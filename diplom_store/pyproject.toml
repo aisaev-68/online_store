@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "diplom-store"
+version = "0.1.0"
+description = ""
+authors = ["ramazan_aisaev <aisaev-68@yandex.ru>"]
+readme = "README.md"
+packages = [{include = "diplom_store"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+django = "^4.2"
+python-decouple = "^3.8"
+djangorestframework = "^3.14.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
