@@ -1,35 +1,44 @@
+import os
+
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.utils.timezone import now
 from rest_framework.exceptions import ValidationError
 
+from account.managers import CustomUserManager
 
-class Profile(models.Model):
-    def validate_image(fieldfile_obj):
-        file_size = fieldfile_obj.file.size
-        megabyte_limit = 150.0
+
+def get_upload_path_by_user(instance, filename):
+    return os.path.join('avatar/', now().date().strftime("%Y/%m/%d"), filename)
+
+
+class User(AbstractUser):
+    def validate_image(self):
+        file_size = self.file.size
+        megabyte_limit = 2
         if file_size > megabyte_limit * 1024 * 1024:
-            raise ValidationError("Максимальный размер файла {}MB".format(str(megabyte_limit)))
+            raise ValidationError(f"Максимальный размер файла не должен превышать {megabyte_limit} МБ")
 
-    user = models.OneToOneField(User, unique=True, on_delete=models.CASCADE, related_name='profile')
-    username = models.CharField(default='-------', max_length=50,
-                                verbose_name='username', blank=True, null=True)
-    full_name = models.CharField(default='не указано', max_length=50, verbose_name='ФИО пользователя', blank=True)
+
+    first_name = None
+    last_name = None
+    email = models.EmailField(verbose_name='email address', unique=True)
+    fullName = models.CharField(default='не указано', max_length=50, verbose_name='ФИО пользователя', blank=True)
     phone = models.CharField(default='Не указано', max_length=30, verbose_name='номер телефона', blank=True, null=True,
                              unique=True)
-    email = models.EmailField(verbose_name='email пользователя', blank=True, unique=True)
-    avatar = models.ImageField(upload_to='catalog/files/', null=True, validators=[validate_image], default='')
+    avatar = models.ImageField(upload_to=get_upload_path_by_user, null=True, validators=[validate_image], default='')
+
+
+    REQUIRED_FIELDS = ['phone']
+
+    objects = CustomUserManager()
 
     class Meta:
-        verbose_name = 'Профиль'
-        verbose_name_plural = 'Профили пользователей'
+        verbose_name = 'пользователь'
+        verbose_name_plural = 'пользователи'
 
     def __str__(self):
         return self.username
 
-
-@receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created and instance.is_superuser:
-        Profile.objects.create(user=instance)

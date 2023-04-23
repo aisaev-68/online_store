@@ -1,0 +1,18 @@
+{% extends "frontend/base.html" %}
+{% load i18n %}
+
+{% block title %}
+Registration
+{% endblock %}
+
+{% block content %}
+<div class="register_main">
+    <h3>Регистрация нового пользователя</h3>
+      <form class="register" action="{% url 'account:register' %}" method="post">
+        {% csrf_token %}
+        {{ form.as_div }}
+          <input class="my_button" type="submit" value="Зарегистрироваться"/>
+          <a class="my_login" href="{% url 'account:login' %}">Вход</a>
+      </form>
+  </div>
+{% endblock %}

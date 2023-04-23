@@ -1,6 +1,7 @@
 from django.apps import AppConfig
 
 
-class ReviewConfig(AppConfig):
+class FrontendConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'review'
+    name = 'frontend'
+    app_name = "frontend"

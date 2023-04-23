@@ -12,6 +12,8 @@ django = "^4.2"
 python-decouple = "^3.8"
 djangorestframework = "^3.14.0"
 pillow = "^9.5.0"
+drf-yasg = "^1.21.5"
+docutils = "^0.19"
 
 
 [build-system]

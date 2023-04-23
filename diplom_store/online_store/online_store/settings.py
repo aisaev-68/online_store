@@ -1,6 +1,7 @@
 import os
 
 from decouple import config
+from django.urls import reverse_lazy
 
 from django.utils.translation import gettext_lazy as _
 
@@ -12,6 +13,11 @@ USER_ADMIN = config('USER_ADMIN')
 EMAIL = config('EMAIL')
 PASSWORD = config('PASSWORD')
 
+CART_SESSION_ID = 'cart'
+
+FIXTURE_DIRS =['online_store/tests/fixtures/']
+
+AUTH_USER_MODEL = 'account.User'
 
 # Application definition
 
@@ -22,7 +28,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'online_shop_app.apps.OnlineShopAppConfig'
+    'rest_framework',
+    'drf_yasg',
+    'frontend.apps.FrontendConfig',
+    'catalog.apps.CatalogConfig',
+    'cart.apps.CartConfig',
+    'order.apps.OrderConfig',
+    'payment.apps.PaymentConfig',
+    'product.apps.ProductConfig',
+    'account.apps.AccountConfig',
 ]
 
 MIDDLEWARE = [
@@ -96,13 +110,15 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
+SHORT_DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-LOGIN_REDIRECT_URL = '/'
+
 STATIC_URL = 'static/'
+#STATICFILES_DIRS = os.path.join(BASE_DIR, 'frontend')
+LOGIN_REDIRECT_URL = reverse_lazy("frontend:profile")
 # media directory in the root directory
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
@@ -111,3 +127,10 @@ MEDIA_URL = '/media/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+
+SESSION_COOKIE_AGE = 30 * 24 * 60 * 60
+
+deliveryType = ['Обычная', 'Экспресс']
+paymentType = ['Онлайн картой', 'Онлайн со случайного чужого счета']
+status = ['Ожидает оплаты', 'Оплачено', 'Ошибка оплаты']

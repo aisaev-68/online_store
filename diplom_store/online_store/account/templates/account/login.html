@@ -1,0 +1,17 @@
+{% extends "frontend/base.html" %}
+{% load i18n %}
+
+{% block title %}
+Log-in
+{% endblock %}
+
+{% block content %}
+<div class="register_main">
+    <h3>Вход</h3>
+      <form class="register" action="{% url 'login' %}" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+          <input class="my_button" type="submit" value="Войти"/>
+      </form>
+</div>
+{% endblock %}
