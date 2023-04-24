@@ -1,7 +1,8 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.views import LoginView, LogoutView
-from django.shortcuts import render
-from django.urls import reverse_lazy
+from django.http import request, HttpResponse
+from django.shortcuts import render, redirect
+from django.urls import reverse_lazy, reverse
 from django.views import View
 from django.views.generic import CreateView
 from rest_framework import viewsets
@@ -9,7 +10,7 @@ from rest_framework.parsers import FileUploadParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from account.forms import UserRegistrationForm
+from account.forms import UserRegistrationForm, LoginForm
 from account.models import User
 from account.serializers import UserPasswordChangeSerializer, UserAvatarSerializer, UserSerializer
 
@@ -89,12 +90,29 @@ class UserChangePasswordView(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class MyLoginView(LoginView):
+class MyLoginView(View):
     """
     Класс представление для авторизации пользователя.
     """
-    template_name = 'account/login.html'
     redirect_authenticated_user = True
+    def get(self, request):
+        context = {"form": LoginForm()}
+        return render(request, 'account/login.html', context=context)
+
+    def post(self, request):
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            user = authenticate(username=cd['username'], password=cd['password'])
+            if user is not None:
+                if user.is_active:
+                    login(request, user)
+                    return redirect(reverse('product:index'))
+                else:
+                    return HttpResponse('Disabled account')
+            else:
+                return HttpResponse('Invalid login')
+
 
 
 class MyLogoutView(LogoutView):

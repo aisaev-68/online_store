@@ -1,34 +1,71 @@
 .Middle-top {
-    margin-bottom: 50px;
+    margin-bottom: 40px;
     padding-top: 25px;
     padding-bottom: 25px;
 }
 
 .form_reg {
     width: 28vw;
-    padding: 25px;
-    #border: 1px solid black;
+    padding: 40px 25px 25px 25px;
     box-shadow: 0 0 10px rgba(0,0,0,0.5);
     border-radius: 15px;
 }
 .form-register {
+    display: flex;
+    justify-content: center;
+    margin-bottom:10px;
 
-    margin-bottom:8px;
+}
+
+.form-field input:focus {
+    border-color: red;
 }
 
 .form-label {
     align-self: center;
 }
 
-.form-field {
 
+#id_avatar {
+    width: 19.5vw;
 }
 
-
-.form-field input {
-    padding: 0px 0px 0px 5px;
+.form-field, .form-field input {
+    padding: 0px 0px 0px 10px;
     min-height: 0;
     height: 30px;
     min-width: 0;
-    min-width: 10vw;
+
 }
+
+.form-field input::-moz-placeholder {
+    color: blue;
+}
+
+.btn {
+    width: 9vw;
+    min-height:0;
+    height:2.5vw;
+    margin-top: 10px;
+}
+
+.form-login {
+    display:flex;
+    flex-wrap: wrap;
+}
+
+.form-login input {
+    min-height: 0;
+
+}
+
+.reg-link {
+    margin-left: 5px;
+}
+
+.form-username input {
+    height: 30px;
+}
+
+
+

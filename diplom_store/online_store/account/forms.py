@@ -53,7 +53,7 @@ class UserRegistrationForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('username', 'fullName', 'email', 'phone', 'password1', 'password2', "avatar")
-        #field_classes = {"username": UsernameField}
+        # field_classes = {"username": UsernameField}
 
     def clean_phone(self):
         """
@@ -82,3 +82,29 @@ class UserRegistrationForm(UserCreationForm):
                 code="email_exists",
             )
         return email
+
+
+class LoginForm(forms.Form):
+    username = forms.CharField(
+        max_length=100,
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': 'Username*',
+            }
+        ),
+        required=True
+    )
+    password = forms.CharField(
+        widget=forms.PasswordInput(
+            attrs={
+                'class': 'form-input',
+                'placeholder': 'Password*',
+                'help_text': ''
+            }
+        )
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['username'].widget.attrs['style'] = "height: 30px;"
+        self.fields['password'].widget.attrs['style'] = "height: 30px;"

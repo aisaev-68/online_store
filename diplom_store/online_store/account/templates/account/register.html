@@ -27,7 +27,6 @@ Registration
         {% csrf_token %}
         {% for field in form %}
         <div class="form-register">
-<!--            <p class="form-label" style="">{{ field.label_tag }}</p>-->
             <p class="form-field" style="">{{ field }}</p>
         </div>
         {% endfor %}

@@ -9,7 +9,7 @@ from product.views import (
 
 app_name = 'product'
 urlpatterns = [
-    path('', MainPageView.as_view()),
+    path('', MainPageView.as_view(), name="index"),
     path('products/popular/', ProductPopularView.as_view()),
     path("products/limited/", ProductLimitedView.as_view()),
     path('sales/', SalesView.as_view()),
