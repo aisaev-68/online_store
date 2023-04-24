@@ -6,12 +6,44 @@ Log-in
 {% endblock %}
 
 {% block content %}
-<div class="register_main">
-    <h3>Вход</h3>
-      <form class="register" action="{% url 'login' %}" method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-          <input class="my_button" type="submit" value="Войти"/>
-      </form>
+<div class="Middle-top">
+    <div class="wrap">
+        <div class="Middle-header">
+            <h1 class="Middle-title">{% trans 'Login'  %}</h1>
+            <ul class="breadcrumbs Middle-breadcrumbs">
+                <li class="breadcrumbs-item"><a href="/">{% trans 'home' %}</a></li>
+                <li class="breadcrumbs-item breadcrumbs-item_current"><span>{% trans 'Sign-in' %}</span></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="Section Section_column">
+    <div class="wrap">
+        <div class="Section-content">
+            <div class="Profile" style="display:flex; justify-content: center">
+                <form class="form Profile-form custom_login-form" method="post" style="width: 25%;">
+                    {% csrf_token %}
+                    <span class="formerror">{{ form.non_field_errors }}</span>
+                    <div class="form-group custom_login_form-group">
+                        <label class="form-label" for="username">Username</label>
+                        <input class="form-input" id="username" name="username" type="text" required>
+
+                    </div>
+                    <div class="form-group custom_login_form-group">
+                        <label class="form-label" for="password">Password</label>
+                        <input class="form-input" id="password" name="password" type="password" required>
+                        <span class="helptext"><a href="">Forgot the password?</a></span>
+                    </div>
+                    <div class="form-group custom_login_form-group-btns">
+                        <div class="Profile-btn custom_align-center">
+                            <button class="btn btn_success custom_login_btn-success" type="submit">Sign in</button>
+                            <a href="{% url 'account:register' %}" class="btn btn_success">Register</a>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

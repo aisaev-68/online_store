@@ -11,12 +11,38 @@ class UserRegistrationForm(UserCreationForm):
     """
     Класс формы регистрации пользователя.
     """
-    fullName = forms.CharField(required=True, label='Ф.И.О.', widget=forms.TextInput)
-    phone = forms.CharField(required=True, label='Номер телефона', widget=forms.TextInput)
-    password1 = forms.CharField(required=True, label='Пароль', widget=forms.PasswordInput,
+    username = forms.CharField(required=True, label='Username*:', widget=forms.TextInput(
+        attrs={
+            'placeholder': 'Username*',
+        }
+    ))
+    fullName = forms.CharField(required=True, label='Full name*:', widget=forms.TextInput(
+        attrs={
+            'placeholder': 'Full name*',
+        }
+    ))
+    phone = forms.CharField(required=True, label='Phone number*:', widget=forms.TextInput(
+        attrs={
+            'placeholder': 'Phone number*',
+        }
+    ))
+    password1 = forms.CharField(required=True, label='Password*:', widget=forms.PasswordInput(
+        attrs={
+            'placeholder': 'Password*',
+        }
+    ),
                                 help_text=password_validation.password_validators_help_text_html())
-    password2 = forms.CharField(required=True, label='Подтвердите пароль', widget=forms.PasswordInput)
-    email = forms.CharField(required=True, label='Адрес электронной почты', widget=forms.EmailInput)
+    password2 = forms.CharField(required=True, label='Confirm the password*:', widget=forms.PasswordInput(
+        attrs={
+            'placeholder': 'Confirm the password*',
+        }
+    ))
+    email = forms.CharField(required=True, label='E-mail address*:', widget=forms.EmailInput(
+        attrs={
+            'placeholder': 'E-mail address*',
+        }
+    ))
+    avatar = forms.CharField(required=False, label='Avatar:', widget=forms.FileInput)
 
     error_messages = {
         "password_mismatch": "Пароли не совпадают! Повторите ввод!",

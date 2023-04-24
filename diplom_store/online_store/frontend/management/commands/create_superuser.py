@@ -13,4 +13,6 @@ class Command(BaseCommand):
             username=settings.USER_ADMIN,
             email=settings.EMAIL,
             password=settings.PASSWORD,
+            phone="89285484431",
+            fullName="Иванов Иван Иванович",
         )

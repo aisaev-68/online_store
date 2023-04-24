@@ -28,7 +28,7 @@ class User(AbstractUser):
     fullName = models.CharField(default='не указано', max_length=50, verbose_name='ФИО пользователя', blank=True)
     phone = models.CharField(default='Не указано', max_length=30, verbose_name='номер телефона', blank=True, null=True,
                              unique=True)
-    avatar = models.ImageField(upload_to=get_upload_path_by_user, null=True, validators=[validate_image], default='')
+    avatar = models.ImageField(upload_to=get_upload_path_by_user, null=True, validators=[validate_image], default='avatar/default_avatars.png')
 
 
     REQUIRED_FIELDS = ['phone']
