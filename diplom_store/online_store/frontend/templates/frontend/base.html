@@ -2,10 +2,7 @@
 
 <html lang="ru">
 <head>
-      <title>
-        {% block title %}
-        {% endblock %}
-    </title>
+  <title>Megano</title>
   <meta name="description" content="Описание страницы">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
@@ -24,8 +21,6 @@
 
 <!--  <script src="{% static 'frontend/assets/plg/vue.global.js' %}"></script>-->
   <script src="{% static 'frontend/assets/plg/CountDown/countdown.js' %}"></script>
-  {% block script_css %}
-  {% endblock %}
 </head>
 <body class="Site" id="site">
   <header class="Header">
@@ -52,7 +47,7 @@
                 {% if user.is_authenticated %}
                   <div class="row-block"><a class="ControlPanel-title" href="/profile">{{ user.username }}</a>
                 {% else %}
-                  <div class="row-block"><a class="ControlPanel-title" href="{% url 'account:login' %}">Login / Register</a>
+                  <div class="row-block"><a class="ControlPanel-title" href="/admin/login/">Login / Register</a>
                 {% endif %}
               </div>
             </div>
@@ -65,22 +60,21 @@
         <div class="row-block Header-logo"><a class="logo" href="/"><img class="logo-image" src="{% static 'frontend/assets/img/logo.png' %}" alt="logo.png"/></a>
         </div>
         <nav class="row-block row-block_right Header-menu">
-                <div class="menuModal" id="navigate">
-                    <ul class="menu menu_main">
-                        <li class="menu-item"><a class="menu-link" href="/">Home</a>
-                        </li>
-                        <li class="menu-item">
-                            <a class="menu-link" href="">Shops</a>
-                        </li>
-                        <li class="menu-item"><a class="menu-link" href="">Promotions</a>
-                        </li>
-                        <li class="menu-item"><a class="menu-link" href="#">Contacts</a>
-                        </li>
-                        <li class="menu-item"><a class="menu-link" href="">Purchase</a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
+          <div class="menuModal" id="navigate">
+            <ul class="menu menu_main">
+              <li class="menu-item"><a class="menu-link" href="/">Home</a>
+              </li>
+
+              <li class="menu-item"><a class="menu-link" href="sale.html">Blog</a>
+              </li>
+              <li class="menu-item"><span class="menu-label menu-label_success">Hot</span><a class="menu-link" href="product.html">Gallery</a>
+              </li>
+
+              <li class="menu-item"><a class="menu-link" href="catalog.html">Purchase</a>
+              </li>
+            </ul>
+          </div>
+        </nav>
         <div class="row-block">
           <div class="CartBlock"><a class="CartBlock-block" href="/cart/">
             <img class="CartBlock-img" src="{% static 'frontend/assets/img/icons/cart.svg' %}" alt="cart.svg"/><span class="CartBlock-amount" v-text="basketCount.count"></span></a>
