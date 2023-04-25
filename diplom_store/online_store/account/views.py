@@ -1,10 +1,11 @@
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.views import LoginView, LogoutView
-from django.http import request, HttpResponse
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView, PasswordChangeDoneView
+from django.http import request, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from django.views import View
-from django.views.generic import CreateView
+from django.views.generic import CreateView, UpdateView
 from rest_framework import viewsets
 from rest_framework.parsers import FileUploadParser
 from rest_framework.permissions import IsAuthenticated
@@ -42,10 +43,10 @@ class UserView(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_object(self):
-        return User.objects.get(user_id=self.request.user.pk)
+        return User.objects.get(id=self.request.user.pk)
 
     def retrieve(self, *args, **kwargs):
-        user = User.objects.get(user_id=self.request.user.pk)
+        user = User.objects.get(id=self.request.user.pk)
         serializer = self.serializer_class(user, many=False)
         return Response(serializer.data)
 
@@ -64,7 +65,7 @@ class UserAvatarView(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_object(self):
-        return User.objects.get(user_id=self.request.user.pk)
+        return User.objects.get(id=self.request.user.pk)
 
     def update(self, request, *args, **kwargs):
         return super().update(request, *args, **kwargs)
@@ -120,3 +121,47 @@ class MyLogoutView(LogoutView):
     Класс представление для выхода пользователя из системы
     """
     next_page = reverse_lazy('account:login')
+
+
+class ChangePasswordView(PasswordChangeView):
+    template_name = 'account/change-password.html'
+
+
+class ChangePasswordViewDone(PasswordChangeDoneView):
+    template_name = 'account/password_change_done.html'
+
+
+class UserProfileView(View, LoginRequiredMixin):
+    def get(self, request, *args, **kwargs):
+        return render(request, 'account/profile.html', context={})
+
+
+# class UserUpdateView(LoginRequiredMixin, UpdateView):
+#     def get(self, request, *args, **kwargs):
+#         form = UpdateProfileForm(initial={'phone': request.user.profile.phone,
+#                                           'username': request.user.username,
+#                                           'first_name': request.user.first_name,
+#                                           'last_name': request.user.last_name,
+#                                           'email': request.user.email})
+#         return render(request, 'users/profile.html', context={'form': form})
+#
+#     def post(self, request, *args, **kwargs):
+#         profile = request.user.profile
+#         form = UpdateProfileForm(request.POST, request.FILES, instance=profile)
+#         if form.is_valid():
+#             first_name = form.cleaned_data['first_name']
+#             last_name = form.cleaned_data['last_name']
+#             username = form.cleaned_data['username']
+#             email = form.cleaned_data['email']
+#             phone = form.cleaned_data['phone']
+#
+#             user = request.user
+#             profile = form.save(commit=False)
+#             user.first_name = first_name
+#             user.last_name = last_name
+#             user.save()
+#             profile.user = user
+#             profile.save()
+#             return HttpResponseRedirect(reverse('account'))
+#         return render(request, 'users/profile.html', context={'form': form})
+

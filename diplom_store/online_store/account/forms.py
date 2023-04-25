@@ -11,6 +11,15 @@ class UserRegistrationForm(UserCreationForm):
     """
     Класс формы регистрации пользователя.
     """
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['username'].widget.attrs['style'] = "height: 30px; padding-left: 5px;"
+        self.fields['password1'].widget.attrs['style'] = "height: 30px; padding-left: 5px;"
+        self.fields['password2'].widget.attrs['style'] = "height: 30px; padding-left: 5px;"
+        self.fields['fullName'].widget.attrs['style'] = "height: 30px; padding-left: 5px;"
+        self.fields['phone'].widget.attrs['style'] = "height: 30px; padding-left: 5px;"
+        self.fields['email'].widget.attrs['style'] = "height: 30px; padding-left: 5px;"
+
     username = forms.CharField(required=True, label='Username*:', widget=forms.TextInput(
         attrs={
             'placeholder': 'Username*',
@@ -106,5 +115,5 @@ class LoginForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['username'].widget.attrs['style'] = "height: 30px;"
-        self.fields['password'].widget.attrs['style'] = "height: 30px;"
+        self.fields['username'].widget.attrs['style'] = "height: 30px; padding-left: 5px;"
+        self.fields['password'].widget.attrs['style'] = "height: 30px; padding-left: 5px;"

@@ -24,9 +24,9 @@ class User(AbstractUser):
 
     first_name = None
     last_name = None
-    email = models.EmailField(verbose_name='email address', unique=True)
-    fullName = models.CharField(default='не указано', max_length=50, verbose_name='ФИО пользователя', blank=True)
-    phone = models.CharField(default='Не указано', max_length=30, verbose_name='номер телефона', blank=True, null=True,
+    email = models.EmailField(verbose_name='E-mail address', unique=True)
+    fullName = models.CharField(default='не указано', max_length=50, verbose_name='Full name', blank=True)
+    phone = models.CharField(default='Не указано', max_length=30, verbose_name='Phone', blank=True, null=True,
                              unique=True)
     avatar = models.ImageField(upload_to=get_upload_path_by_user, null=True, validators=[validate_image], default='avatar/default_avatars.png')
 
@@ -36,8 +36,8 @@ class User(AbstractUser):
     objects = CustomUserManager()
 
     class Meta:
-        verbose_name = 'пользователь'
-        verbose_name_plural = 'пользователи'
+        verbose_name = 'User'
+        verbose_name_plural = 'Users'
 
     def __str__(self):
         return self.username

@@ -30,9 +30,12 @@ Log-in
             <p class="form-field" style="">{{ field }}</p>
         </div>
         {% endfor %}
-        <div class="form-register ">
+        <div class="form-register">
+            <a class="forgot-label" href="">Forgot your password?</a>
+        </div>
+        <div class="form-register reg-link">
                 <button class="btn btn_primary" type="submit">Login</button>
-                <a href="{% url 'account:register' %}" class="btn btn_primary reg-link">Register</a>
+                <a href="{% url 'account:register' %}" class="btn btn_primary ">Register</a>
         </div>
     </form>
 </section>
