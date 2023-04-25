@@ -117,3 +117,9 @@ class LoginForm(forms.Form):
         super().__init__(*args, **kwargs)
         self.fields['username'].widget.attrs['style'] = "height: 30px; padding-left: 5px;"
         self.fields['password'].widget.attrs['style'] = "height: 30px; padding-left: 5px;"
+
+
+class UserUpdateView(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ("avatar", 'username', 'fullName', 'email', 'phone')

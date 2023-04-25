@@ -11,10 +11,10 @@ Profile
     <div class="Middle-top">
         <div class="wrap">
             <div class="Middle-header">
-                <h1 class="Middle-title">Edit profile
+                <h1 class="Middle-title">Profile
                 </h1>
                 <ul class="breadcrumbs Middle-breadcrumbs">
-                    <li class="breadcrumbs-item"><a href="">home</a>
+                    <li class="breadcrumbs-item"><a href="/">home</a>
                     </li>
                     <li class="breadcrumbs-item breadcrumbs-item_current"><span>Profile</span>
                     </li>
@@ -27,61 +27,79 @@ Profile
             {% include 'includes/navigation.html' %}
             <div class="Section-content">
                 <div class="Profile">
-                    <form class="form Profile-form" action="#" enctype="multipart/form-data" method="post">
-                        {% csrf_token %}
-                        <div class="row">
-                            <div class="row-block">
-
+                    <div class="row">
+                        <div class="row-block">
+                            <form action="" method="post" enctype="multipart/form-data">
                                 <div class="form-group">
-                                    <label class="form-label" for="avatar">Avatar
-                                    </label>
-                                    <div class="Profile-avatar Profile-avatar_noimg">
-                                        <div class="Profile-img"><img src="assets/img/#.png" alt="#.png"/>
+                                    <label class="form-label" for="avatar">{% trans 'Avatar' %}</label>
+                                    {% if request.user.avatar %}
+                                    <div class="Profile-avatar">
+                                        {% else %}
+                                        <div class="Profile-avatar Profile-avatar_noimg" style="width: 20vw;">
+                                            {% endif %}
+                                            <div class="Profile-img">
+                                                {% if request.user.avatar %}
+                                                <img src="{{ request.user.avatar_url }}" alt="#.png" style="width: 50px;">
+                                                {% else %}
+                                                <img src="assets/img/#.png" alt="#.png" style="width: 50px;">
+                                                {% endif %}
+                                            </div>
+                                            <span class="avatar-span">{% trans 'Click on picture for change' %}</span>
+                                            <label class="Profile-fileLabel" for="avatar">{% trans 'Choose the picture' %}</label>
+                                            <input class="Profile-file form-input" id="avatar" accept="image/*"
+                                                   name="avatar" type="file" data-validate="onlyImgAvatar">
                                         </div>
-                                        <label class="Profile-fileLabel" for="{{ form.avatar.id_for_label }}">Choose an avatar
-                                        </label>
-                                        {{ form.avatar }}
-<!--                                        <input class="Profile-file form-input" id="avatar" name="avatar" type="file"-->
-<!--                                               data-validate="onlyImgAvatar"/>-->
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" for="fullName">{% trans 'Full name' %}</label>
+                                        <input class="form-input" id="fullName"
+                                               value="{{request.user.fullName|default_if_none:''}}" name="fullName"
+                                               type="text">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" for="mail">{% trans 'E-mail' %}</label>
+                                        <input class="form-input" id="mail" value="{{request.user.email}}" name="mail"
+                                               type="email" required/>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="form-group">
+                                            <button class="btn btn_success" type="submit">Save</button>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="form-label" for="{{ form.username.id_for_label }}">Username:
-                                    </label>{{ form.username.errors }}
-                                    {{ form.username }}
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label" for="{{ form.fullNme.id_for_label }}">Full name
-                                    </label>{{ form.fullName.errors }}
-                                    {{ form.fullName }}
-                                </div>
-
-                                <div class="form-group">
-                                    <div class="Profile-btn">
-                                        <button class="btn btn_success" type="submit">Save
-                                        </button>
-                                    </div>
-                                    <div class="Profile-success">Profile saved successfully
-                                    </div>
-                                </div>
-
-                            </div>
-                            <div class="row-block">
-                                <div class="form-group">{{ form.phone.errors }}
-                                    <label class="form-label" for="{{ form.phone.id_for_label }}">Phone
-                                    </label>
-                                    {{ form.phone }}
-                                </div>
-                                <div class="form-group">{{ form.email.errors }}
-                                    <label class="form-label" for="{{ form.email.id_for_label }}">E-mail
-                                    </label>
-                                    {{ form.email }}
-                                </div>
-                            </div>
-
+                            </form>
                         </div>
-                    </form>
-
+                        <div class="row-block">
+                            <form action="" method="post">
+                                <div class="row-block">
+                                    <div class="form-group">
+                                        <label class="form-label" for="username">{% trans 'Username' %}</label>
+                                        <input class="form-input" id="username"
+                                               value="{{request.user.username|default_if_none:''}}" name="username"
+                                               type="text">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" for="password">{% trans 'Password*' %}</label>
+                                        <input class="form-input" id="password" name="new_password1" type="password">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" for="passwordReply">{% trans 'Repeat password*' %}</label>
+                                        <input class="form-input" id="passwordReply" name="new_password2"
+                                               type="password">
+                                    </div>
+                                    <div class="form-group require-field">
+                                        <label class="form-label" for="id_phone">{% trans 'Phone number*' %}</label>
+                                        <input class="form-input" id="id_phone" value="{{request.user.phone}}"
+                                               name="phone" required type="text">
+                                        <span class="formerror">{{form.errors.phone}}</span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <button class="btn btn_success" type="submit">Save</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

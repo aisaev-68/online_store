@@ -11,7 +11,7 @@ from rest_framework.parsers import FileUploadParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from account.forms import UserRegistrationForm, LoginForm
+from account.forms import UserRegistrationForm, LoginForm, UserUpdateView
 from account.models import User
 from account.serializers import UserPasswordChangeSerializer, UserAvatarSerializer, UserSerializer
 
@@ -131,37 +131,37 @@ class ChangePasswordViewDone(PasswordChangeDoneView):
     template_name = 'account/password_change_done.html'
 
 
-class UserProfileView(View, LoginRequiredMixin):
+
+
+
+
+
+
+class UserProfileView(LoginRequiredMixin, UpdateView):
     def get(self, request, *args, **kwargs):
-        return render(request, 'account/profile.html', context={})
+        form = UserUpdateView(initial={'phone': request.user.phone,
+                                          'username': request.user.username,
+                                          'avatar': request.user.avatar,
+                                          'fullName': request.user.fullName,
+                                          'email': request.user.email})
+        return render(request, 'account/profile.html', context={'form': form})
 
+    def post(self, request, *args, **kwargs):
+        form = UserUpdateView(request.POST, request.FILES)
+        if form.is_valid():
+            fullName = form.cleaned_data['first_name']
+            # avatar = form.cleaned_data['avatar']
+            username = form.cleaned_data['username']
+            email = form.cleaned_data['email']
+            phone = form.cleaned_data['phone']
 
-# class UserUpdateView(LoginRequiredMixin, UpdateView):
-#     def get(self, request, *args, **kwargs):
-#         form = UpdateProfileForm(initial={'phone': request.user.profile.phone,
-#                                           'username': request.user.username,
-#                                           'first_name': request.user.first_name,
-#                                           'last_name': request.user.last_name,
-#                                           'email': request.user.email})
-#         return render(request, 'users/profile.html', context={'form': form})
-#
-#     def post(self, request, *args, **kwargs):
-#         profile = request.user.profile
-#         form = UpdateProfileForm(request.POST, request.FILES, instance=profile)
-#         if form.is_valid():
-#             first_name = form.cleaned_data['first_name']
-#             last_name = form.cleaned_data['last_name']
-#             username = form.cleaned_data['username']
-#             email = form.cleaned_data['email']
-#             phone = form.cleaned_data['phone']
-#
-#             user = request.user
-#             profile = form.save(commit=False)
-#             user.first_name = first_name
-#             user.last_name = last_name
-#             user.save()
-#             profile.user = user
-#             profile.save()
-#             return HttpResponseRedirect(reverse('account'))
-#         return render(request, 'users/profile.html', context={'form': form})
+            user = request.user
+            user.fullName = fullName
+            user.email = email
+            user.username = username
+            user.phone = phone
+            # user.avatar = avatar
+            user.save()
+            return render(request, 'account/profile.html', context={'form': form})
+        return render(request, 'account/profile.html', context={'form': form})
 

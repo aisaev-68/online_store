@@ -24,7 +24,7 @@ urlpatterns = [
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
     # path('api/', include('online_api.urls')),
     path('admin/doc/', include('django.contrib.admindocs.urls')),
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls, name="admin"),
     path('', include('catalog.urls')),
     path('', include('product.urls')),
     path('', include('account.urls')),
