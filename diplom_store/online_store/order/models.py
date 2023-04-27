@@ -1,11 +1,12 @@
 from django.db import models
 
 from account.models import User
+from online_store import settings
 from product.models import Product
 
 
 class Order(models.Model):  # Заказы
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='пользователь', null=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='пользователь', null=True)
     products = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='товар')
     createdAt = models.DateField(auto_now_add=True)
     deliveryType = models.BooleanField(default=False, verbose_name='наличие бесплатной доставки')

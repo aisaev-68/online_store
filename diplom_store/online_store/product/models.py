@@ -5,6 +5,7 @@ from django.urls import reverse
 from django.utils.timezone import now
 
 from account.models import User
+from catalog.models import Catalog
 from catalog.models import Category
 
 
@@ -29,23 +30,8 @@ class Tag(models.Model):
         return self.name
 
 
-# категория товаров
-
-class Specification(models.Model):
-    name = models.TextField(max_length=50, verbose_name='название')
-    value = models.TextField(max_length=50, verbose_name='значение')
-
-    class Meta:
-        verbose_name = 'Спецификация'
-        verbose_name_plural = 'Спецификации'
-
-    def __str__(self):
-        return self.name
-
-
 class Product(models.Model):  # товар
     category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='категория товара')
-    specifications = models.ForeignKey(Specification, on_delete=models.CASCADE, verbose_name='спецификация товара')
     price = models.IntegerField(default=0, verbose_name='цена товара')
     count = models.IntegerField(default=0, verbose_name='количество ')
     date = models.DateField(auto_now_add=True)

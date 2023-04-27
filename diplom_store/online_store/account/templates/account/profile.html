@@ -33,19 +33,20 @@ Profile
                                 <div class="form-group">
                                     <label class="form-label" for="avatar">{% trans 'Avatar' %}</label>
                                     {% if request.user.avatar %}
-                                    <div class="Profile-avatar">
+                                    <div class="Profile-avatar" style="width: 100px; height: 100px;">
                                         {% else %}
-                                        <div class="Profile-avatar Profile-avatar_noimg" style="width: 20vw;">
+                                        <div class="Profile-avatar Profile-avatar_noimg"
+                                             style="width: 100px; height: 100px;">
                                             {% endif %}
                                             <div class="Profile-img">
                                                 {% if request.user.avatar %}
-                                                <img src="{{ request.user.avatar_url }}" alt="#.png" style="width: 50px;">
+                                                <img src="{{ request.user.avatar.url }}" alt="#.png">
                                                 {% else %}
-                                                <img src="assets/img/#.png" alt="#.png" style="width: 50px;">
+                                                <img src="assets/img/#.png" alt="#.png">
                                                 {% endif %}
                                             </div>
-                                            <span class="avatar-span">{% trans 'Click on picture for change' %}</span>
-                                            <label class="Profile-fileLabel" for="avatar">{% trans 'Choose the picture' %}</label>
+<!--                                            <span class="avatar-span">{% trans 'Click on picture for change' %}</span>-->
+<!--                                            <label class="Profile-fileLabel" for="avatar">{% trans 'Choose the picture' %}</label>-->
                                             <input class="Profile-file form-input" id="avatar" accept="image/*"
                                                    name="avatar" type="file" data-validate="onlyImgAvatar">
                                         </div>
@@ -53,7 +54,7 @@ Profile
                                     <div class="form-group">
                                         <label class="form-label" for="fullName">{% trans 'Full name' %}</label>
                                         <input class="form-input" id="fullName"
-                                               value="{{request.user.fullName|default_if_none:''}}" name="fullName"
+                                               value="{{ request.user.last_name|default_if_none:''}} {{request.user.first_name|default_if_none:''}} {{request.user.surname|default_if_none:'' }}" name="fullName"
                                                type="text">
                                     </div>
                                     <div class="form-group">

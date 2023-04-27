@@ -1,15 +1,6 @@
 from django.contrib import admin
 
-from product.models import Product, ProductImage, Tag, Specification, Sale, Category
-
-
-@admin.register(Category)
-class CategoryAdmin(admin.ModelAdmin):
-    """
-    Отображение категорий в административной панели
-    """
-    list_display = ['pk', 'title', 'image']
-    list_display_links = ['pk', 'title']
+from product.models import Product, ProductImage, Tag, Sale, Review
 
 
 @admin.register(Product)
@@ -61,21 +52,24 @@ class TagAdmin(admin.ModelAdmin):
     """
     list_display = ['pk', 'name']
     list_display_links = ['pk', 'name']
-
-
-@admin.register(Specification)
-class SpecificationAdmin(admin.ModelAdmin):
-    """
-    Отображение в административной панели характеристик продуктов
-    """
-    list_display = ['pk', 'name', 'value']
-    list_display_links = ['pk', 'name']
+    search_fields = ['name']
 
 
 @admin.register(Sale)
 class SaleAdmin(admin.ModelAdmin):
     """
-    Отображение в административной панели продуктов, участвующих в распродаже
+    Отображение в административной панели продуктов, участвующих в распродаже.
     """
     list_display = ['pk', 'product', 'price', 'salePrice']
     list_display_links = ['pk', 'product']
+    search_fields = ['product']
+
+
+@admin.register(Review)
+class ReviewAdmin(admin.ModelAdmin):
+    """
+    Отображение в административной панели отзывов.
+    """
+    list_display = ['pk', 'author', 'email', 'text', 'date', 'product']
+    list_display_links = ['pk', 'author']
+    search_fields = ['author', 'text']

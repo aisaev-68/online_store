@@ -1,94 +1,60 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import Group
 from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView, PasswordChangeDoneView
+from django.core.checks import messages
 from django.http import request, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from django.views import View
 from django.views.generic import CreateView, UpdateView
-from rest_framework import viewsets
-from rest_framework.parsers import FileUploadParser
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
 
 from account.forms import UserRegistrationForm, LoginForm, UserUpdateView
 from account.models import User
 from account.serializers import UserPasswordChangeSerializer, UserAvatarSerializer, UserSerializer
 
 
-class RegisterView(CreateView):
+class RegisterView(View):
     """
-    Класс представление для регистрации пользователя.
+        Класс представление для регистрации пользователя.
     """
-    form_class = UserRegistrationForm
-    template_name = "account/register.html"
-    success_url = reverse_lazy('frontend:index')
 
-    def form_valid(self, form):
-        response = super().form_valid(form)
-        User.objects.create(user=self.object, fullName=form.cleaned_data.get('fullName'),
-                            phone=form.cleaned_data.get('phone'), email=form.cleaned_data.get('email'))
-        username = form.cleaned_data.get('username')
-        password = form.cleaned_data.get('password1')
-        user = authenticate(self.request, username=username, password=password)
-        login(self.request, user=user)
-        return response
+    def get(self, request, *args, **kwargs):
+        form = UserRegistrationForm()
 
+        context = {
+            'form': form,
+        }
 
-class UserView(viewsets.ModelViewSet):
-    """
-    Класс представление для получения и обновления данных пользователя.
-    """
-    serializer_class = UserSerializer
-    permission_classes = [IsAuthenticated]
+        return render(request, 'account/register.html', context)
 
-    def get_object(self):
-        return User.objects.get(id=self.request.user.pk)
+    def post(self, request, *args, **kwargs):
+        form = UserRegistrationForm(
+            request.POST,
+        )
 
-    def retrieve(self, *args, **kwargs):
-        user = User.objects.get(id=self.request.user.pk)
-        serializer = self.serializer_class(user, many=False)
-        return Response(serializer.data)
+        context = {
+            'form': form,
+        }
 
-    def update(self, request, *args, **kwargs):
-        if request.data.get('avatar') is not None:
-            request.data['avatar'] = request.user.profiles.avatar
-        return super().update(request, *args, **kwargs)
+        if form.is_valid():
+            new_user = form.save(commit=False)
+            new_user.avatar = request.FILES.get('avatar')
+            last_name, first_name, surname = form.cleaned_data['fullName'].split(' ', 2)
+            password = form.cleaned_data['password1']
+            new_user.last_name, new_user.first_name,  new_user.surname = last_name, first_name, surname
+            new_user.set_password(password)
+            new_user.save()
+            # client_group = Group.objects.get(name="Clients")
+            # new_user.groups.add(client_group)
+            # messages.success(request, _('Created profile.'))
+            user = authenticate(request, username=new_user, password=password)
+            login(request, user)
+            return redirect(reverse('account:profile'))
+        else:
+            # messages.error(request, _('Profile creation error.'))
 
-
-class UserAvatarView(viewsets.ModelViewSet):
-    """
-    Класс представление для обновления аватара пользователя.
-    """
-    serializer_class = UserAvatarSerializer
-    parser_classes = [FileUploadParser]
-    permission_classes = [IsAuthenticated]
-
-    def get_object(self):
-        return User.objects.get(id=self.request.user.pk)
-
-    def update(self, request, *args, **kwargs):
-        return super().update(request, *args, **kwargs)
-
-    def perform_update(self, serializer):
-        serializer.save(avatar=self.request.data['file'])
-
-
-class UserChangePasswordView(viewsets.ModelViewSet):
-    """
-    Класс представление для обновления пароля пользователя.
-    """
-    serializer_class = UserPasswordChangeSerializer
-    permission_classes = [IsAuthenticated]
-
-    def update(self, request, *args, **kwargs):
-        user = self.request.user
-        serializer = self.get_serializer(user, data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user.set_password(serializer.validated_data['password'])
-        user.save()
-        login(request, user)
-        return Response(serializer.data)
+            return render(request, 'account/register.html', context)
 
 
 class MyLoginView(View):
@@ -96,6 +62,7 @@ class MyLoginView(View):
     Класс представление для авторизации пользователя.
     """
     redirect_authenticated_user = True
+
     def get(self, request):
         context = {"form": LoginForm()}
         return render(request, 'account/login.html', context=context)
@@ -108,12 +75,11 @@ class MyLoginView(View):
             if user is not None:
                 if user.is_active:
                     login(request, user)
-                    return redirect(reverse('product:index'))
+                    return redirect(reverse('account:profile'))
                 else:
                     return HttpResponse('Disabled account')
             else:
                 return HttpResponse('Invalid login')
-
 
 
 class MyLogoutView(LogoutView):
@@ -131,19 +97,13 @@ class ChangePasswordViewDone(PasswordChangeDoneView):
     template_name = 'account/password_change_done.html'
 
 
-
-
-
-
-
-
 class UserProfileView(LoginRequiredMixin, UpdateView):
     def get(self, request, *args, **kwargs):
         form = UserUpdateView(initial={'phone': request.user.phone,
-                                          'username': request.user.username,
-                                          'avatar': request.user.avatar,
-                                          'fullName': request.user.fullName,
-                                          'email': request.user.email})
+                                       'username': request.user.username,
+                                       'avatar': request.user.avatar,
+                                       'fullName': request.user.fullName,
+                                       'email': request.user.email})
         return render(request, 'account/profile.html', context={'form': form})
 
     def post(self, request, *args, **kwargs):
@@ -165,3 +125,6 @@ class UserProfileView(LoginRequiredMixin, UpdateView):
             return render(request, 'account/profile.html', context={'form': form})
         return render(request, 'account/profile.html', context={'form': form})
 
+
+class UserAvatarView(View):
+    pass

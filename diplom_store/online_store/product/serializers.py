@@ -2,21 +2,11 @@ import datetime
 
 from rest_framework import serializers
 import locale
-from product.models import Product, Review, Tag, Sale, Specification
+from product.models import Product, Review, Tag, Sale
 
 locale.setlocale(locale.LC_ALL, 'ru_RU.UTF-8')
 
 
-class SpecificationsSerializer(serializers.ModelSerializer):
-    """
-    Сериализация характеристик продукта
-    """
-    specification_name = serializers.StringRelatedField()
-    name = serializers.StringRelatedField()
-
-    class Meta:
-        model = Specification
-        exclude = ['id', 'name', 'value']
 
 
 class ReviewSerializer(serializers.ModelSerializer):
@@ -47,7 +37,6 @@ class ProductSerializer(serializers.ModelSerializer):
     images = serializers.SerializerMethodField()
     description = serializers.StringRelatedField()
     tags = TagSerializer(many=True, required=False)
-    specifications = SpecificationsSerializer(many=True, required=False)
     reviews = ReviewSerializer(many=True, required=False)
     href = serializers.StringRelatedField()
     photoSrc = serializers.SerializerMethodField()
@@ -63,7 +52,7 @@ class ProductSerializer(serializers.ModelSerializer):
                   'description', 'fullDescription',
                   'href', 'freeDelivery',
                   'images', 'tags', 'reviews',
-                  'specifications', 'rating']
+                  'rating']
 
     def get_photoSrc(self, instance):
         """

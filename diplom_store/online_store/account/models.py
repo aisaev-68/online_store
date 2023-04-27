@@ -1,5 +1,5 @@
 import os
-
+from PIL import Image
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.db.models.signals import post_save
@@ -22,18 +22,17 @@ class User(AbstractUser):
             raise ValidationError(f"Максимальный размер файла не должен превышать {megabyte_limit} МБ")
 
 
-    first_name = None
-    last_name = None
-    email = models.EmailField(verbose_name='E-mail address', unique=True)
-    fullName = models.CharField(default='не указано', max_length=50, verbose_name='Full name', blank=True)
+
+    surname = models.CharField(default='не указано', max_length=50, verbose_name='Surname', blank=True)
     phone = models.CharField(default='Не указано', max_length=30, verbose_name='Phone', blank=True, null=True,
                              unique=True)
     avatar = models.ImageField(upload_to=get_upload_path_by_user, null=True, validators=[validate_image], default='avatar/default_avatars.png')
 
-
-    REQUIRED_FIELDS = ['phone']
-
-    objects = CustomUserManager()
+    def fullName(self):
+        """
+        Полное имя
+        """
+        return f"{self.last_name} {self.first_name} {self.surname}"
 
     class Meta:
         verbose_name = 'User'
@@ -42,3 +41,9 @@ class User(AbstractUser):
     def __str__(self):
         return self.username
 
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        img = Image.open(self.avatar.path)
+        if img.height > 100 or img.width > 100:
+            img.thumbnail((100, 100))
+        img.save(self.avatar.path, quality=70, optimize=True)

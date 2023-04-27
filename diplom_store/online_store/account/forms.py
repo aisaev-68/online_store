@@ -62,7 +62,7 @@ class UserRegistrationForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('username', 'fullName', 'email', 'phone', 'password1', 'password2', "avatar")
-        # field_classes = {"username": UsernameField}
+
 
     def clean_phone(self):
         """
@@ -91,6 +91,21 @@ class UserRegistrationForm(UserCreationForm):
                 code="email_exists",
             )
         return email
+
+
+    def clean_username(self):
+        """
+        Метод для определения уникальности username.
+        :return: username
+        """
+        username = self.cleaned_data.get("username")
+        username_db = User.objects.filter(username=username)
+        if username_db:
+            raise ValidationError(
+                self.error_messages["username_exists"],
+                code="username_exists",
+            )
+        return username
 
 
 class LoginForm(forms.Form):
@@ -122,4 +137,4 @@ class LoginForm(forms.Form):
 class UserUpdateView(forms.ModelForm):
     class Meta:
         model = User
-        fields = ("avatar", 'username', 'fullName', 'email', 'phone')
+        fields = ("avatar", 'username', 'last_name', 'first_name', 'surname', 'email', 'phone')
