@@ -14,5 +14,7 @@ class Command(BaseCommand):
             email=settings.EMAIL,
             password=settings.PASSWORD,
             phone="89285484431",
-            fullName="Иванов Иван Иванович",
+            last_name="Иванов",
+            first_name="Иван",
+            surname="Иванович",
         )
