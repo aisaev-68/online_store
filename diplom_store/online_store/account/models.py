@@ -28,6 +28,7 @@ class User(AbstractUser):
                              unique=True)
     avatar = models.ImageField(upload_to=get_upload_path_by_user, null=True, validators=[validate_image], default='avatar/default_avatars.png')
 
+    objects = CustomUserManager()
     def fullName(self):
         """
         Полное имя

@@ -1,4 +1,6 @@
 from django.contrib import admin
+
+from account.forms import ChangeForm
 from account.models import User
 
 @admin.register(User)
@@ -6,6 +8,9 @@ class UserAdmin(admin.ModelAdmin):
     """
     Отображение пользователя в административной панели
     """
+    form = ChangeForm
+    # model = User
+
     list_display = ['pk', 'username', 'fullName', 'email', 'phone', 'avatar']
     list_filter = ('is_staff', 'is_superuser', 'groups')
     list_display_links = ['fullName', 'email']
