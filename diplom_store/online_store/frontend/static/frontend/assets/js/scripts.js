@@ -170,7 +170,6 @@ var form = function(){
                             break;
                         case 'pay':
                             var val = $this.val().replaceAll(' ', '');
-                            console.log('val', val)
                             if (val.length !== 16) {
                                 message += 'Некорректный номер карты.';
                                 error = true;
@@ -332,7 +331,6 @@ var Slider = function(){
         $container = $block.children('.Slider-box'),
         $carousel = $('.Slider_carousel'),
         $containerCar = $carousel.children('.Slider-box');
-        console.log($containerCar)
     return {
         init: function(){
             $container.each(function(){

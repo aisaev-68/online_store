@@ -4,37 +4,35 @@ from django.contrib.auth.forms import UserCreationForm, UsernameField, ReadOnlyP
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 
-from account.models import User
+from account.models import CustomUser
 
 
-class UserRegistrationForm(UserCreationForm):
+class UserRegistrationForm(forms.ModelForm):
     """
     Класс формы регистрации пользователя.
     """
     def __init__(self, *args, **kwargs):
+        style = "height: 30px; padding-left: 15px;"
         super().__init__(*args, **kwargs)
-        self.fields['username'].widget.attrs['style'] = "height: 30px; padding-left: 5px;"
-        self.fields['password1'].widget.attrs['style'] = "height: 30px; padding-left: 5px;"
-        self.fields['password2'].widget.attrs['style'] = "height: 30px; padding-left: 5px;"
-        self.fields['fullName'].widget.attrs['style'] = "height: 30px; padding-left: 5px;"
-        self.fields['phone'].widget.attrs['style'] = "height: 30px; padding-left: 5px;"
-        self.fields['email'].widget.attrs['style'] = "height: 30px; padding-left: 5px;"
+        for field in ['username', 'password1', 'password2',]: #'fullName', 'phone', 'email'
+            self.fields[field].widget.attrs['style'] = style
+
 
     username = forms.CharField(required=True, label='Username*:', widget=forms.TextInput(
         attrs={
             'placeholder': 'Username*',
         }
     ))
-    fullName = forms.CharField(required=True, label='Full name*:', widget=forms.TextInput(
-        attrs={
-            'placeholder': 'Full name*',
-        }
-    ))
-    phone = forms.CharField(required=True, label='Phone number*:', widget=forms.TextInput(
-        attrs={
-            'placeholder': 'Phone number*',
-        }
-    ))
+    # fullName = forms.CharField(required=True, label='Full name*:', widget=forms.TextInput(
+    #     attrs={
+    #         'placeholder': 'Full name*',
+    #     }
+    # ))
+    # phone = forms.CharField(required=False, label='Phone number*:', widget=forms.TextInput(
+    #     attrs={
+    #         'placeholder': 'Phone number*',
+    #     }
+    # ))
     password1 = forms.CharField(required=True, label='Password*:', widget=forms.PasswordInput(
         attrs={
             'placeholder': 'Password*',
@@ -46,72 +44,73 @@ class UserRegistrationForm(UserCreationForm):
             'placeholder': 'Confirm the password*',
         }
     ))
-    email = forms.CharField(required=True, label='E-mail address*:', widget=forms.EmailInput(
-        attrs={
-            'placeholder': 'E-mail address*',
-        }
-    ))
-    avatar = forms.CharField(required=False, label='Avatar:', widget=forms.FileInput)
+    # email = forms.CharField(required=True, label='E-mail address*:', widget=forms.EmailInput(
+    #     attrs={
+    #         'placeholder': 'E-mail address*',
+    #     }
+    # ))
+    # avatar = forms.CharField(required=False, label='Avatar:', widget=forms.FileInput)
 
     error_messages = {
         "password_mismatch": "Пароли не совпадают! Повторите ввод!",
-        "phone_exists": "Пользователь с таким номером телефона уже существует!",
-        "email_exists": "Пользователь с таким email уже существует!",
+        # "phone_exists": "Пользователь с таким номером телефона уже существует!",
+        # "email_exists": "Пользователь с таким email уже существует!",
     }
 
     class Meta:
-        model = User
-        fields = ('username', 'fullName', 'email', 'phone', 'password1', 'password2', "avatar")
+        model = CustomUser
+        # fields = ('username', 'fullName', 'email', 'phone', 'password', 'password1', "avatar")
+
+        fields = ('username', 'password1', 'password2', )
 
 
-    def clean_phone(self):
-        """
-        Метод для определение уникальности номера телефона.
-        :return: phone
-        """
-        phone = self.cleaned_data.get("phone")
-        phone_db = User.objects.filter(phone=phone)
-        if phone_db:
-            raise ValidationError(
-                self.error_messages["phone_exists"],
-                code="phone_exists",
-            )
-        return phone
+    def clean_password(self):
+        cd = self.cleaned_data
+        print(333, cd)
+        if cd['password1'] != cd['password2']:
+            raise forms.ValidationError('password no match')
+        return cd['password1']
 
-    def clean_email(self):
-        """
-        Метод для определения уникальности email.
-        :return: email
-        """
-        email = self.cleaned_data.get("email")
-        email_db = User.objects.filter(email=email)
-        if email_db:
-            raise ValidationError(
-                self.error_messages["email_exists"],
-                code="email_exists",
-            )
-        return email
-
-
-    def clean_username(self):
-        """
-        Метод для определения уникальности username.
-        :return: username
-        """
-        username = self.cleaned_data.get("username")
-        username_db = User.objects.filter(username=username)
-        if username_db:
-            raise ValidationError(
-                self.error_messages["username_exists"],
-                code="username_exists",
-            )
-        return username
+    # def clean_phone(self):
+    #     """
+    #     Метод для определение уникальности номера телефона.
+    #     :return: phone
+    #     """
+    #     phone = self.cleaned_data.get('phone')
+    #     if phone and User.objects.filter(phone=phone).exclude(pk=self.instance.pk).exists():
+    #         raise forms.ValidationError("This phone number is already in use.")
+    #     return phone
+    #
+    # def clean_email(self):
+    #     """
+    #     Метод для определения уникальности email.
+    #     :return: email
+    #     """
+    #     email = self.cleaned_data.get('email')
+    #     if User.objects.filter(email=email).exclude(pk=self.instance.pk).exists():
+    #         raise forms.ValidationError("This email is already in use.")
+    #     return email
+    #
+    # def clean_username(self):
+    #     """
+    #     Метод для определения уникальности username.
+    #     :return: username
+    #     """
+    #     username = self.cleaned_data.get('username')
+    #     if User.objects.filter(username=username).exclude(pk=self.instance.pk).exists():
+    #         raise forms.ValidationError("This username is already in use.")
+    #     return username
+    #
+    # def clean_avatar(self):
+    #     avatar = self.cleaned_data.get('avatar')
+    #     if avatar and avatar.size > 2 * 1024 * 1024:
+    #         raise forms.ValidationError("The maximum file size for avatar is 2MB.")
+    #     return avatar
 
 
 class ChangeForm(UserChangeForm):
     class Meta(UserChangeForm.Meta):
         model = User
-
 
 
 class LoginForm(forms.Form):
@@ -141,6 +140,53 @@ class LoginForm(forms.Form):
 
 
 class UserUpdateView(forms.ModelForm):
+    fullName = forms.CharField(
+        required=True,
+        label='Full name*:',
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': 'Full name*',
+            }
+        )
+    )
+    email = forms.CharField(
+        required=True,
+        label='E-mail address*:',
+        widget=forms.EmailInput(
+            attrs={
+                'placeholder': 'E-mail address*',
+            }
+        )
+    )
+
     class Meta:
-        model = User
-        fields = ("avatar", 'username', 'last_name', 'first_name', 'surname', 'email', 'phone')
+        model = CustomUser
+        fields = ("avatar", 'username', 'fullName', 'email', 'phone',)
+
+
+class ChangePasswordForm(forms.Form):
+    passwordCurrent = forms.CharField(
+        required=True,
+        widget=forms.PasswordInput,
+        help_text=password_validation.password_validators_help_text_html()
+    )
+    password = forms.CharField(
+        required=True,
+        widget=forms.PasswordInput,
+        help_text=password_validation.password_validators_help_text_html()
+    )
+    passwordReply = forms.CharField(
+        required=True,
+        widget=forms.PasswordInput
+    )
+
+    def clean(self):
+        super().cleaned_data()
+        return self.cleaned_data['passwordReply']
+
+    def clean_password(self):
+        cd = self.cleaned_data
+        print(333, cd)
+        if cd['password'] != cd['passwordReply']:
+            raise forms.ValidationError('password no match')
+        return cd['password']

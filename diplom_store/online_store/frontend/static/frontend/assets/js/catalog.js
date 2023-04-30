@@ -36,10 +36,8 @@ var mix = {
                     selected: false
                 })))
                 .catch(() => {
-                        this.topTags = this.topTags.map(tag => ({
-                        ...tag,
-                        selected: false
-                    }))
+                        this.topTags = []
+                        console.warn('Ошибка получения тегов')
                 })
         },
         getCatalogs(page) {
@@ -58,63 +56,12 @@ var mix = {
                 limit: PAGE_LIMIT
             })
                 .then(data => {
-                    throw new Error('break')
                     this.catalogCards = data.items
                     this.currentPage = data.currentPage
                     this.lastPage = data.lastPage
-                    console.log(this.catalogCards)
 
                 }).catch(() => {
-                    let items = this.catalogFromServer
-                        .filter(item => this.category ? item.category === this.category : true)
-                    if (this.filter) {
-                        if (this.filter.minPrice) {
-                           items = items.filter(item => item.price >= this.filter.minPrice)
-                        }
-                        if (this.filter.maxPrice) {
-                           items = items.filter(item => item.price <= this.filter.maxPrice)
-                        }
-                        if (this.filter.name) {
-                            items = items.filter(item => item.title
-                                .toLowerCase()
-                                .indexOf(this.filter.name.trim().toLowerCase()) >= 0
-                            )
-                        }
-                        if (this.filter.freeDelivery) {
-                            items = items.filter(item => item.freeDelivery)
-                        }
-                        if (this.filter.available) {
-                            items = items.filter(item => item.count > 0)
-                        }
-                    }
-                    if (tags.length) {
-                        items = items
-                            .filter(
-                                item => tags.every(
-                                    tag => item.tags?.includes(tag)
-                                )
-                            )
-                    }
-
-                    this.pages = Math.ceil(items.length / PAGE_LIMIT)
-
-                    if (this.selectedSort) {
-                        const res = items.sort((a, b) => {
-                             return this.selectedSort.selected === 'dec'
-                                 ? a[this.selectedSort.id] - b[this.selectedSort.id]
-                                 : b[this.selectedSort.id] - a[this.selectedSort.id]
-                        })
-                        items = res
-                    }
-
-
-                    this.catalogCards
-                        = items.slice(
-                            (page-1)*PAGE_LIMIT,
-                            (page) * PAGE_LIMIT < (items.length - 1)
-                                ? (page+1) * PAGE_LIMIT
-                                : (items.length - 1)
-                        )
+                    console.warn('Ошибка при получении каталога')
                 })
         }
     },
@@ -135,7 +82,7 @@ var mix = {
             category: null,
             catalogCards: [],
             currentPage: null,
-            lastPage: null,
+            lastPage: 1,
             selectedSort: null,
             filter: {
                 name: '',

@@ -5,23 +5,26 @@ var mix = {
               .then(data => {
                 this.banners = data.banners
               }).catch(() => {
-                  this.banners = this.catalogFromServer.slice(0, 3)
+                  this.banners = []
+                  console.warn('Ошибка при получении баннеров')
               })
         },
         getPopularProducts() {
             this.getData("/api/products/popular")
               .then(data => {
-                this.popularCards = data.products
+                this.popularCards = data
               }).catch(() => {
-                  this.popularCards = this.catalogFromServer.slice(0, 5)
+                  this.popularCards = []
+                  console.warn('Ошибка при получении списка популярных товаров')
             })
         },
         getLimitedProducts() {
             this.getData("/api/products/limited")
               .then(data => {
-                this.limitedCards = data.products
+                this.limitedCards = data
               }).catch(() => {
-                  this.limitedCards = this.catalogFromServer.slice(0, 5)
+                  this.limitedCards = []
+                  console.warn('Ошибка при получении списка лимитированных товаров')
             })
         },
     },

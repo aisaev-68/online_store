@@ -1,7 +1,7 @@
 var mix = {
     methods: {
         getOrder(orderId) {
-            this.getData(`/api/orders/${orderId}`).then(data => {
+            this.getData(`/api/orders/active`).then(data => {
                 this.orderId = data.orderId
                 this.createdAt = data.createdAt
                 this.fullName = data.fullName
@@ -14,18 +14,22 @@ var mix = {
                 this.status = data.status
                 this.totalCost = data.totalCost
                 this.products = data.products
-                if(typeof data.paymentError !== 'undefined'){
+                if (typeof data.paymentError !== 'undefined'){
                     this.paymentError = data.paymentError
                 }
             })
         },
         confirmOrder() {
             if (this.order) {
-                this.postData('/api/order/' + this.order.id)
-                    .then()
-                    .catch()
-                    .finally(() => {
+                this.postData('/api/orders/' + this.order, {
+                   ...this.order
+                })
+                    .then(() => {
+                        alert('Заказ подтвержден')
                         location.replace('/payment')
+                    })
+                    .catch(() => {
+                        console.warn('Ошибка при подтверждения заказа')
                     })
             }
         }

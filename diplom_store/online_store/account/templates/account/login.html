@@ -22,20 +22,23 @@ Log-in
         </div>
     </div>
 </div>
-<section class="wrap container form_reg">
-    <form class="" method="post" action="">
+<section class="wrapper">
+    <div class="header">
+        <h3 class="sign-in" style="text-align: center;">Вход</h3>
+    </div>
+    <form class="" method="post" action="" style="display: flex; flex-direction: column; align-items: center;">
         {% csrf_token %}
         {% for field in form %}
-        <div class="form-register">
+        <div class="form-group">
             <p class="form-field" style="">{{ field }}</p>
         </div>
         {% endfor %}
-        <div class="form-register">
+        <div class="form-group">
             <a class="forgot-label" href="">Forgot your password?</a>
         </div>
-        <div class="form-register reg-link">
-                <button class="btn btn_primary" type="submit">Login</button>
-                <a href="{% url 'account:register' %}" class="btn btn_primary ">Register</a>
+        <div class="form-group">
+            <button class="btn btn_success" type="submit">Login</button>
+            <a href="{% url 'account:register' %}" class="btn btn_success">Register</a>
         </div>
     </form>
 </section>

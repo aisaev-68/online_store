@@ -1,16 +1,13 @@
 var mix = {
     methods: {
-        getProfile(userId) {
+        getProfile() {
             this.getData(`/api/profile/`).then(data => {
                 this.fullName = data.fullName
                 this.avatar = data.avatar
                 this.phone = data.phone
                 this.email = data.email
             }).catch(() => {
-                this.fullName = 'Полное имя'
-                this.avatar = 'https://i.pravatar.cc/300'
-                this.phone = '88002000600'
-                this.email = 'no-reply@mail.ru'
+                console.warn('Ошибка при получении профиля')
             })
         },
         changeProfile () {
@@ -19,7 +16,7 @@ var mix = {
                 return
             }
 
-            this.postData('/api/profile/change', {
+            this.postData('/api/profile', {
                 fullName: this.fullName,
                 avatar: this.avatar,
                 phone: this.phone,
@@ -27,8 +24,8 @@ var mix = {
             }).then(data => {
                alert('Успешно сохранено')
             }).catch(() => {
-               alert('Ошибка сохранения')
-            }).finally(() => {})
+                console.warn('Ошибка при обновлении профиля')
+            })
         },
         changePassword () {
             if (
@@ -42,14 +39,45 @@ var mix = {
             }
             this.postData('/api/profile/password').then(data => {
                alert('Успешно сохранено')
-            }).catch(() => {
-                alert('Ошибка сохранения')
-            }).finally(() => {
                 this.passwordCurrent = ''
                 this.password = ''
                 this.passwordReply = ''
+            }).catch(() => {
+                console.warn('Ошибка при сохранении пароля')
             })
+        },
+        setAvatar (event) {
+            const target = event.target
+            const file = target.files?.[0] ?? null
+            if (!file) return
+
+            this.postData('/api/profile/avatar', file, {
+                headers: {
+                  'Content-Type': file.type,
+                  'X-CSRFToken': this.getCookie('csrftoken')
+                },
+            }).then((data) => {
+                this.avatar = data.url
+            }).catch(() => {
+                 console.warn('Ошибка при обновлении изображения')
+            })
+        },
+        getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
         }
+
     },
     created() {
         this.getProfile();

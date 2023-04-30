@@ -4,7 +4,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils.timezone import now
 
-from account.models import User
+from account.models import CustomUser
 from catalog.models import Catalog
 from catalog.models import Category
 

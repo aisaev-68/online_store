@@ -4,7 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.parsers import FileUploadParser
 
-from account.models import User
+from account.models import CustomUser
 from account.serializers import UserSerializer, UserAvatarSerializer, UserPasswordChangeSerializer
 
 
@@ -16,10 +16,10 @@ class UserView(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_object(self):
-        return User.objects.get(id=self.request.user.pk)
+        return CustomUser.objects.get(id=self.request.user.pk)
 
     def retrieve(self, *args, **kwargs):
-        user = User.objects.get(id=self.request.user.pk)
+        user = CustomUser.objects.get(id=self.request.user.pk)
         serializer = self.serializer_class(user, many=False)
         return Response(serializer.data)
 
@@ -40,7 +40,7 @@ class UserAvatarView(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_object(self):
-        return User.objects.get(id=self.request.user.pk)
+        return CustomUser.objects.get(id=self.request.user.pk)
 
     def update(self, request, *args, **kwargs):
         return super().update(request, *args, **kwargs)

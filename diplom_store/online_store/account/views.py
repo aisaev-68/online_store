@@ -1,16 +1,18 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import Group
 from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView, PasswordChangeDoneView
 from django.core.checks import messages
+from django.contrib.auth.hashers import check_password
 from django.http import request, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from django.views import View
 from django.views.generic import CreateView, UpdateView
 
-from account.forms import UserRegistrationForm, LoginForm, UserUpdateView
-from account.models import User
+from account.forms import UserRegistrationForm, LoginForm, UserUpdateView, ChangePasswordForm
+from account.models import CustomUser
 from account.serializers import UserPasswordChangeSerializer, UserAvatarSerializer, UserSerializer
 
 
@@ -39,10 +41,10 @@ class RegisterView(View):
 
         if form.is_valid():
             new_user = form.save(commit=False)
-            new_user.avatar = request.FILES.get('avatar')
-            last_name, first_name, surname = form.cleaned_data['fullName'].split(' ', 2)
+            # new_user.avatar = request.FILES.get('avatar')
+            # last_name, first_name, surname = form.cleaned_data['fullName'].split(' ', 2)
             password = form.cleaned_data['password1']
-            new_user.last_name, new_user.first_name,  new_user.surname = last_name, first_name, surname
+            # new_user.last_name, new_user.first_name,  new_user.surname = last_name, first_name, surname
             new_user.set_password(password)
             new_user.save()
             # client_group = Group.objects.get(name="Clients")
@@ -89,42 +91,66 @@ class MyLogoutView(LogoutView):
     next_page = reverse_lazy('account:login')
 
 
-class ChangePasswordView(PasswordChangeView):
-    template_name = 'account/change-password.html'
-
-
 class ChangePasswordViewDone(PasswordChangeDoneView):
     template_name = 'account/password_change_done.html'
 
 
-class UserProfileView(LoginRequiredMixin, UpdateView):
+class UpdateProfileView(LoginRequiredMixin, UpdateView):
     def get(self, request, *args, **kwargs):
+        password_form = ChangePasswordForm()
         form = UserUpdateView(initial={'phone': request.user.phone,
                                        'username': request.user.username,
                                        'avatar': request.user.avatar,
-                                       'fullName': request.user.fullName,
-                                       'email': request.user.email})
-        return render(request, 'account/profile.html', context={'form': form})
+                                       'fullName': request.user.last_name + ' ' + request.user.first_name + ' ' + request.user.surname,
+                                       'email': request.user.email,})
+
+        return render(request, 'account/profile.html', context={'form': form, 'passw_form': password_form})
 
     def post(self, request, *args, **kwargs):
         form = UserUpdateView(request.POST, request.FILES)
+        passw_form = PasswordChangeForm(user=request.user, data=request.POST)
+        if passw_form.is_valid():
+            user_passw = passw_form.save()
+            update_session_auth_hash(request, user_passw)  # обновляем хэш в сессии
+            messages.success(request, 'Ваш пароль успешно изменен!')
+            return render(request, 'account/profile.html', context={'form': form, 'passw_form': passw_form})
+        else:
+            form = PasswordChangeForm(user=request.user)
+
+
         if form.is_valid():
-            fullName = form.cleaned_data['first_name']
-            # avatar = form.cleaned_data['avatar']
-            username = form.cleaned_data['username']
+            user = form.save(commit=False)
+            user.avatar = request.FILES.get('avatar')
             email = form.cleaned_data['email']
             phone = form.cleaned_data['phone']
-
-            user = request.user
-            user.fullName = fullName
+            last_name, first_name, surname = form.cleaned_data['fullName'].split(' ', 2)
+            user.last_name, user.first_name, user.surname = last_name, first_name, surname
             user.email = email
-            user.username = username
             user.phone = phone
-            # user.avatar = avatar
             user.save()
-            return render(request, 'account/profile.html', context={'form': form})
-        return render(request, 'account/profile.html', context={'form': form})
+            return render(request, 'account/profile.html', context={'form': form, 'passw_form': passw_form})
+        return render(request, 'account/profile.html', context={'form': form, 'passw_form': passw_form})
 
 
 class UserAvatarView(View):
     pass
+
+
+class ChangePasswordView(View):
+    def post(self, request, *args, **kwargs):
+        user = CustomUser.objects.get(username=request.user)
+        form = ChangePasswordForm(request.POST)
+        if form.is_valid():
+            old_password = request.POST.get("passwordCurrent")
+            new_pass = request.POST.get("new_password")
+            new_pass_rep = request.POST.get("passwordReply")
+            if check_password(old_password, user.password):
+                user.set_password(new_pass)
+                user.save()
+                return HttpResponse('ok')
+            else:
+                return HttpResponse('bad')
+        else:
+            form = ChangePasswordForm()
+            return render(request, 'account/profile.html',
+                  {'form': form, 'user': user})
