@@ -99,8 +99,8 @@ class UpdateProfileView(LoginRequiredMixin, UpdateView):
                                        'avatar': request.user.avatar,
                                        'fullName': request.user.last_name + ' ' + request.user.first_name + ' ' + request.user.surname,
                                        'email': request.user.email,})
-        print(33333, form)
-        return render(request, 'account/profile.html', context={'form': form, 'passw_form': password_form})
+        print(33333, password_form)
+        return render(request, 'account/profile.html', context={'form': form, 'password_form': password_form})
 
     def post(self, request, *args, **kwargs):
         user = request.user
@@ -125,7 +125,7 @@ class UpdateProfileView(LoginRequiredMixin, UpdateView):
         else:
             return HttpResponse('bad')
 
-        return render(request, 'account/profile.html', context={'user': user})
+        return render(request, 'account/profile.html', context={'form': form, 'password_form': password_form})
 
 
 class UserAvatarView(View):

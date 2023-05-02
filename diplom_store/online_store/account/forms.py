@@ -159,12 +159,12 @@ class ChangePasswordForm(forms.Form):
     passwordCurrent = forms.CharField(
         required=True,
         widget=forms.PasswordInput,
-        help_text=password_validation.password_validators_help_text_html()
+        # help_text=password_validation.password_validators_help_text_html()
     )
     password = forms.CharField(
         required=True,
         widget=forms.PasswordInput,
-        help_text=password_validation.password_validators_help_text_html()
+        # help_text=password_validation.password_validators_help_text_html()
     )
     passwordReply = forms.CharField(
         required=True,
