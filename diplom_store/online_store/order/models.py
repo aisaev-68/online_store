@@ -1,6 +1,5 @@
 from django.db import models
 
-from account.models import CustomUser
 from online_store import settings
 from product.models import Product
 

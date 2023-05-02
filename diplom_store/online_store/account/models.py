@@ -12,23 +12,25 @@ def get_upload_path_by_user(instance, filename):
     return os.path.join('avatar/', now().date().strftime("%Y/%m/%d"), filename)
 
 
-class CustomUser(AbstractUser):
+class User(AbstractUser):
     def validate_image(self):
         if self.file.size > 2 * 1024 * 1024:
             raise ValidationError("The maximum file size for avatar is 2MB.")
 
-    surname = models.CharField(max_length=50, verbose_name='Surname', blank=True)
-    phone = models.CharField(max_length=30, verbose_name='Phone', blank=True, null=True,)
-    avatar = models.ImageField(upload_to=get_upload_path_by_user, null=True, validators=[validate_image],
+    surname = models.CharField(max_length=100, verbose_name='Surname', blank=True)
+    phone = models.CharField(max_length=20, verbose_name='Phone', blank=True, null=True, unique=True)
+    avatar = models.ImageField(upload_to=get_upload_path_by_user, null=True, blank=True, validators=[validate_image],
                                default='avatar/default_avatars.png')
 
-    def fullName(self):
-        """
-        Полное имя
-        """
-        return f"{self.last_name} {self.first_name} {self.surname}"
+    def save(self, *args, **kwargs):
+        self.fullName = f"{self.last_name} {self.first_name} {self.surname}".strip()
+        super().save(*args, **kwargs)
 
     class Meta:
+        indexes = [models.Index(fields=['email'])]
+        constraints = [
+            models.UniqueConstraint(fields=['email', 'phone'], name='unique_email_phone')
+        ]
         verbose_name = 'user'
         verbose_name_plural = 'users'
 
@@ -38,9 +40,9 @@ class CustomUser(AbstractUser):
     # def get_absolute_url(self):
     #     return reverse("shopapp:catalog_products", kwargs={'eng_name': self.eng_name})
 
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        img = Image.open(self.avatar.path)
-        if img.height > 100 or img.width > 100:
-            img.thumbnail((100, 100))
-        img.save(self.avatar.path, quality=70, optimize=True)
+    # def save(self, *args, **kwargs):
+    #     super().save(*args, **kwargs)
+    #     img = Image.open(self.avatar.path)
+    #     if img.height > 100 or img.width > 100:
+    #         img.thumbnail((100, 100))
+    #     img.save(self.avatar.path, quality=70, optimize=True)

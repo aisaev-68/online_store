@@ -12,7 +12,7 @@ from django.views import View
 from django.views.generic import CreateView, UpdateView
 
 from account.forms import UserRegistrationForm, LoginForm, UserUpdateView, ChangePasswordForm
-from account.models import CustomUser
+from account.models import User
 from account.serializers import UserPasswordChangeSerializer, UserAvatarSerializer, UserSerializer
 
 
@@ -138,7 +138,7 @@ class UserAvatarView(View):
 
 class ChangePasswordView(View):
     def post(self, request, *args, **kwargs):
-        user = CustomUser.objects.get(username=request.user)
+        user = User.objects.get(username=request.user)
         form = ChangePasswordForm(request.POST)
         if form.is_valid():
             old_password = request.POST.get("passwordCurrent")

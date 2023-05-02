@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from account.models import CustomUser
+from account.models import User
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -9,7 +9,7 @@ class UserSerializer(serializers.ModelSerializer):
     """
 
     class Meta:
-        model = CustomUser
+        model = User
         fields = ['fullName', 'phone', 'email', 'avatar']
 
 
@@ -19,7 +19,7 @@ class UserAvatarSerializer(serializers.ModelSerializer):
     """
 
     class Meta:
-        model = CustomUser
+        model = User
         fields = ['avatar']
 
 
@@ -29,5 +29,5 @@ class UserPasswordChangeSerializer(serializers.ModelSerializer):
     """
 
     class Meta:
-        model = CustomUser
+        model = User
         fields = ['password']

@@ -17,7 +17,7 @@ CART_SESSION_ID = 'cart'
 
 FIXTURE_DIRS =['online_store/tests/fixtures/']
 
-AUTH_USER_MODEL = 'account.CustomUser'
+AUTH_USER_MODEL = 'account.User'
 
 # Application definition
 

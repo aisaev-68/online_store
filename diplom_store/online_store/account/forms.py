@@ -1,10 +1,9 @@
 from django import forms
 from django.contrib.auth import password_validation
 from django.contrib.auth.forms import UserCreationForm, UsernameField, ReadOnlyPasswordHashField, UserChangeForm
-from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 
-from account.models import CustomUser
+from account.models import User
 
 
 class UserRegistrationForm(forms.ModelForm):
@@ -58,7 +57,7 @@ class UserRegistrationForm(forms.ModelForm):
     }
 
     class Meta:
-        model = CustomUser
+        model = User
         # fields = ('username', 'fullName', 'email', 'phone', 'password', 'password1', "avatar")
 
         fields = ('username', 'password1', 'password2', )
@@ -160,7 +159,7 @@ class UserUpdateView(forms.ModelForm):
     )
 
     class Meta:
-        model = CustomUser
+        model = User
         fields = ("avatar", 'username', 'fullName', 'email', 'phone',)
 
 

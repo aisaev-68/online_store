@@ -1,30 +1,25 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
-from account.models import CustomUser
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.utils.translation import gettext_lazy as _
+from account.models import User
 
 
-@admin.register(CustomUser)
-class CustomUserAdmin(UserAdmin):
-    list_display = ('username', 'fullName', 'email', 'is_staff', 'avatar')
-    list_filter = ('is_staff', 'is_superuser', 'is_active', 'groups')
+
+class UserAdmin(BaseUserAdmin):
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
-        (('Personal info'), {'fields': ('last_name', 'first_name', 'surname', 'email', 'phone', 'avatar')}),
-        (('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
-        (('Important dates'), {'fields': ('last_login', 'date_joined')}),
+        (_('Personal info'), {'fields': ('first_name', 'last_name', 'surname', 'email', 'phone', 'avatar')}),
+        (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
+        (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
     )
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('username', 'email', 'password1', 'password2'),
-        }),
+            'fields': ('username', 'password1', 'password2', 'email', 'first_name', 'last_name', 'surname', 'phone')}
+        ),
     )
-    search_fields = ('username', 'first_name', 'last_name', 'email')
+    list_display = ('username', 'email', 'first_name', 'last_name', 'surname', 'phone', 'is_staff')
+    search_fields = ('username', 'email', 'first_name', 'last_name', 'surname', 'phone')
     ordering = ('username',)
-    filter_horizontal = ('groups', 'user_permissions',)
 
-    def fullName(self, obj: CustomUser):
-        """
-        Полное имя
-        """
-        return obj.last_name + ' ' + obj.first_name + ' ' + obj.surname
+admin.site.register(User, UserAdmin)
