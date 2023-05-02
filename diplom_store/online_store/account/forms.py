@@ -148,19 +148,11 @@ class UserUpdateView(forms.ModelForm):
             }
         )
     )
-    email = forms.CharField(
-        required=True,
-        label='E-mail address*:',
-        widget=forms.EmailInput(
-            attrs={
-                'placeholder': 'E-mail address*',
-            }
-        )
-    )
+
 
     class Meta:
         model = User
-        fields = ("avatar", 'username', 'fullName', 'email', 'phone',)
+        fields = ("avatar", 'fullName', 'email', 'phone',)
 
 
 class ChangePasswordForm(forms.Form):
@@ -179,13 +171,13 @@ class ChangePasswordForm(forms.Form):
         widget=forms.PasswordInput
     )
 
-    def clean(self):
-        super().cleaned_data()
-        return self.cleaned_data['passwordReply']
 
-    def clean_password(self):
-        cd = self.cleaned_data
-        print(333, cd)
-        if cd['password'] != cd['passwordReply']:
-            raise forms.ValidationError('password no match')
-        return cd['password']
+    def clean(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get("password")
+        passwordReply = cleaned_data.get("passwordReply")
+        if password != passwordReply:
+            raise forms.ValidationError(
+                "New passwords do not match"
+            )
+

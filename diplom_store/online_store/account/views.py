@@ -41,10 +41,7 @@ class RegisterView(View):
 
         if form.is_valid():
             new_user = form.save(commit=False)
-            # new_user.avatar = request.FILES.get('avatar')
-            # last_name, first_name, surname = form.cleaned_data['fullName'].split(' ', 2)
             password = form.cleaned_data['password1']
-            # new_user.last_name, new_user.first_name,  new_user.surname = last_name, first_name, surname
             new_user.set_password(password)
             new_user.save()
             # client_group = Group.objects.get(name="Clients")
@@ -99,58 +96,57 @@ class UpdateProfileView(LoginRequiredMixin, UpdateView):
     def get(self, request, *args, **kwargs):
         password_form = ChangePasswordForm()
         form = UserUpdateView(initial={'phone': request.user.phone,
-                                       'username': request.user.username,
                                        'avatar': request.user.avatar,
                                        'fullName': request.user.last_name + ' ' + request.user.first_name + ' ' + request.user.surname,
                                        'email': request.user.email,})
-
+        print(33333, form)
         return render(request, 'account/profile.html', context={'form': form, 'passw_form': password_form})
 
     def post(self, request, *args, **kwargs):
+        user = request.user
         form = UserUpdateView(request.POST, request.FILES)
-        passw_form = PasswordChangeForm(user=request.user, data=request.POST)
-        if passw_form.is_valid():
-            user_passw = passw_form.save()
-            update_session_auth_hash(request, user_passw)  # обновляем хэш в сессии
-            messages.success(request, 'Ваш пароль успешно изменен!')
-            return render(request, 'account/profile.html', context={'form': form, 'passw_form': passw_form})
-        else:
-            form = PasswordChangeForm(user=request.user)
-
-
-        if form.is_valid():
-            user = form.save(commit=False)
-            user.avatar = request.FILES.get('avatar')
-            email = form.cleaned_data['email']
-            phone = form.cleaned_data['phone']
+        password_form = PasswordChangeForm(request.POST)
+        print(1111111111)
+        if password_form.is_valid():
+            old_password = request.POST.get("passwordCurrent")
+            new_password = request.POST.get("new_password")
+            if user.check_password(old_password):
+                user.set_password(new_password)
+                user.save()
+                update_session_auth_hash(request, user)
+            # return HttpResponse('bad')
+        elif form.is_valid():
+            print(55555, form.cleaned_data)
             last_name, first_name, surname = form.cleaned_data['fullName'].split(' ', 2)
             user.last_name, user.first_name, user.surname = last_name, first_name, surname
-            user.email = email
-            user.phone = phone
+            user.email = form.cleaned_data['email']
+            user.phone = form.cleaned_data['phone']
             user.save()
-            return render(request, 'account/profile.html', context={'form': form, 'passw_form': passw_form})
-        return render(request, 'account/profile.html', context={'form': form, 'passw_form': passw_form})
+        else:
+            return HttpResponse('bad')
+
+        return render(request, 'account/profile.html', context={'user': user})
 
 
 class UserAvatarView(View):
     pass
 
-
-class ChangePasswordView(View):
-    def post(self, request, *args, **kwargs):
-        user = User.objects.get(username=request.user)
-        form = ChangePasswordForm(request.POST)
-        if form.is_valid():
-            old_password = request.POST.get("passwordCurrent")
-            new_pass = request.POST.get("new_password")
-            new_pass_rep = request.POST.get("passwordReply")
-            if check_password(old_password, user.password):
-                user.set_password(new_pass)
-                user.save()
-                return HttpResponse('ok')
-            else:
-                return HttpResponse('bad')
-        else:
-            form = ChangePasswordForm()
-            return render(request, 'account/profile.html',
-                  {'form': form, 'user': user})
+#
+# class ChangePasswordView(View):
+#     def post(self, request, *args, **kwargs):
+#         user = User.objects.get(username=request.user)
+#         form = ChangePasswordForm(request.POST)
+#         if form.is_valid():
+#             old_password = request.POST.get("passwordCurrent")
+#             new_pass = request.POST.get("new_password")
+#             new_pass_rep = request.POST.get("passwordReply")
+#             if check_password(old_password, user.password):
+#                 user.set_password(new_pass)
+#                 user.save()
+#                 return HttpResponse('ok')
+#             else:
+#                 return HttpResponse('bad')
+#         else:
+#             form = ChangePasswordForm()
+#             return render(request, 'account/profile.html',
+#                   {'form': form, 'user': user})

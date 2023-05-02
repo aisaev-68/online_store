@@ -1,28 +1,30 @@
 {% load static %}
 {% load i18n %}
 
-<form class="form Profile-form" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <div class="row">
+
+<div class="row">
+    <div class="" style="display: flex; flex-direction: column;">
         <div class="row-block">
-            <div class="form-group">
-                <label class="form-label" for="avatar">{% trans 'Avatar' %}</label>
-                {% if form.avatar.value %}
-                <div class="Profile-avatar">
-                    {% else %}
-                    <div class="Profile-avatar Profile-avatar_noimg">
-                        {% endif %}
-                        <div class="Profile-img">
-                            {% if form.avatar.value %}
-                            <img src="{{ form.avatar.value.url }}" alt="#.png">
-                            {% else %}
-                            <img src="{% static 'frontend/assets/img/icons/user_icon.png' %}" alt="#.png">
+            <form class="form Profile-form" action="{% url 'account:profile' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label class="form-label" for="avatar">{% trans 'Avatar' %}</label>
+                    {% if form.avatar.value %}
+                    <div class="Profile-avatar">
+                        {% else %}
+                        <div class="Profile-avatar Profile-avatar_noimg">
                             {% endif %}
+                            <div class="Profile-img">
+                                {% if form.avatar.value %}
+                                <img src="{{ form.avatar.value.url }}" alt="#.png">
+                                {% else %}
+                                <img src="{% static 'frontend/assets/img/icons/user_icon.png' %}" alt="#.png">
+                                {% endif %}
+                            </div>
+                            <input class="Profile-file form-input" id="avatar" accept="image/*" name="avatar"
+                                   type="file"
+                                   data-validate="onlyImgAvatar">
                         </div>
-<!--                        <span class="avatar-span">{% trans 'Click on picture for change' %}</span>-->
-<!--                        <label class="Profile-fileLabel" for="avatar">{% trans 'Choose the picture' %}</label>-->
-                        <input class="Profile-file form-input" id="avatar" accept="image/*" name="avatar" type="file"
-                               data-validate="onlyImgAvatar">
                     </div>
                 </div>
                 <div class="form-group">
@@ -45,26 +47,30 @@
                         <button class="btn btn_success" type="submit">{% trans 'Save' %}</button>
                     </div>
                 </div>
-            </div>
-            <div class="row-block" style="align-self: end;">
+            </form>
+        </div>
+        <div class="row-block" style="align-self: end;">
+            <form class="form Profile-form" method="POST">
+                {% csrf_token %}
                 <div class="form-group">
                     <label class="form-label" for="passwordCurrent">{% trans 'Current password' %}</label>
                     <input class="form-input" id="passwordCurrent" name="passwordCurrent" type="password"
-                           placeholder="{% trans 'Enter the current password' %}" v-model="passwordCurrent"/>
+                           required value="{{ password_form.passwordCurrent }}"/>
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="password">{% trans 'New password' %}</label>
                     <input class="form-input" id="password" name="password" type="password"
-                           placeholder="{% trans 'Enter a new password' %}" v-model="password"/>
+                           required value="{{ password_form.password }}"/>
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="passwordReply">{% trans 'Password confirmation' %}</label>
                     <input class="form-input" id="passwordReply" name="passwordReply" type="password"
-                           placeholder="{% trans 'Enter your password again' %}" v-model="passwordReply"/>
+                           required value="{{ password_form.passwordReply }}"/>
                 </div>
                 <div class="form-group">
                     <button class="btn btn_success" type="submit">{% trans 'Save' %}</button>
                 </div>
-            </div>
+            </form>
         </div>
-</form>
+    </div>
+</div>
