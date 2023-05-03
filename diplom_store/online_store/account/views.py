@@ -5,7 +5,7 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView, PasswordChangeDoneView
 from django.core.checks import messages
 from django.contrib.auth.hashers import check_password
-from django.http import request, HttpResponse, HttpResponseRedirect
+from django.http import request, HttpResponse, HttpResponseRedirect, HttpRequest
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from django.views import View
@@ -95,34 +95,38 @@ class ChangePasswordViewDone(PasswordChangeDoneView):
 class UpdateProfileView(LoginRequiredMixin, UpdateView):
     def get(self, request, *args, **kwargs):
         password_form = ChangePasswordForm()
-        form = UserUpdateView(initial={'phone': request.user.phone,
-                                       'avatar': request.user.avatar,
-                                       'fullName': request.user.last_name + ' ' + request.user.first_name + ' ' + request.user.surname,
-                                       'email': request.user.email,})
+        form = UserUpdateView(instance=request.user)
+        # form = UserUpdateView(initial={'phone': request.user.phone,
+        #                                'avatar': request.user.avatar,
+        #                                'fullName': request.user.last_name + ' ' + request.user.first_name + ' ' + request.user.surname,
+        #                                'email': request.user.email,})
         print(33333, password_form)
         return render(request, 'account/profile.html', context={'form': form, 'password_form': password_form})
 
     def post(self, request, *args, **kwargs):
         user = request.user
-        form = UserUpdateView(request.POST, request.FILES)
+        print(12, request.user.email)
+        form = UserUpdateView(request.POST, request.FILES, instance=user)
         password_form = PasswordChangeForm(request.POST)
-        print(1111111111)
+        print(1111111111, form)
         if password_form.is_valid():
             old_password = request.POST.get("passwordCurrent")
-            new_password = request.POST.get("new_password")
+            new_password = request.POST.get("password")
             if user.check_password(old_password):
                 user.set_password(new_password)
                 user.save()
                 update_session_auth_hash(request, user)
             # return HttpResponse('bad')
         elif form.is_valid():
-            print(55555, form.cleaned_data)
+
             last_name, first_name, surname = form.cleaned_data['fullName'].split(' ', 2)
             user.last_name, user.first_name, user.surname = last_name, first_name, surname
             user.email = form.cleaned_data['email']
             user.phone = form.cleaned_data['phone']
+            print(55555, user.email, user.phone)
             user.save()
         else:
+            print(77777, )
             return HttpResponse('bad')
 
         return render(request, 'account/profile.html', context={'form': form, 'password_form': password_form})
