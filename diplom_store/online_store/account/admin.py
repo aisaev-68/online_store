@@ -1,11 +1,12 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import gettext_lazy as _
-from account.models import User
+from .models import User
 
 
-
-class UserAdmin(BaseUserAdmin):
+class CustomUserAdmin(UserAdmin):
+    model = User
+    list_display = ('username', 'email', 'fullName', 'phone')
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
         (_('Personal info'), {'fields': ('first_name', 'last_name', 'surname', 'email', 'phone', 'avatar')}),
@@ -15,11 +16,12 @@ class UserAdmin(BaseUserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('username', 'password1', 'password2', 'email', 'first_name', 'last_name', 'surname', 'phone')}
-        ),
+            'fields': ('username', 'password1', 'password2'),
+        }),
     )
-    list_display = ('username', 'email', 'first_name', 'last_name', 'surname', 'phone', 'is_staff')
     search_fields = ('username', 'email', 'first_name', 'last_name', 'surname', 'phone')
     ordering = ('username',)
+    filter_horizontal = ('groups', 'user_permissions',)
 
-admin.site.register(User, UserAdmin)
+
+admin.site.register(User, CustomUserAdmin)

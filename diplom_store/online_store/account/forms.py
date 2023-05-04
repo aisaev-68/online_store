@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth import password_validation
-from django.contrib.auth.forms import UserCreationForm, UsernameField, ReadOnlyPasswordHashField, UserChangeForm
+from django.contrib.auth.forms import UserCreationForm, UsernameField, ReadOnlyPasswordHashField, UserChangeForm, \
+    PasswordChangeForm
 from django.core.exceptions import ValidationError
 
 from account.models import User
@@ -138,7 +139,15 @@ class LoginForm(forms.Form):
         self.fields['password'].widget.attrs['style'] = "height: 30px; padding-left: 5px;"
 
 
-class UserUpdateView(forms.ModelForm):
+class UserUpdateForm(forms.ModelForm):
+    password = None
+
+    class Meta:
+        model = User
+        fields = ('fullName', 'email', 'phone', 'avatar')
+
+
+class UserUpdateView(forms.Form):
     fullName = forms.CharField(
         required=True,
         label='Full name*:',
@@ -149,10 +158,23 @@ class UserUpdateView(forms.ModelForm):
         )
     )
 
+    phone = forms.CharField(required=False, label='Phone number*:', widget=forms.TextInput(
+        attrs={
+            'placeholder': 'Phone number*',
+        }
+    ))
 
-    class Meta:
-        model = User
-        fields = ("avatar", 'fullName', 'email', 'phone',)
+    email = forms.CharField(required=True, label='E-mail address*:', widget=forms.EmailInput(
+        attrs={
+            'placeholder': 'E-mail address*',
+        }
+    ))
+    avatar = forms.CharField(required=False, label='Avatar:', widget=forms.FileInput)
+
+
+    # class Meta:
+    #     model = User
+    #     fields = ("avatar", 'fullName', 'email', 'phone',)
 
 
 class ChangePasswordForm(forms.Form):
@@ -161,7 +183,7 @@ class ChangePasswordForm(forms.Form):
         widget=forms.PasswordInput,
         # help_text=password_validation.password_validators_help_text_html()
     )
-    password = forms.CharField(
+    new_password = forms.CharField(
         required=True,
         widget=forms.PasswordInput,
         # help_text=password_validation.password_validators_help_text_html()
@@ -171,13 +193,22 @@ class ChangePasswordForm(forms.Form):
         widget=forms.PasswordInput
     )
 
+    # def clean_password(self):
+    #     cd = self.cleaned_data
+    #     print(333, cd)
+    #     if cd['password'] != cd['passwordReply']:
+    #         raise forms.ValidationError('password no match')
+    #     return cd['password']
 
-    def clean(self):
-        cleaned_data = super().clean()
-        password = cleaned_data.get("password")
-        passwordReply = cleaned_data.get("passwordReply")
-        if password != passwordReply:
-            raise forms.ValidationError(
-                "New passwords do not match"
-            )
+    # def clean(self):
+    #     cleaned_data = super().clean()
+    #     print(5555555555555555555555555)
+    #     new_password = cleaned_data.get("new_password")
+    #     passwordReply = cleaned_data.get("passwordReply")
+    #     if new_password != passwordReply:
+    #         raise forms.ValidationError(
+    #             "New passwords do not match"
+    #         )
+    #     print(11111111, new_password)
+    #     return new_password
 

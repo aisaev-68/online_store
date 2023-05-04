@@ -1,9 +1,11 @@
 import os
-from PIL import Image
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.urls import reverse
-
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
+from django.core.validators import FileExtensionValidator
+from PIL import Image
 from django.utils.timezone import now
 from rest_framework.exceptions import ValidationError
 
@@ -12,37 +14,34 @@ def get_upload_path_by_user(instance, filename):
     return os.path.join('avatar/', now().date().strftime("%Y/%m/%d"), filename)
 
 
+def validate_image_file_extension(image):
+    """
+    Валидатор, проверяющий размер изображения
+    """
+    max_size = 2 * 1024 * 1024  # 2 Мб
+    if image.size > max_size:
+        raise ValidationError(
+            _(f'The image exceeds the maximum size in {max_size / (1024 * 1024)} Mb'))
+
+
 class User(AbstractUser):
-    def validate_image(self):
-        if self.file.size > 2 * 1024 * 1024:
-            raise ValidationError("The maximum file size for avatar is 2MB.")
-
-    surname = models.CharField(max_length=100, verbose_name='Surname', blank=True)
-    phone = models.CharField(max_length=20, verbose_name='Phone', blank=True, null=True, unique=True)
-    avatar = models.ImageField(upload_to=get_upload_path_by_user, null=True, blank=True, validators=[validate_image],
-                               default='avatar/default_avatars.png')
-
-    def save(self, *args, **kwargs):
-        self.fullName = f"{self.last_name} {self.first_name} {self.surname}".strip()
-        super().save(*args, **kwargs)
-
-    class Meta:
-        indexes = [models.Index(fields=['email'])]
-        constraints = [
-            models.UniqueConstraint(fields=['email', 'phone'], name='unique_email_phone')
-        ]
-        verbose_name = 'user'
-        verbose_name_plural = 'users'
+    fullName = models.CharField(max_length=100, blank=True, verbose_name=_("Full name"))
+    surname = models.CharField(max_length=50, blank=True, verbose_name=_("Surname"))
+    phone = models.CharField(max_length=20, blank=True, verbose_name=_("Phone"))
+    avatar = models.ImageField(upload_to=get_upload_path_by_user, blank=True, null=True,
+                               validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png']),
+                                           validate_image_file_extension], verbose_name=_("Avatar"))
 
     def __str__(self):
         return self.username
 
-    # def get_absolute_url(self):
-    #     return reverse("shopapp:catalog_products", kwargs={'eng_name': self.eng_name})
+    def save(self, *args, **kwargs):
+        if not self.fullName:
+            self.fullName = f"{self.first_name} {self.last_name} {self.surname}"
+        else:
+            self.last_name, self.first_name, self.surname = str(self.fullName).split(' ', 2)
+        super().save(*args, **kwargs)
 
-    # def save(self, *args, **kwargs):
-    #     super().save(*args, **kwargs)
-    #     img = Image.open(self.avatar.path)
-    #     if img.height > 100 or img.width > 100:
-    #         img.thumbnail((100, 100))
-    #     img.save(self.avatar.path, quality=70, optimize=True)
+    class Meta:
+        verbose_name = _('user')
+        verbose_name_plural = _('users')
