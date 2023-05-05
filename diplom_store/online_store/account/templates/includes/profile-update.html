@@ -3,47 +3,46 @@
 
 <div class="Profile">
     <div class="row">
-        <div class="" style="display: flex; flex-direction: column;">
             <div class="row-block">
+                {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+                </div>
+                {% endfor %}
+                {% endif %}
                 <form class="form Profile-form" method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="form-group">
                         <label class="form-label" for="avatar">{% trans 'Avatar' %}</label>
-
-                        <div class="Profile-avatar">
-
-                            <div class="Profile-avatar Profile-avatar_noimg">
-
-                                <div class="Profile-img">
-                                    {% if form.avatar.value %}
-                                    <img src="{{ form.avatar.value.url }}" alt="#.png">
-                                    {% else %}
-                                    <img src="{% static 'frontend/assets/img/icons/user_icon.png' %}" alt="#.png">
-                                    {% endif %}
-                                </div>
-
-                                <input class="Profile-file form-input" id="avatar" accept="image/*" name="avatar"
+                        {% if not user_form.avatar.value %}
+                        <div class="Profile-avatar Profile-avatar_noimg">
+                            <label class="Profile-fileLabel" for="avatar">Выберите аватар</label>
+                            <input class="Profile-file form-input" id="avatar" accept="image/*" name="avatar"
                                        type="file"
                                        data-validate="onlyImgAvatar">
-
-                            </div>
                         </div>
-
+                        {% else %}
+                        <div class="Profile-img">
+                            <img src="{{ user_form.avatar.value.url }}" alt="#.png">
+<!--                            <img src="{% static 'frontend/assets/img/icons/user_icon.png' %}" alt="#.png">-->
+                        </div>
+                        {% endif %}
                     </div>
                     <div class="form-group">
                         <label class="form-label" for="fullName">{% trans 'Full name' %}</label>
                         <input class="form-input" id="fullName" name="fullName" type="text" required
-                               value="{{ form.fullName.value }}"/>
+                               value="{{ user_form.fullName.value }}"/>
                     </div>
                     <div class="form-group">
                         <label class="form-label" for="phone">{% trans 'Phone' %}</label>
                         <input class="form-input" id="phone" name="phone" type="tel" required
-                               value="{{ form.phone.value }}"/>
+                               value="{{ user_form.phone.value }}"/>
                     </div>
                     <div class="form-group">
                         <label class="form-label" for="email">{% trans 'Email' %}</label>
                         <input class="form-input" id="email" name="email" type="email" required
-                               value="{{ form.email.value }}"/>
+                               value="{{ user_form.email.value }}"/>
                     </div>
                     <div class="form-group">
                             <button class="btn btn_success" type="submit">{% trans 'Save' %}</button>
@@ -51,6 +50,13 @@
                 </form>
             </div>
             <div class="row-block" style="align-self: end;">
+                {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+                </div>
+                {% endfor %}
+                {% endif %}
                 <form class="form Profile-form" method="POST">
                     {% csrf_token %}
                     {% for field in password_form %}
@@ -64,6 +70,5 @@
                     </div>
                 </form>
             </div>
-        </div>
     </div>
 </div>

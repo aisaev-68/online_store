@@ -140,11 +140,16 @@ class LoginForm(forms.Form):
 
 
 class UserUpdateForm(forms.ModelForm):
-    password = None
-
     class Meta:
         model = User
-        fields = ('fullName', 'email', 'phone', 'avatar')
+        fields = ['fullName', 'email', 'phone', 'avatar']
+
+    def __init__(self, *args, **kwargs):
+        super(UserUpdateForm, self).__init__(*args, **kwargs)
+        self.fields['avatar'].widget.attrs.update({'class': 'form-control-file'})
+        self.fields['email'].widget.attrs.update({'class': 'form-control', 'readonly': True})
+        self.fields['fullName'].widget.attrs.update({'class': 'form-control'})
+        self.fields['phone'].widget.attrs.update({'class': 'form-control'})
 
 
 class UserUpdateView(forms.Form):

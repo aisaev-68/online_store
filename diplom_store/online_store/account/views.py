@@ -95,82 +95,35 @@ class ChangePasswordViewDone(PasswordChangeDoneView):
     template_name = 'account/password_change_done.html'
 
 
-# class UpdateProfileView(LoginRequiredMixin, UpdateView):
-#     def get(self, request, *args, **kwargs):
-#         user = request.user
-#         # password_form = ChangePasswordForm()
-#         password_form = PasswordChangeForm(request.user)
-#         form = UserUpdateForm(initial={'phone': user.phone,
-#                                        'avatar': user.avatar,
-#                                        'fullName': user.last_name + ' ' + user.first_name + ' ' + user.surname,
-#                                        'email': user.email,})
-#
-#         return render(request, 'account/profile.html', context={'form': form, 'password_form': password_form})
-#
-#     def post(self, request, *args, **kwargs):
-#         user = request.user
-#         password_form = PasswordChangeForm(user, request.POST)
-#         # password_form = ChangePasswordForm(request.POST)
-#         form = UserUpdateForm(request.POST, request.FILES, user)
-#
-#         if password_form.is_valid():
-#             print(11111, password_form.cleaned_data)
-#             update_session_auth_hash(request, password_form.save())
-#             messages.success(request, _('Your password was successfully updated!'))
-#             # old_password = password_form.cleaned_data["passwordCurrent"]
-#             # new_password = password_form.cleaned_data["new_password"]
-#             # print(6666, old_password, new_password)
-#             # if user.check_password(old_password):
-#             #     user.set_password(new_password)
-#             #     user.save()
-#             #     update_session_auth_hash(request, user)
-#             # return redirect('account:profile')
-#         else:
-#             return HttpResponse('bad')
-#         if form.is_valid():
-#
-#             print(222, form)
-#             avatar = request.FILES.get('avatar')
-#             # last_name, first_name, surname = form.cleaned_data['fullName'].split(' ', 2)
-#             # user.last_name, user.first_name, user.surname = last_name, first_name, surname
-#             # user.email = form.cleaned_data['email']
-#             # user.phone = form.cleaned_data['phone']
-#             user.avatar = avatar
-#             print(55555, user.email, user.phone)
-#             user.save()
-#         return redirect('account:profile')
-#         # return render(request, 'account/profile.html', context={'form': UserUpdateForm(instance=request.user), 'password_form': PasswordChangeForm(request.user)})
-#
-
 class UserAvatarView(View):
     pass
 
 
+class UpdateProfileView(View):
+    def get(self, request):
+        user_form = UserUpdateForm(instance=request.user)
+        password_form = PasswordChangeForm(user=request.user)
+        return render(request, 'account/profile.html', {'user_form': user_form, 'password_form': password_form})
 
+    def post(self, request):
+        if 'fullName' in request.POST:
+            user_form = UserUpdateForm(request.POST, request.FILES, instance=request.user)
+            if user_form.is_valid():
+                user_form.save()
+                messages.success(request, 'Your profile was updated successfully.')
+                return redirect('account:profile')
+            else:
+                messages.error(request, 'There was an error updating your profile. Please try again.')
+        elif 'new_password1' in request.POST:
+            password_form = PasswordChangeForm(data=request.POST, user=request.user)
 
-class UpdateProfileView(LoginRequiredMixin, UpdateView):
-    model = User
-    fields = ['fullName', 'email', 'phone', 'avatar']
-    template_name = 'account/profile.html'
-    success_url = reverse_lazy('account:profile')
-
-    def get_object(self, queryset=None):
-        return self.request.user
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        if 'password_form' not in context:
-            context['password_form'] = PasswordChangeForm(self.request.user)
-        return context
-
-    def form_valid(self, form):
-        response = super().form_valid(form)
-        password_form = PasswordChangeForm(self.request.user, self.request.POST)
-        if password_form.is_valid():
-            password_form.save()
-        return response
-
-    def form_invalid(self, form):
-        context = self.get_context_data(form=form)
-        context['password_form'] = PasswordChangeForm(self.request.user)
-        return self.render_to_response(context)
+            if password_form.is_valid():
+                password_form.save()
+                update_session_auth_hash(request, password_form.user)
+                messages.success(request, 'Your password was updated successfully.')
+                return redirect('account:profile')
+            else:
+                messages.error(request, 'There was an error updating your password. Please try again.')
+        else:
+            messages.error(request, 'Invalid request. Please try again.')
+        return redirect('account:profile')
