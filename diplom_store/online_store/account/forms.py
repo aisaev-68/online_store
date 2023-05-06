@@ -1,7 +1,6 @@
 from django import forms
 from django.contrib.auth import password_validation
-from django.contrib.auth.forms import UserCreationForm, UsernameField, ReadOnlyPasswordHashField, UserChangeForm, \
-    PasswordChangeForm
+from django.contrib.auth.forms import UserChangeForm as ChangeForm, PasswordChangeForm as PassChangeForm
 from django.core.exceptions import ValidationError
 
 from account.models import User
@@ -108,9 +107,10 @@ class UserRegistrationForm(forms.ModelForm):
     #     return avatar
 
 
-class ChangeForm(UserChangeForm):
-    class Meta(UserChangeForm.Meta):
+class UserChangeForm(ChangeForm):
+    class Meta:
         model = User
+        fields = ['fullName', 'email', 'phone', 'avatar']
 
 
 class LoginForm(forms.Form):
@@ -151,6 +151,10 @@ class UserUpdateForm(forms.ModelForm):
         self.fields['fullName'].widget.attrs.update({'class': 'form-control'})
         self.fields['phone'].widget.attrs.update({'class': 'form-control'})
 
+    def clean(self):
+        cleaned_data = super().clean()
+        self.instance.clean_avatar()
+        return cleaned_data
 
 class UserUpdateView(forms.Form):
     fullName = forms.CharField(
@@ -159,6 +163,7 @@ class UserUpdateView(forms.Form):
         widget=forms.TextInput(
             attrs={
                 'placeholder': 'Full name*',
+                'class': 'form-control',
             }
         )
     )
@@ -166,12 +171,14 @@ class UserUpdateView(forms.Form):
     phone = forms.CharField(required=False, label='Phone number*:', widget=forms.TextInput(
         attrs={
             'placeholder': 'Phone number*',
+            'class': 'form-control',
         }
     ))
 
     email = forms.CharField(required=True, label='E-mail address*:', widget=forms.EmailInput(
         attrs={
             'placeholder': 'E-mail address*',
+            'class': 'form-control',
         }
     ))
     avatar = forms.CharField(required=False, label='Avatar:', widget=forms.FileInput)
@@ -182,38 +189,38 @@ class UserUpdateView(forms.Form):
     #     fields = ("avatar", 'fullName', 'email', 'phone',)
 
 
-class ChangePasswordForm(forms.Form):
-    passwordCurrent = forms.CharField(
+class PasswordChangeForm(PassChangeForm):
+    old_password = forms.CharField(
         required=True,
-        widget=forms.PasswordInput,
+        label='Old password:',
+        widget=forms.PasswordInput(
+            attrs={
+                'placeholder': 'Old_password*',
+            }
+        ),
         # help_text=password_validation.password_validators_help_text_html()
     )
-    new_password = forms.CharField(
+    new_password1 = forms.CharField(
         required=True,
-        widget=forms.PasswordInput,
+        label='New password:',
+        widget=forms.PasswordInput(
+            attrs={
+                'placeholder': 'New password*',
+            }
+        ),
         # help_text=password_validation.password_validators_help_text_html()
     )
-    passwordReply = forms.CharField(
+    new_password2 = forms.CharField(
         required=True,
-        widget=forms.PasswordInput
+        label='New password confirmation:',
+        widget=forms.PasswordInput(
+            attrs={
+                'placeholder': 'New password confirmation*',
+            }
+        )
     )
 
-    # def clean_password(self):
-    #     cd = self.cleaned_data
-    #     print(333, cd)
-    #     if cd['password'] != cd['passwordReply']:
-    #         raise forms.ValidationError('password no match')
-    #     return cd['password']
 
-    # def clean(self):
-    #     cleaned_data = super().clean()
-    #     print(5555555555555555555555555)
-    #     new_password = cleaned_data.get("new_password")
-    #     passwordReply = cleaned_data.get("passwordReply")
-    #     if new_password != passwordReply:
-    #         raise forms.ValidationError(
-    #             "New passwords do not match"
-    #         )
-    #     print(11111111, new_password)
-    #     return new_password
+
+
 

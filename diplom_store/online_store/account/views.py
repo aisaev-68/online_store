@@ -1,6 +1,6 @@
 from django.contrib.auth import authenticate, login, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.forms import PasswordChangeForm, UserChangeForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
@@ -14,7 +14,7 @@ from django.urls import reverse_lazy, reverse
 from django.views import View
 from django.views.generic import CreateView, UpdateView
 
-from account.forms import UserRegistrationForm, LoginForm, UserUpdateForm, ChangePasswordForm
+from account.forms import UserRegistrationForm, LoginForm, UserUpdateForm
 from account.models import User
 from account.serializers import UserPasswordChangeSerializer, UserAvatarSerializer, UserSerializer
 
@@ -96,7 +96,9 @@ class ChangePasswordViewDone(PasswordChangeDoneView):
 
 
 class UserAvatarView(View):
-    pass
+    def get(self, request, *args, **kwargs):
+        print(8888, request.user.avatar)
+        return render(request, 'account/account.html')
 
 
 class UpdateProfileView(View):
@@ -110,20 +112,28 @@ class UpdateProfileView(View):
             user_form = UserUpdateForm(request.POST, request.FILES, instance=request.user)
             if user_form.is_valid():
                 user_form.save()
-                messages.success(request, 'Your profile was updated successfully.')
+                messages.success(request, _('Your profile was updated successfully.'))
                 return redirect('account:profile')
             else:
-                messages.error(request, 'There was an error updating your profile. Please try again.')
+                if user_form.errors.get('avatar'):
+                    messages.error(request, user_form.errors['avatar'])
+                elif user_form.errors.get('email'):
+                    messages.error(request, user_form.errors['email'])
+                else:
+                    messages.error(request, _('There was an error updating your profile. Please try again.'))
         elif 'new_password1' in request.POST:
             password_form = PasswordChangeForm(data=request.POST, user=request.user)
 
             if password_form.is_valid():
                 password_form.save()
                 update_session_auth_hash(request, password_form.user)
-                messages.success(request, 'Your password was updated successfully.')
+                messages.success(request, _('Your password was updated successfully.'))
                 return redirect('account:profile')
             else:
-                messages.error(request, 'There was an error updating your password. Please try again.')
+                if password_form.errors.get('old_password'):
+                    messages.error(request, _('Your old password was entered incorrectly. Please enter it again.'))
+                else:
+                    messages.error(request, _('The two password fields didn’t match.'))
         else:
-            messages.error(request, 'Invalid request. Please try again.')
+            messages.error(request, _('Invalid request. Please try again.'))
         return redirect('account:profile')
