@@ -1,4 +1,5 @@
 {% load static %}
+{% load i18n %}
 
 <html lang="ru">
 <head>
@@ -67,7 +68,7 @@
                             <ul>
                                 <l>
                                     <a href="{% url 'account:logout' %}" class="ControlPanel-title">
-                                        Log Out
+                                        {% trans 'Log Out' %}
                                     </a>
                                 </l>
                             </ul>
@@ -75,7 +76,7 @@
                             {% else %}
                             <div class="row-block">
                                 <a class="ControlPanel-title" href="{% url 'account:login' %}">
-                                    Login / Register
+                                    {% trans 'Login / Register' %}
                                 </a>
                                 {% endif %}
                             </div>
@@ -93,27 +94,33 @@
             <nav class="row-block row-block_right Header-menu">
                 <div class="menuModal" id="navigate">
                     <ul class="menu menu_main">
-                        <li class="menu-item"><a class="menu-link" href="/">Home</a>
+                        <li class="menu-item"><a class="menu-link" href="/">{% trans 'Home' %}</a>
                         </li>
                         <li class="menu-item">
-                            <a class="menu-link" href="">Shops</a>
+                            <a class="menu-link" href="">{% trans 'Shops' %}</a>
                         </li>
-                        <li class="menu-item"><a class="menu-link" href="">Promotions</a>
+                        <li class="menu-item"><a class="menu-link" href="">{% trans 'Promotions' %}</a>
                         </li>
-                        <li class="menu-item"><a class="menu-link" href="#">Contacts</a>
+                        <li class="menu-item"><a class="menu-link" href="#">{% trans 'Contacts' %}</a>
                         </li>
-                        <li class="menu-item"><a class="menu-link" href="">Purchase</a>
+                        <li class="menu-item"><a class="menu-link" href="">{% trans 'Purchase' %}</a>
                         </li>
                     </ul>
                 </div>
             </nav>
             <div class="row-block">
-                <div class="CartBlock"><a class="CartBlock-block" href="/cart/">
-                    <img class="CartBlock-img" src="{% static 'frontend/assets/img/icons/cart.svg' %}"
-                         alt="cart.svg"/><span class="CartBlock-amount" v-text="basketCount.count"></span></a>
-                    <div class="CartBlock-block"><span class="CartBlock-price">${basketCount.price}$$</span>
+                {% with cart=cart %}
+                <div class="CartBlock">
+                    <a class="CartBlock-block" href="{% url 'cart:basket' %}">
+                        <img class="CartBlock-img" src="{% static 'frontend/assets/img/icons/cart.svg' %}"
+                         alt="cart.svg"/>
+                        <span class="CartBlock-amount"></span>
+                    </a>
+                    <div class="CartBlock-block">
+                        <span class="CartBlock-price">{{ cart.total_price }}</span>
                     </div>
                 </div>
+                {% endwith %}
             </div>
             <div class="row-block Header-trigger">
                 <a class="menuTrigger" href="#navigate">
@@ -133,30 +140,36 @@
                         <div class="CategoriesButton-icon"><img
                                 src="{% static 'frontend/assets/img/icons/allDep.svg' %}" alt="allDep.svg"/>
                         </div>
-                        <span class="CategoriesButton-text">All Departments</span>
+                        <span class="CategoriesButton-text">{% trans 'All Departments' %}</span>
                         <div class="CategoriesButton-arrow">
                         </div>
                     </div>
                     <div class="CategoriesButton-content">
 
                         <!-- Получаем категории и подкатегории  -->
-                        <div class="CategoriesButton-link" v-for="category in categories"><a :href="category.href">
-                            <div class="CategoriesButton-icon"><img :src="category.image.src"
-                                                                    :alt="category.image.alt"/>
+                        {% with all_catalogs=catalogs %}
+                        {% for catalog in all_catalogs %}
+                        <div class="CategoriesButton-link"><a href="">
+                            <div class="CategoriesButton-icon">
+                                <img src="{{ catalog.href }}" alt="{{ catalog.alt }}" style="height:30px;"/>
                             </div>
-                            <span class="CategoriesButton-text">${ category.title }$</span></a>
-                            <a v-if="category.subcategories.length > 0" class="CategoriesButton-arrow" href="#"></a>
+                            <span class="CategoriesButton-text">{{ catalog.title }}</span></a>
+                            <a class="CategoriesButton-arrow" href="#"></a>
 
-                            <div v-if="category.subcategories.length > 0" class="CategoriesButton-submenu">
-                                <div v-for="subcategory in category.subcategories">
-                                    <a class="CategoriesButton-link" :href="subcategory.href">
+                            <div class="CategoriesButton-submenu">
+                                {% for category in catalog.categories.all %}
+                                <div>
+                                    <a class="CategoriesButton-link" href="">
                                         <div class="CategoriesButton-icon">
-                                            <img :src="subcategory.image.src" :alt="subcategory.alt"/>
+                                            <img src="{{ category.href }}" alt="{{ category.alt }}" style="height:30px;"/>
                                         </div>
-                                        <span class="CategoriesButton-text">${ subcategory.name }$</span></a>
+                                        <span class="CategoriesButton-text">{{ category.title }}</span></a>
                                 </div>
+                                {% endfor %}
                             </div>
                         </div>
+                        {% endfor %}
+                        {% endwith %}
                         <!-- Получаем категории и подкатегории  -->
 
                     </div>
@@ -279,7 +292,7 @@
 
 {% block mixins %}{% endblock %}
 
-<script src="{% static 'frontend/assets/js/app.js' %}"></script>
+<!--<script src="{% static 'frontend/assets/js/app.js' %}"></script>-->
 <script src="{% static 'frontend/assets/plg/jQuery/jquery-3.5.0.slim.min.js' %}"></script>
 <script src="{% static 'frontend/assets/plg/form/jquery.form.js' %}"></script>
 <script src="{% static 'frontend/assets/plg/form/jquery.maskedinput.min.js' %}"></script>

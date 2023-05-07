@@ -17,6 +17,7 @@ from django.views.generic import CreateView, UpdateView
 from account.forms import UserRegistrationForm, LoginForm, UserUpdateForm
 from account.models import User
 from account.serializers import UserPasswordChangeSerializer, UserAvatarSerializer, UserSerializer
+from order.models import Order
 
 
 class RegisterView(View):
@@ -49,12 +50,12 @@ class RegisterView(View):
             new_user.save()
             # client_group = Group.objects.get(name="Clients")
             # new_user.groups.add(client_group)
-            # messages.success(request, _('Created profile.'))
+            messages.success(request, _('Created profile.'))
             user = authenticate(request, username=new_user, password=password)
             login(request, user)
             return redirect(reverse('account:profile'))
         else:
-            # messages.error(request, _('Profile creation error.'))
+            messages.error(request, _('Profile creation error.'))
 
             return render(request, 'account/register.html', context)
 
@@ -79,9 +80,13 @@ class MyLoginView(View):
                     login(request, user)
                     return redirect(reverse('account:profile'))
                 else:
-                    return HttpResponse('Disabled account')
+                    messages.error(request, _('Disabled account.'))
+                    # return HttpResponse('Disabled account')
+                    return redirect('account:login')
             else:
-                return HttpResponse('Invalid login')
+                messages.error(request, _('Password or username does not match.'))
+                return redirect('account:login')
+                # return HttpResponse('Invalid login')
 
 
 class MyLogoutView(LogoutView):
@@ -97,7 +102,6 @@ class ChangePasswordViewDone(PasswordChangeDoneView):
 
 class UserAvatarView(View):
     def get(self, request, *args, **kwargs):
-        print(8888, request.user.avatar)
         return render(request, 'account/account.html')
 
 
@@ -137,3 +141,13 @@ class UpdateProfileView(View):
         else:
             messages.error(request, _('Invalid request. Please try again.'))
         return redirect('account:profile')
+
+
+class HistoryOrder(View):
+
+    def get(self, request):
+        context = {
+            'order': Order.objects.all()
+        }
+        print(1111, context)
+        return render(request, 'frontend/historyorder.html', context=context)

@@ -10,11 +10,11 @@
     {% endfor %}
     {% endif %}
     <div class="row">
-        <div class="row-block" style="min-width: 66%;">
+        <div class="row-block" style="display: flex; justify-content: column;">
             <form class="form Profile-form" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
-                <div class="row">
-                    <div class="form-group" style="min-width: 40%; margin-right: 2vw;">
+<!--                <div class="row">-->
+                    <div class="form-group" style="margin-right: 1vw;">
                         <label class="form-label" for="avatar">{% trans 'Avatar' %}</label>
                         <div class="Profile-avatar Profile-avatar_noimg">
                             <label class="Profile-fileLabel" for="avatar" style="color: #2fa225;">Выберите аватар</label>
@@ -29,7 +29,7 @@
                             {% endif %}
                         </div>
                     </div>
-                    <div style="min-width: 50%;">
+<!--                    <div style="">-->
 
                         <div class="form-group">
                             <label class="form-label" for="fullName">{% trans 'Full name' %}</label>
@@ -50,11 +50,11 @@
                             <button class="btn btn_success" type="submit">{% trans 'Save' %}</button>
                         </div>
 
-                    </div>
-                </div>
+<!--                    </div>-->
+<!--                </div>-->
             </form>
         </div>
-        <div class="row-block" style="min-width: 33%;">
+        <div class="row-block" style="">
             <form class="form Profile-form" method="POST">
                 {% csrf_token %}
                 <div class="form-group">

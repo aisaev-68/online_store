@@ -9,7 +9,7 @@ from PIL import Image
 from django.utils.timezone import now
 
 
-def get_upload_path_by_user(filename):
+def get_upload_path_by_user(instance, filename):
     """
     Функция возврата пути файла.
     :param filename:

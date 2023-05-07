@@ -23,6 +23,13 @@ Log-in
     </div>
 </div>
 <section class="wrapper">
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }}" style="color: #2fa225; text-align: center;">
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
     <div class="header">
         <h3 class="sign-in" style="text-align: center;">Вход</h3>
     </div>

@@ -1,7 +1,8 @@
 from django.urls import include, path
+from django.views.generic import TemplateView
 
 from account.api import ProfileView
-from account.views import RegisterView, MyLoginView, MyLogoutView, UpdateProfileView, UserAvatarView
+from account.views import RegisterView, MyLoginView, MyLogoutView, UpdateProfileView, UserAvatarView, HistoryOrder
 
 app_name = 'account'
 urlpatterns = [
@@ -13,6 +14,7 @@ urlpatterns = [
     path('register/', RegisterView.as_view(), name='register'),
     path('login/', MyLoginView.as_view(), name='login'),
     path('logout/', MyLogoutView.as_view(), name='logout'),
+    path('history-order/', HistoryOrder.as_view(), name='history_order'),
 ]
 
 # urlpatterns = [

@@ -35,7 +35,7 @@ class Product(models.Model):  # товар
     price = models.IntegerField(default=0, verbose_name='цена товара')
     count = models.IntegerField(default=0, verbose_name='количество ')
     date = models.DateField(auto_now_add=True)
-    title = models.TextField(max_length=50, verbose_name='название товара')
+    title = models.CharField(max_length=150, verbose_name='название товара')
     fullDescription = models.TextField(max_length=100, verbose_name='полное описание товара')
     freeDelivery = models.BooleanField(default=True)
     rating = models.IntegerField(default=0, verbose_name='счетчик покупок данного товара')

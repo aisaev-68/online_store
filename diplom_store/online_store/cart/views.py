@@ -1,4 +1,7 @@
-
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
+from django.views import View
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -20,26 +23,32 @@ def get_products_in_cart(cart):
     return serializer
 
 
-class BasketView(APIView):
+class BasketView(View):
     """
     Представление для получения и удаления продуктов из корзины, добавления продуктов в корзину
     """
 
-    def get(self, *args, **kwargs):
-        cart = Cart(self.request)
-        serializer = get_products_in_cart(cart)
-        return Response(serializer.data)
+    def get_success_url(self):
+        return reverse_lazy(
+            "cart:basket",
+        )
+    def get(self, request, *args, **kwargs):
+        cart = Cart(request)
+        return render(request, 'cart/cart.html', context={'carts': cart})
 
-    def post(self, *args, **kwargs):
-        cart = Cart(self.request)
-        product = get_object_or_404(Product, id=self.request.data.get('id'))
-        cart.add(product=product, quantity=self.request.data.get('count'))
-        serializer = get_products_in_cart(cart)
-        return Response(serializer.data)
+    def post(self, request, product_id, *args, **kwargs):
+        cart = Cart(request)
+        product = get_object_or_404(Product, pk=product_id)
+        cart.add(
+            product=product,
+            quantity=1,
+            update_quantity=False,
+        )
+        return redirect('shopapp:shop_page')
 
-    def delete(self, *args, **kwargs):
-        cart = Cart(self.request)
-        product = get_object_or_404(Product, id=self.request.query_params.get('id'))
-        cart.remove(product.pk)
-        serializer = get_products_in_cart(cart)
-        return Response(serializer.data)
+    def delete(self, request, *args, **kwargs):
+        cart = Cart(request)
+        product = get_object_or_404(Product, id=self.kwargs['product_id'])
+        cart.remove(product)
+        url = self.get_success_url()
+        return HttpResponseRedirect(url)
