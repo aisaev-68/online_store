@@ -1,9 +1,11 @@
 import json
 import os
-
+import shutil
 from django.core.management import BaseCommand
 
 from catalog.models import Catalog, Category
+
+
 
 
 class Command(BaseCommand):
@@ -13,18 +15,38 @@ class Command(BaseCommand):
                 f"Start added category"
             )
         )
-        BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        BASE_DIR_MEDIA = os.path.abspath('media/') # путь папки media
+        if not os.path.exists(os.path.join(BASE_DIR_MEDIA, 'catalog')):
+            os.mkdir(os.path.join(BASE_DIR_MEDIA, 'catalog'))
 
-        with open(os.path.join(BASE_DIR, 'commands/json_data-categories.json')) as json_file:
-            data = json.load(json_file)
+        if not os.path.exists(os.path.join(BASE_DIR_MEDIA, 'category')):
+            os.mkdir(os.path.join(BASE_DIR_MEDIA, 'category'))
 
-        for catalog in data['data']:
-            for name_catalog, catalogs in catalog.items():
-                rus_name, eng_name = name_catalog.split('-')
-                id_catalog = Catalog.objects.create(title=rus_name)
-                for name in catalogs.keys():
-                    group_name, slug = name.split('-')
-                    Category.objects.create(title=group_name, catalog=id_catalog)
+        BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) # папка запуска модуля
+
+        with open(os.path.join(BASE_DIR, 'commands/catalog-data.json')) as json_file:
+            catalogs = json.load(json_file)
+
+        for catalog in catalogs:
+
+            Catalog.objects.create(title=catalog["fields"]["title"], src=catalog["fields"]["src"])
+            src_path = os.path.join(BASE_DIR, f"commands/{catalog['fields']['src']}")
+            dst_path = os.path.join(BASE_DIR_MEDIA, f"{catalog['fields']['src']}")
+            shutil.copyfile(src_path, dst_path)
+
+        with open(os.path.join(BASE_DIR, 'commands/category-data.json')) as json_file:
+            categories = json.load(json_file)
+
+        id_catalog = Catalog.objects.filter(title='Электроника').first()
+        for category in categories:
+            if category['fields']['catalog'] == 1:
+                Category.objects.create(title=category['fields']['title'], src=category['fields']['src'], catalog=id_catalog)
+                src_path = os.path.join(BASE_DIR, f"commands/{category['fields']['src']}")
+                dst_path = os.path.join(BASE_DIR_MEDIA, f"{category['fields']['src']}")
+                shutil.copyfile(src_path, dst_path)
+            # else:
+            #     Category.objects.create(title=category['fields']['title'], src=category['fields']['src'],
+            #                             catalog=category['fields']['catalog'])
 
         self.stdout.write(
             self.style.SUCCESS(

@@ -57,7 +57,7 @@ paths:
           schema:
             type: string
             default: ''
-        - name: category
+        - name: catalog
           in: query
           required: false
           schema:
@@ -142,7 +142,7 @@ paths:
           schema:
             type: string
             default: ''
-        - name: category
+        - name: catalog
           in: query
           required: false
           schema:
@@ -176,7 +176,7 @@ paths:
             default: 20
         - name: id
           in: path
-          description: category id
+          description: catalog id
           required: true
           schema:
             type: string
@@ -614,7 +614,7 @@ components:
     ProductShort:
       required:
         - id
-        - category
+        - catalog
         - title
         - price
         - count
@@ -715,7 +715,7 @@ components:
     ProductFull:
       required:
         - id
-        - category
+        - catalog
         - title
         - price
         - count

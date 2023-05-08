@@ -44,7 +44,8 @@ python manage.py create_news
 ```
 5. Текстуры
 ```
-python manage.py dumpdata houseroom.HouseRoom > houseroom/tests/fixtures/houseroom-fixtures.json
+python manage.py dumpdata online_store.Catalog > online_store/tests/fixtures/catalog-fixtures.json
+python manage.py dumpdata online_store.Catalog > online_store/tests/fixtures/catalog-fixtures.json
 python manage.py dumpdata houseroom.RoomType > houseroom/tests/fixtures/room_type-fixtures.json  
 python manage.py dumpdata houseroom.NumberRoom > houseroom/tests/fixtures/number_room-fixtures.json 
 python manage.py dumpdata news.News > houseroom/tests/fixtures/news-fixtures.json    

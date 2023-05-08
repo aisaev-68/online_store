@@ -55,7 +55,7 @@ class Migration(migrations.Migration):
                 ('product_picture', models.ImageField(null=True, upload_to='files/')),
                 ('rating', models.IntegerField(default=0, verbose_name='счетчик покупок данного товара')),
                 ('reviews', models.IntegerField(default=0, verbose_name='счетчик просмотров данного товара')),
-                ('category', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='my_store_app.categoryproduct', verbose_name='категория товара')),
+                ('catalog', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='my_store_app.categoryproduct', verbose_name='категория товара')),
             ],
             options={
                 'verbose_name': 'Товар',

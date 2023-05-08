@@ -19,16 +19,14 @@ class MainPageView(View):
     def get(self, request, *args, **kwargs):
         return render(request, 'frontend/index.html')
 
-class ProductPopularView(APIView):
+class ProductPopularView(View):
     """
         Представление для отображения популярных продуктов
     """
-    def get(self, request):
-        products = Product.objects.order_by('-rating')[:8].prefetch_related('images')
-        for product in products:
-            product.categoryName = product.category
-        serializer = ProductSerializer(products, many=True)
-        return Response(serializer.data)
+    def get(self, request, *args, **kwargs):
+        products = Product.objects.filter(category=self.kwargs['category']).order_by('-rating')[:8].prefetch_related('images')
+
+        return render(request, 'product/catalog.html', context={'products': products})
 
 
 class ProductLimitedView(APIView):

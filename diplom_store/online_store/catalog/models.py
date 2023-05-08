@@ -4,17 +4,14 @@ from django.db import models
 from django.utils.timezone import now
 
 
-def category_image_directory_path(instance: 'CategoryIcons', filename):
+def category_image_directory_path(instance, filename):
     """
     Получение пути для загрузки иконки категории.
     :param instance: экземпляр класса.
     :param filename: имя загружаемого файла.
     :return: путь для загрузки файла.
     """
-    if instance.category.parent:
-        return f'category/icons/{instance.category.parent}/{instance.category}/{filename}'
-    else:
-        return f'category/icons/{instance.category}/{filename}'
+    return os.path.join('category/', filename)
 
 
 def catalog_image_directory_path(instance, filename):
@@ -24,7 +21,7 @@ def catalog_image_directory_path(instance, filename):
     :param filename: имя загружаемого файла
     :return: путь для загрузки файла
     """
-    return os.path.join('category/', filename)
+    return os.path.join('catalog/', filename)
 
 
 class Catalog(models.Model):

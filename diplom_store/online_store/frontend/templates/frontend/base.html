@@ -153,17 +153,17 @@
                             <div class="CategoriesButton-icon">
                                 <img src="{{ catalog.href }}" alt="{{ catalog.alt }}" style="height:30px;"/>
                             </div>
-                            <span class="CategoriesButton-text">{{ catalog.title }}</span></a>
-                            <a class="CategoriesButton-arrow" href="#"></a>
+                            <span class="CategoriesButton-text" style="font-size: 12px;">{{ catalog.title }}</span></a>
+                            <a class="CategoriesButton-arrow" href=""></a>
 
                             <div class="CategoriesButton-submenu">
                                 {% for category in catalog.categories.all %}
                                 <div>
-                                    <a class="CategoriesButton-link" href="">
+                                    <a class="CategoriesButton-link" href="{% url 'product:product-popular' category=category.pk %}">
                                         <div class="CategoriesButton-icon">
                                             <img src="{{ category.href }}" alt="{{ category.alt }}" style="height:30px;"/>
                                         </div>
-                                        <span class="CategoriesButton-text">{{ category.title }}</span></a>
+                                        <span class="CategoriesButton-text" style="font-size: 12px;">{{ category.title }}</span></a>
                                 </div>
                                 {% endfor %}
                             </div>

@@ -1,0 +1,614 @@
+[
+  {
+    "model": "catalog.category",
+    "pk": 1,
+    "fields": {
+      "title": "Телефоны и смарт часы",
+      "src": "category/smart-watch.png",
+      "catalog": 1
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 2,
+    "fields": {
+      "title": "Ноутбуки",
+      "src": "category/responsive.png",
+      "catalog": 1
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 3,
+    "fields": {
+      "title": "Оптические приборы",
+      "src": "category/optics.png",
+      "catalog": 1
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 4,
+    "fields": {
+      "title": "Аудиотехника",
+      "src": "category/5.svg",
+      "catalog": 1
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 5,
+    "fields": {
+      "title": "Моноблоки",
+      "src": "category/monoblock.png",
+      "catalog": 1
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 6,
+    "fields": {
+      "title": "Компьютеры",
+      "src": "category/computer.png",
+      "catalog": 1
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 7,
+    "fields": {
+      "title": "Фототехника",
+      "src": "category/photo-and-video.png",
+      "catalog": 1
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 8,
+    "fields": {
+      "title": "Игровые приставки",
+      "src": "category/video-game-console.png",
+      "catalog": 1
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 9,
+    "fields": {
+      "title": "Офисная техника",
+      "src": "category/printer.png",
+      "catalog": 1
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 11,
+    "fields": {
+      "title": "Навигаторы",
+      "src": "category/gps-navigator.png",
+      "catalog": 1
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 12,
+    "fields": {
+      "title": "Телевизоры",
+      "src": "category/led-tv.png",
+      "catalog": 1
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 16,
+    "fields": {
+      "title": "Крупная бытовая техника",
+      "src": "",
+      "catalog": 2
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 17,
+    "fields": {
+      "title": "Техника для кухни",
+      "src": "",
+      "catalog": 2
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 18,
+    "fields": {
+      "title": "Встраиваемая бытовая техника",
+      "src": "",
+      "catalog": 2
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 19,
+    "fields": {
+      "title": "Климатическая техника",
+      "src": "",
+      "catalog": 2
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 20,
+    "fields": {
+      "title": "Техника для красоты и здоровья",
+      "src": "",
+      "catalog": 2
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 21,
+    "fields": {
+      "title": "Техника для общепита",
+      "src": "",
+      "catalog": 2
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 22,
+    "fields": {
+      "title": "Макияж",
+      "src": "",
+      "catalog": 3
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 23,
+    "fields": {
+      "title": "Уход за лицом",
+      "src": "",
+      "catalog": 3
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 24,
+    "fields": {
+      "title": "Уход за волосами",
+      "src": "",
+      "catalog": 3
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 25,
+    "fields": {
+      "title": "Уход за телом",
+      "src": "",
+      "catalog": 3
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 26,
+    "fields": {
+      "title": "Парфюмерия",
+      "src": "",
+      "catalog": 3
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 27,
+    "fields": {
+      "title": "Аппаратная косметология",
+      "src": "",
+      "catalog": 3
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 28,
+    "fields": {
+      "title": "Маникюр и педикюр",
+      "src": "",
+      "catalog": 3
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 29,
+    "fields": {
+      "title": "Ароматерапия",
+      "src": "",
+      "catalog": 3
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 30,
+    "fields": {
+      "title": "Мужская косметика",
+      "src": "",
+      "catalog": 3
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 31,
+    "fields": {
+      "title": "Беременным и кормящим",
+      "src": "",
+      "catalog": 3
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 32,
+    "fields": {
+      "title": "Детская косметика",
+      "src": "",
+      "catalog": 3
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 33,
+    "fields": {
+      "title": "Мебель и оборудование для салонов красоты",
+      "src": "",
+      "catalog": 3
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 34,
+    "fields": {
+      "title": "Оборудование и материалы для тату салона",
+      "src": "",
+      "catalog": 3
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 35,
+    "fields": {
+      "title": "Загар и защита от солнца",
+      "src": "",
+      "catalog": 3
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 36,
+    "fields": {
+      "title": "Женщинам",
+      "src": "",
+      "catalog": 4
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 37,
+    "fields": {
+      "title": "Мужчинам",
+      "src": "",
+      "catalog": 4
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 38,
+    "fields": {
+      "title": "Детям",
+      "src": "",
+      "catalog": 4
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 39,
+    "fields": {
+      "title": "Спецодежда",
+      "src": "",
+      "catalog": 4
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 40,
+    "fields": {
+      "title": "Женщинам",
+      "src": "",
+      "catalog": 5
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 41,
+    "fields": {
+      "title": "Мужчинам",
+      "src": "",
+      "catalog": 5
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 42,
+    "fields": {
+      "title": "Детям",
+      "src": "",
+      "catalog": 5
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 43,
+    "fields": {
+      "title": "Уход и аксессуары",
+      "src": "",
+      "catalog": 5
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 44,
+    "fields": {
+      "title": "Инструменты",
+      "src": "",
+      "catalog": 6
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 45,
+    "fields": {
+      "title": "Сантехника",
+      "src": "",
+      "catalog": 6
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 46,
+    "fields": {
+      "title": "Водоснабжение",
+      "src": "",
+      "catalog": 6
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 47,
+    "fields": {
+      "title": "Строительные материалы",
+      "src": "",
+      "catalog": 6
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 48,
+    "fields": {
+      "title": "Отделочные материалы",
+      "src": "",
+      "catalog": 6
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 49,
+    "fields": {
+      "title": "Лакокрасочные материалы",
+      "src": "",
+      "catalog": 6
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 50,
+    "fields": {
+      "title": "Крепеж и фурнитура",
+      "src": "",
+      "catalog": 6
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 51,
+    "fields": {
+      "title": "Электрика",
+      "src": "",
+      "catalog": 6
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 52,
+    "fields": {
+      "title": "Отопление",
+      "src": "",
+      "catalog": 6
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 53,
+    "fields": {
+      "title": "Вентиляция",
+      "src": "",
+      "catalog": 6
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 54,
+    "fields": {
+      "title": "Сауны и бани",
+      "src": "",
+      "catalog": 6
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 55,
+    "fields": {
+      "title": "Средства защиты и пожаротушения",
+      "src": "",
+      "catalog": 6
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 56,
+    "fields": {
+      "title": "Промышленное оборудование и комплектующие",
+      "src": "",
+      "catalog": 6
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 57,
+    "fields": {
+      "title": "Дома, бани и гаражи",
+      "src": "",
+      "catalog": 6
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 58,
+    "fields": {
+      "title": "Газоснабжение",
+      "src": "",
+      "catalog": 6
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 59,
+    "fields": {
+      "title": "Лифтовое оборудование",
+      "src": "",
+      "catalog": 6
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 60,
+    "fields": {
+      "title": "Оборудования для порошковой покраски",
+      "src": "",
+      "catalog": 6
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 61,
+    "fields": {
+      "title": "Коляски и автокресла",
+      "src": "",
+      "catalog": 7
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 62,
+    "fields": {
+      "title": "Игрушки и игры",
+      "src": "",
+      "catalog": 7
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 63,
+    "fields": {
+      "title": "Подгузники и трусики",
+      "src": "",
+      "catalog": 7
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 64,
+    "fields": {
+      "title": "Детское питание",
+      "src": "",
+      "catalog": 7
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 65,
+    "fields": {
+      "title": "Товары для кормления",
+      "src": "",
+      "catalog": 7
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 66,
+    "fields": {
+      "title": "Товары для мам",
+      "src": "",
+      "catalog": 7
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 67,
+    "fields": {
+      "title": "Спорт и игры на улице",
+      "src": "",
+      "catalog": 7
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 68,
+    "fields": {
+      "title": "Детская комната",
+      "src": "",
+      "catalog": 7
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 69,
+    "fields": {
+      "title": "Товары для школы и обучения",
+      "src": "",
+      "catalog": 7
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 70,
+    "fields": {
+      "title": "Планшеты",
+      "src": "category/tablet.png",
+      "catalog": 1
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 71,
+    "fields": {
+      "title": "Электронные книги",
+      "src": "category/ebook.png",
+      "catalog": 1
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 73,
+    "fields": {
+      "title": "Комплектующие",
+      "src": "category/kit-bag.png",
+      "catalog": 1
+    }
+  }
+]
