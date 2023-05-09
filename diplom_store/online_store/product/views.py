@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db import connection
 from django.db.models import Q
 from django.shortcuts import render
@@ -27,7 +27,19 @@ class ProductCatalogView(View):
     """
     def get(self, request, *args, **kwargs):
         products = Product.objects.filter(category=self.kwargs['category']).prefetch_related('images')
-        return render(request, 'product/catalog.html', context={'products': products[:6]})
+        if 'page' in request.GET:
+            page = request.GET['page']
+        else:
+            page = 1
+        paginator = Paginator(products, 6)
+        try:
+            results = paginator.page(page)
+        except PageNotAnInteger:
+            results = paginator.page(1)
+        except EmptyPage:
+            results = paginator.page(paginator.num_pages)
+
+        return render(request, 'product/catalog.html', context={"page": results})
 
 class ProductPopularView(View):
     """

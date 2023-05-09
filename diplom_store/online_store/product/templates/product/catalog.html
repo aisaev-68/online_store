@@ -81,11 +81,11 @@
           <div class="Cards">
 
             <!-- Получаем товары по фильтрам -->
-            {% for card in products %}
-            {{ card.images.first.url }}
+            {% for card in page %}
+
             <div class="Card">
               <a class="Card-picture" href="{{ card.href }}">
-                <img src="{{ card.images.first.url }}" alt="">
+                <img src="/media{{ card.images.all.0 }}" alt="">
               </a>
               <div class="Card-content">
                 <strong class="Card-title">
@@ -111,24 +111,44 @@
 
           <!-- Доработать апгинацию!  -->
           <div class="Pagination">
-                        <div class="Pagination-ins">
-                            <a class="Pagination-element Pagination-element_prev" href="#">
-                                <img src="{% static 'frontend/assets/img/icons/prevPagination.svg' %}" alt="prevPagination.svg">
-                            </a>
-                            <a class="Pagination-element Pagination-element_current" href="#">
-                                <span class="Pagination-text">1</span>
-                            </a>
-                            <a class="Pagination-element" href="#">
-                                <span class="Pagination-text">2</span>
-                            </a>
-                            <a class="Pagination-element" href="#">
-                                <span class="Pagination-text">3</span>
-                            </a>
-                            <a class="Pagination-element Pagination-element_prev" href="#">
-                                <img src="{% static 'frontend/assets/img/icons/nextPagination.svg' %}" alt="nextPagination.svg" />
-                            </a>
-                        </div>
+            <div class="Pagination-ins">
+
+              {% if page.has_previous %}
+                <a class="Pagination-element Pagination-element_prev"
+                   href="?page={{ page.previous_page_number }}">
+                  <img src="{% static 'frontend/assets/img/icons/prevPagination.svg' %}" alt="prevPagination.svg"/>
+                </a>
+                {% else %}
+                <a class="Pagination-element"
+                   href="">
+                    <img src="{% static 'frontend/assets/img/icons/prevPagination.svg' %}" alt="prevPagination.svg"/>
+                </a>
+
+              {% endif %}
+                 {% for page_obj in page.paginator.page_range %}
+                  <a class="Pagination-element Pagination-element_current" href="?page={{ page_obj }}">
+                    <span class="Pagination-text">{{ page_obj }}</span>
+                  </a>
+                {% endfor %}
+              {% if page.has_next %}
+
+                <a class="Pagination-element Pagination-element_prev"
+                   href="?page={{ page.next_page_number }}">
+                  <img src="{% static 'frontend/assets/img/icons/nextPagination.svg' %}" alt="nextPagination.svg"/>
+                    <span class="Pagination-text">{{ page_obj }}</span>
+                </a>
+                 {% else %}
+                <a class="Pagination-element"
+                   href="">
+                    <img src="{% static 'frontend/assets/img/icons/nextPagination.svg' %}" alt="nextPagination.svg"/>
+                  <span class="Pagination-text">{{ page_obj }}</span>
+                </a>
+
+              {% endif %}
+
+            </div>
           </div>
+
           <!-- Доработать пагинацию!  -->
 
         </div>
