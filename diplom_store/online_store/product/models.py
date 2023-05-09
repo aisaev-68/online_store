@@ -1,5 +1,5 @@
 import os
-
+from django.utils.translation import gettext_lazy as _
 from django.db import models
 from django.urls import reverse
 from django.utils.timezone import now
@@ -20,30 +20,32 @@ def get_upload_path_by_products(instance, filename):
 
 
 class Tag(models.Model):
-    name = models.TextField(max_length=50, verbose_name='тэг товара')
+    name = models.TextField(max_length=50, verbose_name=_('Tag product'))
 
     class Meta:
-        verbose_name = 'Тэг'
-        verbose_name_plural = 'Тэги'
+        verbose_name = _('tag')
+        verbose_name_plural = _('tags')
 
     def __str__(self):
         return self.name
 
 
 class Product(models.Model):  # товар
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='категория товара')
-    price = models.IntegerField(default=0, verbose_name='цена товара')
-    count = models.IntegerField(default=0, verbose_name='количество ')
-    date = models.DateField(auto_now_add=True)
-    title = models.CharField(max_length=150, verbose_name='название товара')
-    fullDescription = models.TextField(max_length=100, verbose_name='полное описание товара')
-    freeDelivery = models.BooleanField(default=True)
-    rating = models.IntegerField(default=0, verbose_name='счетчик покупок данного товара')
-    tags = models.ManyToManyField(Tag, related_name='tags')
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name=_('Product category'))
+    price = models.DecimalField(decimal_places=2, max_digits=10,  verbose_name=_('Price'))
+    count = models.IntegerField(default=0, verbose_name=_('Count'))
+    date = models.DateTimeField(auto_now_add=True, verbose_name=_('Created data'))
+    title = models.CharField(max_length=150, verbose_name=_('Title'))
+    fullDescription = models.TextField(max_length=100, verbose_name=_('Full description product'))
+    freeDelivery = models.BooleanField(default=False, verbose_name=_('Free shipping')) #бесплатная доставка
+    rating = models.DecimalField(decimal_places=1, max_digits=2, blank=True, null=True, verbose_name=_('counter of purchases of this product'))
+    tags = models.ManyToManyField(Tag, related_name='tags', blank=True, verbose_name=_('Tag'))
+    limited = models.BooleanField(default=False, verbose_name=_('Limited edition')) #ограниченный тираж
+    banner = models.BooleanField(default=False, verbose_name=_('Banner on home page'))
 
     class Meta:
-        verbose_name = 'Товар'
-        verbose_name_plural = 'Товары'
+        verbose_name = _('product')
+        verbose_name_plural = _('products')
 
     def href(self):
         """
@@ -90,13 +92,13 @@ class ProductImage(models.Model):
     """
     Модель изображения продукта
     """
-    image = models.FileField(upload_to=get_upload_path_by_products, verbose_name='изображение')
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images', verbose_name='продукт')
+    image = models.FileField(upload_to=get_upload_path_by_products, verbose_name=_('Image product'))
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images', verbose_name=_('Product'))
 
     class Meta:
         ordering = ["pk"]
-        verbose_name = "изображение продукта"
-        verbose_name_plural = "изображения продуктов"
+        verbose_name = _("product image")
+        verbose_name_plural = _("product images")
 
     def src(self):
         """
@@ -110,17 +112,17 @@ class ProductImage(models.Model):
 
 
 class Review(models.Model):  # отзыв
-    author = models.CharField(max_length=128, verbose_name='автор')
+    author = models.CharField(max_length=128, verbose_name=_('Author'))
     email = models.EmailField(max_length=254)
-    text = models.TextField(verbose_name='текст')
-    rate = models.PositiveSmallIntegerField(blank=False, default=5, verbose_name='оценка')
-    date = models.DateTimeField(auto_now_add=True, verbose_name='дата создания')
+    text = models.TextField(verbose_name=_('Text'))
+    rate = models.PositiveSmallIntegerField(blank=False, default=5, verbose_name=_('Rating'))
+    date = models.DateTimeField(auto_now_add=True, verbose_name=_('Created data'))
     product = models.ForeignKey(Product, on_delete=models.PROTECT, related_name='reviews',
-                                verbose_name='продукт')
+                                verbose_name=_('Product'))
 
     class Meta:
-        verbose_name = 'отзыв'
-        verbose_name_plural = 'отзывы'
+        verbose_name = _('review')
+        verbose_name_plural = _('reviews')
 
     def __str__(self):
         if len(self.text) > 50:

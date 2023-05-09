@@ -1,17 +1,18 @@
 {% extends "frontend/base.html" %}
 {% load static %}
+{% load i18n %}
 
 {% block content %}
   <div class="Middle Middle_top">
     <div class="Middle-top">
       <div class="wrap">
         <div class="Middle-header">
-          <h1 class="Middle-title">Catalog Megano
+          <h1 class="Middle-title">{% trans 'Catalog' %}
           </h1>
           <ul class="breadcrumbs Middle-breadcrumbs">
-            <li class="breadcrumbs-item"><a href="index.html">home</a>
+            <li class="breadcrumbs-item"><a href="index.html">{% trans 'Home' %}</a>
             </li>
-            <li class="breadcrumbs-item breadcrumbs-item_current"><span>Каталог</span>
+            <li class="breadcrumbs-item breadcrumbs-item_current"><span>{% trans 'Catalog' %}</span>
             </li>
           </ul>
         </div>
@@ -22,7 +23,7 @@
         <div class="Section-column">
           <div class="Section-columnSection">
             <header class="Section-header">
-              <strong class="Section-title">Фильтр
+              <strong class="Section-title">{% trans 'Filter' %}
               </strong>
             </header>
             <div class="Section-columnContent">
