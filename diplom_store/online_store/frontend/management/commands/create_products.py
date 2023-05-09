@@ -11,8 +11,9 @@ import json
 
 from django.utils.timezone import now
 
-from product.models import Product, ShopItem, ProductImage
-from shopapp.models import Shop
+from catalog.models import Category
+from product.models import ProductImage, Product
+
 
 new_dir_file = now().date().strftime("%Y/%m/%d")
 uploaded_file_path = Path().parent / "media/product_images" / new_dir_file
@@ -28,17 +29,16 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
 
         self.stdout.write("Create products")
-        with open(str(Path(__file__).parent.joinpath('json_data-phones.json'))) as json_file:
-            data = json.load(json_file)["phones"]
+        with open(str(Path(__file__).parent.joinpath('json_data-planshet.json'))) as json_file:
+            data = json.load(json_file)
         prod_len = len(data)
-        user = User.objects.filter(username='editor').first()
-        shops = [s.pk for s in Shop.objects.all()]
+        # user = User.objects.filter(username='editor').first()
+
 
         for value in data:
-            start_shop = sorted(random.sample(shops, 3))
             error = {}
             try:
-                request = requests.get(value.get('image')[0])
+                request = requests.get(f"https://img.mvideo.ru/{value.get('image')}")
                 request.raise_for_status()
             except requests.exceptions.HTTPError as errh:
                 error = {"Error": errh}
@@ -60,32 +60,33 @@ class Command(BaseCommand):
                 with open(path_absolute, 'wb') as f:
                     f.write(request.content)
 
-                discount = value.get('discount')
-                price = decimal.Decimal(value.get('price'))
-                rating = decimal.Decimal(value.get('rating'))
 
+                price = decimal.Decimal(value.get('item_base_price'))
+                # rating = value.get('rating')
+                # rating = decimal.Decimal()
+                attributes = {}
+                description = ''
+                for values in value.get('propertiesPortion'):
+                    for key, item in values.items():
+                        if key == 'nameDescription':
+                            description += str(item).replace('None', '')
+                        if key == 'name':
+                            attributes[item] = values['value']
+
+                category = Category.objects.get(pk=12)
                 product = Product.objects.create(
-                            category=,
+                            category=category,
                             title=value.get('name'),
-                            fullDescription=value.get('description'),
-                            attributes=value.get('attributes'),
-                            rating=rating,
+                            fullDescription=description,
+                            attributes=attributes,
                             price=price,
-                            discount=discount,
                             count=50,
+                            tag=value.get('nameTranslit'),
+                            brand=value.get('brandName')
                         )
                 ProductImage.objects.create(image=file_path, product_id=product.pk)
 
                 self.stdout.write(self.style.SUCCESS(f"Product {product} created"))
 
 
-
-
-        pks_to_delete = []
-        rows = Product.objects.values_list('pk', 'name').order_by('name')
-        filter_func = lambda x: x[1]
-        for key, group in itertools.groupby(rows.iterator(), filter_func):
-            pks_to_delete.extend((i[0] for i in list(group)[1:]))
-
-        Product.objects.filter(pk__in=pks_to_delete).delete()
         self.stdout.write(self.style.SUCCESS("Products created"))

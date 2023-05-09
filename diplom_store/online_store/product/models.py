@@ -4,7 +4,6 @@ from django.db import models
 from django.urls import reverse
 from django.utils.timezone import now
 
-
 from catalog.models import Catalog
 from catalog.models import Category
 
@@ -19,33 +18,50 @@ def get_upload_path_by_products(instance, filename):
     return f'product/images/{instance.product.pk}/{filename}'
 
 
-class Tag(models.Model):
-    name = models.TextField(max_length=50, verbose_name=_('Tag product'))
-
-    class Meta:
-        verbose_name = _('tag')
-        verbose_name_plural = _('tags')
-
-    def __str__(self):
-        return self.name
+# class Tag(models.Model):
+#     name = models.TextField(max_length=50, verbose_name=_('Tag product'))
+#     tags = models.ManyToManyField('Tag', related_name='tags', blank=True, verbose_name=_('Tag'))
+#
+#     class Meta:
+#         verbose_name = _('tag')
+#         verbose_name_plural = _('tags')
+#
+#     def __str__(self):
+#         return self.name
 
 
 class Product(models.Model):  # товар
     category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name=_('Product category'))
-    price = models.DecimalField(decimal_places=2, max_digits=10,  verbose_name=_('Price'))
+    price = models.DecimalField(decimal_places=2, max_digits=10, verbose_name=_('Price'))
     count = models.IntegerField(default=0, verbose_name=_('Count'))
     date = models.DateTimeField(auto_now_add=True, verbose_name=_('Created data'))
     title = models.CharField(max_length=150, verbose_name=_('Title'))
     fullDescription = models.TextField(max_length=100, verbose_name=_('Full description product'))
-    freeDelivery = models.BooleanField(default=False, verbose_name=_('Free shipping')) #бесплатная доставка
-    rating = models.DecimalField(decimal_places=1, max_digits=2, blank=True, null=True, verbose_name=_('counter of purchases of this product'))
-    tags = models.ManyToManyField(Tag, related_name='tags', blank=True, verbose_name=_('Tag'))
-    limited = models.BooleanField(default=False, verbose_name=_('Limited edition')) #ограниченный тираж
+    freeDelivery = models.BooleanField(default=False, verbose_name=_('Free shipping'))  # бесплатная доставка
+    tag = models.SlugField(max_length=200, db_index=True, verbose_name=_('Tag product'))
+    limited = models.BooleanField(default=False, verbose_name=_('Limited edition'))  # ограниченный тираж
     banner = models.BooleanField(default=False, verbose_name=_('Banner on home page'))
+    brand = models.CharField(max_length=100, verbose_name=_('Brand'))
+    attributes = models.JSONField(default=dict, blank=True, verbose_name=_('Attributes'))
 
     class Meta:
         verbose_name = _('product')
         verbose_name_plural = _('products')
+
+    def rating_info(self):
+        rating_info = getattr(self, 'rating_info', None)
+        if rating_info is None:
+            return {
+                'rating': None,
+                'count': 0,
+            }
+        return {
+            'rating': rating_info.rating,
+            'count': rating_info.count,
+        }
+
+    def reviews_list(self):
+        return list(self.reviews.all())
 
     def href(self):
         """
@@ -68,7 +84,7 @@ class Product(models.Model):  # товар
         Получение главного изображения продукта
         :return: изображение
         """
-        return self.images
+        return self.images.all()[0]
 
     def get_price(self):
         """
@@ -85,7 +101,6 @@ class Product(models.Model):  # товар
 
     def __str__(self):
         return self.title
-
 
 
 class ProductImage(models.Model):
@@ -111,14 +126,23 @@ class ProductImage(models.Model):
         return f'/{self.image}'
 
 
+class Rating(models.Model):
+    product = models.OneToOneField(Product, on_delete=models.CASCADE, related_name='rating_info')
+    rating = models.DecimalField(decimal_places=1, max_digits=2, verbose_name=_('rating'))
+    count = models.PositiveIntegerField(default=0, verbose_name=_('count'))
+
+    class Meta:
+        verbose_name = _('rating')
+        verbose_name_plural = _('ratings')
+
+
 class Review(models.Model):  # отзыв
-    author = models.CharField(max_length=128, verbose_name=_('Author'))
+    author = models.CharField(max_length=128, verbose_name=_('author'))
     email = models.EmailField(max_length=254)
     text = models.TextField(verbose_name=_('Text'))
-    rate = models.PositiveSmallIntegerField(blank=False, default=5, verbose_name=_('Rating'))
-    date = models.DateTimeField(auto_now_add=True, verbose_name=_('Created data'))
-    product = models.ForeignKey(Product, on_delete=models.PROTECT, related_name='reviews',
-                                verbose_name=_('Product'))
+    date = models.DateTimeField(auto_now_add=True, verbose_name=_('created data'))
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews',
+                                verbose_name=_('product'))
 
     class Meta:
         verbose_name = _('review')
@@ -128,6 +152,14 @@ class Review(models.Model):  # отзыв
         if len(self.text) > 50:
             return f'{self.text[:50]}...'
         return self.text
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        rating_info, created = Rating.objects.get_or_create(product=self.product)
+        rating_info.count = self.product.reviews.count()
+        rating_info.rating = self.product.reviews.aggregate(models.Avg('rating'))['rating__avg']
+        rating_info.save()
+
 
 class Sale(models.Model):
     product = models.ForeignKey('Product', on_delete=models.CASCADE, related_name='sales', verbose_name='товар')

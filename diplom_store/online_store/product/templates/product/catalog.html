@@ -27,71 +27,38 @@
               </strong>
             </header>
             <div class="Section-columnContent">
-              <form class="form"
-                    action="/api/catalog"
-                    method="post"
-                    @submit.prevent="getCatalogs(1)"
-              >
-                {% csrf_token %}
-                <div class="form-group">
-                  <div class="range Section-columnRange">
-
-                    <!-- Получаем данные по фильтру цены -->
-                    <input class="range-line"
-                           id="price"
-                           name="price"
-                           type="text"
-                           data-type="double"
-                           :data-min="filters.price.minValue"
-                           :data-max="filters.price.maxValue"
-                           :data-from="filter.minPrice"
-                           :data-to="filter.maxPrice"
-                    />
-                    <input type="hidden" name="minPrice" v-model="filters.price.currentFromValue">
-                    <input type="hidden" name="maxPrice" v-model="filters.price.currentToValue">
-                    <!-- Получаем данные по фильтру цены -->
-                    
-                    <div class="range-price">Price:&#32;
-                      <div class="rangePrice">
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <input  class="form-input form-input_full"
-                          id="title"
-                          name="title"
-                          type="text"
-                          v-model="filter.name"
-                          placeholder="Название"
-                  />
-                </div>
-                <div class="form-group">
-                </div>
-                <div class="form-group">
-                  <label class="toggle">
-                    <input type="checkbox" name="available" v-model="filter.available"/>
-                    <span class="toggle-box"></span>
-                    <span class="toggle-text">Только товары в наличии</span>
-                  </label>
-                </div>
-                <div class="form-group">
-                  <label class="toggle">
-                    <input type="checkbox" name="freeDelivery" v-model="filter.freeDelivery"/>
-                    <span class="toggle-box"></span>
-                    <span class="toggle-text">С бесплатной доставкой</span>
-                  </label>
-                </div>
-                <div class="form-group">
-                  <div class="buttons">
-                    <button type="submit"
-                            class="btn btn_square btn_dark btn_narrow" >
-                      Фильтровать
-                    </button>
-                  </div> <!-- TODO отправка формы фильтрации -->
-                </div>
-              </form>
-            </div>
+                            <form class="form" action="#" method="post">
+                                <div class="form-group">
+                                    <div class="range Section-columnRange">
+                                        <input class="range-line" id="price" name="price" type="text" data-type="double" data-min="7" data-max="50" data-from="7" data-to="27" />
+                                        <div class="range-price">Цена:&#32;
+                                            <div class="rangePrice">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-input form-input_full" id="title" name="title" type="text" placeholder="Название" />
+                                </div>
+                                <div class="form-group">
+                                    <!-- - var options = setOptions(items, ['value', 'selected', 'disabled']);-->
+                                </div>
+                                <div class="form-group">
+                                    <label class="toggle">
+                                        <input type="checkbox" /><span class="toggle-box"></span><span class="toggle-text">Только товары в наличии</span>
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label class="toggle">
+                                        <input type="checkbox" /><span class="toggle-box"></span><span class="toggle-text">С бесплатной доставкой</span>
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <div class="buttons"><a class="btn btn_square btn_dark btn_narrow" href="#">Фильтр</a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
           </div>
           <div class="Section-columnSection">
             <header class="Section-header">
@@ -99,77 +66,68 @@
               </strong>
             </header>
             <div class="Section-columnContent">
-              <div class="buttons">
-
-                <!-- Получаем популярные тэги -->
-                <button v-for="tag in topTags"
-                        :key="tag.id"
-                        :class="['btn btn_sm', tag.selected ? 'btn_warning' : 'btn_default']"
-                        @click="setTag(tag.id)"
-                >
-                  ${ tag.name }$
-                </button>
-                <!-- Получаем популярные тэги -->
-
-              </div>
-            </div>
+                            <div class="buttons"><a class="btn btn_default btn_sm" href="#">Видео</a><a class="btn btn_default btn_sm" href="#">Разработка</a><a class="btn btn_default btn_sm" href="#">Игры</a><a class="btn btn_default btn_sm" href="#">Asus</a><a class="btn btn_default btn_sm" href="#">Разработка</a><a class="btn btn_default btn_sm" href="#">Видео</a>
+                            </div>
+                        </div>
           </div>
         </div>
         <div class="Section-content">
           <div class="Sort">
-            <div class="Sort-title">Сортировать по:</div>
-            <div class="Sort-variants">
-              <div v-for="sort in sortRules"
-                   :key="sort.id"
-                   :id="sort.id"
-                   class="Sort-sortBy"
-                   :class="[
-                    selectedSort && sort.id === selectedSort.id
-                      ? `Sort-sortBy_${selectedSort.selected}`
-                      : null
-                   ]"
-                   @click="setSort(sort.id)"
-              >
-                ${ sort.title }$
-              </div>
-
-            </div>
-          </div>
+                        <div class="Sort-title">Сортировать по:
+                        </div>
+                        <div class="Sort-variants"><a class="Sort-sortBy Sort-sortBy_dec" href="#">Популярности</a><a class="Sort-sortBy" href="#">Цене</a><a class="Sort-sortBy" href="#">Отзывам</a><a class="Sort-sortBy Sort-sortBy_inc" href="#">Новизне</a>
+                        </div>
+                    </div>
           <div class="Cards">
 
             <!-- Получаем товары по фильтрам -->
-            <div v-for="card in catalogCards" class="Card" :key="id">
-              <a class="Card-picture" :href="card.href"><img :src="card.images[0]" :alt="card.title"/></a>
+            {% for card in products %}
+            {{ card.images.first.url }}
+            <div class="Card">
+              <a class="Card-picture" href="{{ card.href }}">
+                <img src="{{ card.images.first.url }}" alt="">
+              </a>
               <div class="Card-content">
-                <strong class="Card-title"><a :href="card.href">${ card.title }$</a></strong>
+                <strong class="Card-title">
+                  <a href="{{ card.href }}">{{ card.title|truncatechars:33 }}</a>
+                </strong>
                 <div class="Card-description">
-                  <div class="Card-cost"><span class="Card-price">$${ card.price }$</span></div>
-                  <div class="Card-category">${ card.categoryName }$</div>
+                  <div class="Card-cost">
+                    <span class="Card-price">{{ card.price }}</span>
+                  </div>
+                  <div class="Card-category">{{ card.category }}</div>
                   <div class="Card-hover">
-                    <button class="Card-btn" @click="addToBasket(card)">
+                    <button class="Card-btn">
                       <img src="/static/frontend/assets/img/icons/card/cart.svg" alt="cart.svg"/>
                     </button>
                   </div>
                 </div>
               </div>
             </div>
+            {% endfor %}
             <!-- Получаем товары по фильтрам -->
 
           </div>
 
           <!-- Доработать апгинацию!  -->
           <div class="Pagination">
-            <div class="Pagination-ins">
-              <a class="Pagination-element Pagination-element_prev" @click.prevent="getCatalogs(1)" href="#">
-                <img src="/static/frontend/assets/img/icons/prevPagination.svg" alt="prevPagination.svg"/>
-              </a>
-              <a v-for="i in lastPage" class="Pagination-element" :class="{'Pagination-element_current': i == currentPage}" @click.prevent="getCatalogs(i)" href="#">
-                <span class="Pagination-text">${i}$</span>
-              </a>
-              <a class="Pagination-element Pagination-element_prev" @click.prevent="getCatalogs(lastPage)" href="#">
-                <img src="/static/frontend/assets/img/icons/nextPagination.svg" alt="nextPagination.svg"/>
-              </a>
-            </div>
+                        <div class="Pagination-ins">
+                            <a class="Pagination-element Pagination-element_prev" href="#">
+                                <img src="{% static 'frontend/assets/img/icons/prevPagination.svg' %}" alt="prevPagination.svg">
+                            </a>
+                            <a class="Pagination-element Pagination-element_current" href="#">
+                                <span class="Pagination-text">1</span>
+                            </a>
+                            <a class="Pagination-element" href="#">
+                                <span class="Pagination-text">2</span>
+                            </a>
+                            <a class="Pagination-element" href="#">
+                                <span class="Pagination-text">3</span>
+                            </a>
+                            <a class="Pagination-element Pagination-element_prev" href="#">
+                                <img src="{% static 'frontend/assets/img/icons/nextPagination.svg' %}" alt="nextPagination.svg" />
+                            </a>
+                        </div>
           </div>
           <!-- Доработать пагинацию!  -->
 

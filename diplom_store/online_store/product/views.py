@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from django.core.paginator import Paginator
+from django.db import connection
 from django.db.models import Q
 from django.shortcuts import render
 from django.views import View
@@ -19,14 +20,22 @@ class MainPageView(View):
     def get(self, request, *args, **kwargs):
         return render(request, 'frontend/index.html')
 
+
+class ProductCatalogView(View):
+    """
+        Представление для отображения популярных продуктов
+    """
+    def get(self, request, *args, **kwargs):
+        products = Product.objects.filter(category=self.kwargs['category']).prefetch_related('images')
+        return render(request, 'product/catalog.html', context={'products': products[:6]})
+
 class ProductPopularView(View):
     """
         Представление для отображения популярных продуктов
     """
     def get(self, request, *args, **kwargs):
-        products = Product.objects.filter(category=self.kwargs['category']).order_by('-rating')[:8].prefetch_related('images')
-
-        return render(request, 'product/catalog.html', context={'products': products})
+        products = Product.objects.filter(category=self.kwargs['category']).prefetch_related('images')
+        return render(request, 'product/catalog.html', context={'products': products[:6]})
 
 
 class ProductLimitedView(APIView):

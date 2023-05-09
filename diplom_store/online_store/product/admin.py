@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from product.models import Product, ProductImage, Tag, Sale, Review
+from product.models import Product, ProductImage, Sale, Review, Rating
 
 
 @admin.register(Product)
@@ -18,20 +18,20 @@ class ProductAdmin(admin.ModelAdmin):
         # 'freeDelivery',
     ]
     list_display_links = ['pk', 'title']
-    list_filter = ['freeDelivery', 'rating']
+    list_filter = ['freeDelivery',]
     search_fields = ['title', 'category', 'price']
 
     fieldsets = (
         ('О продукте', {
-            'fields': ('category', 'title', ('price', 'count', 'rating'))
+            'fields': ('category', 'title', ('price', 'count',))
         }),
         ('Дополнительные параметры', {
             'classes': ('collapse',),
-            'fields': ('freeDelivery',)
+            'fields': ('freeDelivery', 'limited', 'banner',)
         }),
         ('Описание товара', {
             'classes': ('collapse',),
-            'fields': ('fullDescription',),
+            'fields': ('fullDescription', 'attributes', 'brand'),
         }),
     )
 
@@ -45,14 +45,14 @@ class ProductImageAdmin(admin.ModelAdmin):
     list_display_links = ['pk', 'product']
 
 
-@admin.register(Tag)
-class TagAdmin(admin.ModelAdmin):
-    """
-    Отображение тегов в административной панели
-    """
-    list_display = ['pk', 'name']
-    list_display_links = ['pk', 'name']
-    search_fields = ['name']
+# @admin.register(Tag)
+# class TagAdmin(admin.ModelAdmin):
+#     """
+#     Отображение тегов в административной панели
+#     """
+#     list_display = ['pk', 'name']
+#     list_display_links = ['pk', 'name']
+#     search_fields = ['name']
 
 
 @admin.register(Sale)
@@ -73,3 +73,13 @@ class ReviewAdmin(admin.ModelAdmin):
     list_display = ['pk', 'author', 'email', 'text', 'date', 'product']
     list_display_links = ['pk', 'author']
     search_fields = ['author', 'text']
+
+
+@admin.register(Rating)
+class RatingAdmin(admin.ModelAdmin):
+    """
+    Отображение в административной панели оценок.
+    """
+    list_display = ['pk', 'product', 'rating', 'count',]
+    list_display_links = ['pk', 'product']
+    search_fields = ['product', ]

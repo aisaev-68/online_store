@@ -3,7 +3,7 @@ import json
 
 
 class CitylinkSpider(scrapy.Spider):
-    name = "citylink"
+    name = "mvideo"
     start_urls = ["https://www.citylink.ru/catalog/kompyutery_i_komplektuyushchie/"]
 
     def parse(self, response):
@@ -35,4 +35,4 @@ class CitylinkSpider(scrapy.Spider):
         next_page = response.css(".next::attr(href)").get()
         if next_page is not None:
             yield response.follow(next_page, self.parse)
-#scrapy crawl citylink -o output.json
+#scrapy crawl mvideo -o output.json

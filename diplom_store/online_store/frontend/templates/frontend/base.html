@@ -159,7 +159,7 @@
                             <div class="CategoriesButton-submenu">
                                 {% for category in catalog.categories.all %}
                                 <div>
-                                    <a class="CategoriesButton-link" href="{% url 'product:product-popular' category=category.pk %}">
+                                    <a class="CategoriesButton-link" href="{% url 'product:product-catalog' category=category.pk %}">
                                         <div class="CategoriesButton-icon">
                                             <img src="{{ category.href }}" alt="{{ category.alt }}" style="height:30px;"/>
                                         </div>

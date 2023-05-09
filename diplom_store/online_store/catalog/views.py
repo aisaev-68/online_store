@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from catalog.models import Category
-from product.models import Tag
+
 from product.serializers import ProductSerializer
 
 
