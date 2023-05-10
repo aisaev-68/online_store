@@ -81,6 +81,15 @@ class FilterProduct(View):
         return products
 
 
+class SortedPrice(View):
+    def get(self, request, *args, **kwargs):
+        # Пример сортировки по возрастанию цены
+        sorted_products = Product.objects.order_by('price')
+
+        # Пример сортировки по убыванию цены
+        sorted_products = Product.objects.order_by('-price')
+
+
 class SalesView(APIView):
     """
     Представление для отображения товаров со скидками.
