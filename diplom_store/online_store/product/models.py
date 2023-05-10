@@ -33,7 +33,7 @@ def get_upload_path_by_products(instance, filename):
 class Product(models.Model):  # товар
     category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name=_('Product category'))
     price = models.DecimalField(decimal_places=2, max_digits=10, verbose_name=_('Price'))
-    count = models.IntegerField(default=0, verbose_name=_('Count'))
+    quantity = models.IntegerField(default=0, verbose_name=_('Quantity'))
     date = models.DateTimeField(auto_now_add=True, verbose_name=_('Created data'))
     title = models.CharField(max_length=150, verbose_name=_('Title'))
     fullDescription = models.TextField(max_length=100, verbose_name=_('Full description product'))
@@ -43,10 +43,25 @@ class Product(models.Model):  # товар
     banner = models.BooleanField(default=False, verbose_name=_('Banner on home page'))
     brand = models.CharField(max_length=100, verbose_name=_('Brand'))
     attributes = models.JSONField(default=dict, blank=True, verbose_name=_('Attributes'))
+    in_stock = models.BooleanField(default=True, verbose_name=_('In stock'))
 
     class Meta:
         verbose_name = _('product')
         verbose_name_plural = _('products')
+
+    def sell(self, quantity_sold):
+        """
+        Метод sell уменьшает количество товаров при продаже
+        и изменяет признак in_stock, если товары закончились.
+        :param quantity_sold:
+        :return:
+        """
+        self.quantity -= quantity_sold
+
+        if self.quantity == 0:
+            self.in_stock = False
+
+        self.save()
 
     def rating_info(self):
         rating_info = getattr(self, 'rating_info', None)

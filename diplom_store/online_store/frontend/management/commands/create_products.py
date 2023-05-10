@@ -80,7 +80,7 @@ class Command(BaseCommand):
                             fullDescription=description,
                             attributes=attributes,
                             price=price,
-                            count=50,
+                            quantity=50,
                             tag=value.get('nameTranslit'),
                             brand=value.get('brandName')
                         )

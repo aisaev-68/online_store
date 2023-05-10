@@ -12,7 +12,7 @@ class ProductAdmin(admin.ModelAdmin):
         'pk',
         'title',
         'price',
-        'count',
+        'quantity',
         'category',
         'date',
         # 'freeDelivery',
@@ -23,11 +23,11 @@ class ProductAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ('О продукте', {
-            'fields': ('category', 'title', ('price', 'count',))
+            'fields': ('category', 'title', ('price', 'quantity',))
         }),
         ('Дополнительные параметры', {
             'classes': ('collapse',),
-            'fields': ('freeDelivery', 'limited', 'banner',)
+            'fields': ('freeDelivery', 'limited', 'banner', 'in_stock')
         }),
         ('Описание товара', {
             'classes': ('collapse',),

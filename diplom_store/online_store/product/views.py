@@ -62,6 +62,25 @@ class ProductLimitedView(APIView):
         serializer = ProductSerializer(products, many=True)
         return Response(serializer.data)
 
+
+class FilterProduct(View):
+    def get(self, request, min_price=None, max_price=None, in_stock=None, free_shipping=None, *args, **kwargs):
+        # Получаем все товары
+        products = Product.objects.all()
+
+        # Применяем фильтры
+        if min_price is not None:
+            products = products.filter(price__gte=min_price)
+        if max_price is not None:
+            products = products.filter(price__lte=max_price)
+        if in_stock is not None:
+            products = products.filter(in_stock=in_stock)
+        if free_shipping is not None:
+            products = products.filter(freeDelivery=free_shipping)
+
+        return products
+
+
 class SalesView(APIView):
     """
     Представление для отображения товаров со скидками.
