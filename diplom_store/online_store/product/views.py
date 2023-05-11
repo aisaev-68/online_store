@@ -41,6 +41,67 @@ class ProductCatalogView(View):
 
         return render(request, 'product/catalog.html', context={"page": results})
 
+
+class FilterAndSort(View):
+    template_name = 'product/catalog.html'
+
+    def get(self, request, *args, **kwargs):
+        # queryset = Product.objects.all()
+        print(55, self.kwargs)
+        queryset = Product.objects.filter(category=self.kwargs['category']).prefetch_related('images')
+
+        title = request.GET.get('title')
+        if title:
+            queryset = queryset.filter(title=title)
+
+        # Фильтрация по наличию на складе
+        in_stock = request.GET.get('in_stock')
+        if in_stock:
+            queryset = queryset.filter(in_stock=True)
+
+        # Фильтрация по бесплатной доставке
+        free_shipping = request.GET.get('free_shipping')
+        if free_shipping:
+            queryset = queryset.filter(freeDelivery=True)
+
+        # Фильтрация по цене
+        min_price = request.GET.get('min_price')
+        max_price = request.GET.get('max_price')
+        if min_price and max_price:
+            queryset = queryset.filter(price__gte=min_price, price__lte=max_price)
+
+        # Поиск по тексту
+        query = request.GET.get('q')
+        if query:
+            queryset = queryset.filter(
+                Q(title__icontains=query) | Q(description__icontains=query)
+            )
+
+        if 'page' in request.GET:
+            page = request.GET['page']
+        else:
+            page = 1
+        paginator = Paginator(queryset, 6)
+        try:
+            results = paginator.page(page)
+        except PageNotAnInteger:
+            results = paginator.page(1)
+        except EmptyPage:
+            results = paginator.page(paginator.num_pages)
+
+        context = {
+            'products': results,
+            'query': query,
+            'min_price': min_price,
+            'max_price': max_price,
+            'in_stock': in_stock,
+            'free_shipping': free_shipping,
+        }
+
+        return render(request, self.template_name, context)
+
+
+
 class ProductPopularView(View):
     """
         Представление для отображения популярных продуктов
