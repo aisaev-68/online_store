@@ -46,36 +46,41 @@ class FilterAndSort(View):
     template_name = 'product/catalog.html'
 
     def get(self, request, *args, **kwargs):
-        # queryset = Product.objects.all()
-        print(55, self.kwargs)
         queryset = Product.objects.filter(category=self.kwargs['category']).prefetch_related('images')
+        order_by = request.GET.get('order_by')
+        direction = request.GET.get('direction', 'asc')
+        # Фильтрация по цене
+        price_min = request.GET.get('price_min')
+        price_max = request.GET.get('price_max')
+        if price_min and price_max:
+            queryset = queryset.filter(price__range=(price_min, price_max))
 
+        # Фильтрация по названию
         title = request.GET.get('title')
         if title:
-            queryset = queryset.filter(title=title)
+            queryset = queryset.filter(title__icontains=title)
+
+        # Фильтрация по бесплатной доставке
+        free_delivery = request.GET.get('free_delivery')
+        if free_delivery:
+            queryset = queryset.filter(freeDelivery=True)
 
         # Фильтрация по наличию на складе
         in_stock = request.GET.get('in_stock')
         if in_stock:
             queryset = queryset.filter(in_stock=True)
 
-        # Фильтрация по бесплатной доставке
-        free_shipping = request.GET.get('free_shipping')
-        if free_shipping:
-            queryset = queryset.filter(freeDelivery=True)
+        if order_by == 'price':
 
-        # Фильтрация по цене
-        min_price = request.GET.get('min_price')
-        max_price = request.GET.get('max_price')
-        if min_price and max_price:
-            queryset = queryset.filter(price__gte=min_price, price__lte=max_price)
-
-        # Поиск по тексту
-        query = request.GET.get('q')
-        if query:
-            queryset = queryset.filter(
-                Q(title__icontains=query) | Q(description__icontains=query)
-            )
+            if direction == 'asc':
+                queryset = queryset.order_by('price')
+            else:
+                queryset = queryset.order_by('-price')
+        # elif order_by == 'reviews':
+        #     queryset = queryset.order_by(
+        #         '-reviews')  # Предположим, что у модели Product есть поле 'reviews' для отзывов
+        elif order_by == 'newest':
+            queryset = queryset.order_by('-date')
 
         if 'page' in request.GET:
             page = request.GET['page']
@@ -90,15 +95,17 @@ class FilterAndSort(View):
             results = paginator.page(paginator.num_pages)
 
         context = {
-            'products': results,
-            'query': query,
-            'min_price': min_price,
-            'max_price': max_price,
+            'page': results,
+            'price_min': price_min,
+            'price_max': price_max,
+            'title': title,
+            'free_delivery': free_delivery,
             'in_stock': in_stock,
-            'free_shipping': free_shipping,
         }
 
         return render(request, self.template_name, context)
+
+
 
 
 

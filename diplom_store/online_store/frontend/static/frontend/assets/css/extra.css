@@ -4845,7 +4845,7 @@ a.Cart-title {
   top: 0;
   width: 30px;
   height: 30px;
-  background: url("../img/icons/upArrow.svg") center center no-repeat;
+  background: url("../img/icons/catalog/top.png") center center no-repeat;
   background-size: contain;
 }
 .Sort-sortBy_inc:after {

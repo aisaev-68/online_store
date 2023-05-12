@@ -1,6 +1,7 @@
 import os
 from django.utils.translation import gettext_lazy as _
 from django.db import models
+import django_filters
 from django.urls import reverse
 from django.utils.timezone import now
 
@@ -140,6 +141,23 @@ class ProductImage(models.Model):
     def __str__(self):
         return f'/{self.image}'
 
+
+class ProductFilter(django_filters.FilterSet):
+    CHOICES = [
+        ["title", "по названию"],
+        ["price", "дешевые сверху"],
+        ["-price", "дорогие сверху"]
+    ]
+    title = django_filters.CharFilter(name='name', lookup_expr='icontains')
+    category__slug = django_filters.CharFilter()
+    price__gt = django_filters.NumberFilter(name='price', lookup_expr='gt')
+    price__lt = django_filters.NumberFilter(name='price', lookup_expr='lt')
+    ordering = django_filters.OrderingFilter(choices=CHOICES, required=True, empty_label=None,)
+
+    class Meta:
+        model = Product
+        exclude = [field.name for field in Product._meta.fields]
+        order_by_field = 'title'
 
 class Rating(models.Model):
     product = models.OneToOneField(Product, on_delete=models.CASCADE, related_name='rating_info')

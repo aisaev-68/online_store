@@ -27,10 +27,10 @@
               </strong>
             </header>
             <div class="Section-columnContent">
-                            <form class="form" action="#" method="post">
+                            <form class="form" method="get">
                                 <div class="form-group">
                                     <div class="range Section-columnRange">
-                                        <input class="range-line" id="price" name="price" type="text" data-type="double" data-min="7" data-max="50" data-from="7" data-to="27" />
+                                        <input class="range-line" id="price" name="price" type="text" data-type="double" data-min="0" data-max="500000" data-from="0" data-to="500000" />
                                         <div class="range-price">Цена:&#32;
                                             <div class="rangePrice">
                                             </div>
@@ -38,24 +38,23 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <input class="form-input form-input_full" id="title" name="title" type="text" placeholder="Название" />
+                                    <label for="title">Title:</label>
+                                    <input type="text" name="title" value="{{ title }}" placeholder="Title">
                                 </div>
                                 <div class="form-group">
-                                    <!-- - var options = setOptions(items, ['value', 'selected', 'disabled']);-->
+
+                                    <input type="checkbox" name="in_stock" {% if in_stock %}checked{% endif %}>
+                                    <label for="in_stock">In stock</label>
+
                                 </div>
                                 <div class="form-group">
-                                    <label class="toggle">
-                                        <input name="in_stock" type="checkbox" /><span class="toggle-box"></span><span class="toggle-text">Только товары в наличии</span>
-                                    </label>
+
+                                    <input type="checkbox" name="free_delivery" {% if free_delivery %}checked{% endif %}>
+                                    <label for="free_delivery">Free delivery</label>
+
                                 </div>
                                 <div class="form-group">
-                                    <label class="toggle">
-                                        <input name="free_shipping" type="checkbox" /><span class="toggle-box"></span><span class="toggle-text">С бесплатной доставкой</span>
-                                    </label>
-                                </div>
-                                <div class="form-group">
-                                    <div class="buttons"><a class="btn btn_square btn_dark btn_narrow" href="#">Фильтр</a>
-                                    </div>
+                                    <input class="btn btn_success" type="submit" value="Apply Filters">
                                 </div>
                             </form>
                         </div>
@@ -75,7 +74,18 @@
           <div class="Sort">
                         <div class="Sort-title">Сортировать по:
                         </div>
-                        <div class="Sort-variants"><a class="Sort-sortBy Sort-sortBy_dec" href="#">Популярности</a><a class="Sort-sortBy" href="#">Цене</a><a class="Sort-sortBy" href="#">Отзывам</a><a class="Sort-sortBy Sort-sortBy_inc" href="#">Новизне</a>
+                        <div class="Sort-variants">
+                            <a class="Sort-sortBy Sort-sortBy_dec" href="#">Популярности</a>
+
+                            <p>Price</p>
+                            <a class="Sort-sortBy Sort-sortBy_dec" href="?order_by=price&direction=desc"></a>
+                            <a class="Sort-sortBy Sort-sortBy_inc" href="?order_by=price&direction=asc"></a>
+
+
+<!--                            <a class="Sort-sortBy Sort-sortBy_dec" href="?order_by=price&direction=desc">Price</a>-->
+<!--                            <a class="Sort-sortBy Sort-sortBy_inc" href="?order_by=price&direction=asc">Price</a>-->
+                            <a class="Sort-sortBy" href="?order_by=reviews">Reviews</a>
+                            <a class="Sort-sortBy Sort-sortBy_inc" href="?order_by=newest">Newest</a>
                         </div>
                     </div>
           <div class="Cards">

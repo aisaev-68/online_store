@@ -17,6 +17,7 @@ docutils = "^0.19"
 scrapy = "^2.9.0"
 selenium = "^4.9.1"
 scrapy-user-agents = "^0.1.1"
+django-filter = "^23.2"
 
 
 [build-system]
