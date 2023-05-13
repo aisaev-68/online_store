@@ -1,0 +1,52 @@
+{% extends "frontend/base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}
+Log-in
+{% endblock %}
+
+{% block script_css %}
+<link rel="stylesheet" href="{% static 'frontend/assets/css/register.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="Middle-top">
+    <div class="wrap">
+        <div class="Middle-header">
+            <h1 class="Middle-title">{% trans 'Login' %}</h1>
+            <ul class="breadcrumbs Middle-breadcrumbs">
+                <li class="breadcrumbs-item"><a href="/">{% trans 'home' %}</a></li>
+                <li class="breadcrumbs-item breadcrumbs-item_current"><span>{% trans 'Login' %}</span></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<section class="wrapper">
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }}" style="color: #2fa225; text-align: center;">
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+    <div class="header">
+        <h3 class="sign-in" style="text-align: center;">Вход</h3>
+    </div>
+    <form class="" method="post" action="" style="display: flex; flex-direction: column; align-items: center;">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="form-group">
+            <p class="form-field" style="">{{ field }}</p>
+        </div>
+        {% endfor %}
+        <div class="form-group">
+            <a class="forgot-label" href="">Forgot your password?</a>
+        </div>
+        <div class="form-group">
+            <button class="btn btn_success" type="submit">Login</button>
+            <a href="{% url 'account:register' %}" class="btn btn_success">Register</a>
+        </div>
+    </form>
+</section>
+{% endblock %}
