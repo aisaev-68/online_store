@@ -5,14 +5,16 @@ from product.models import Product, ProductImage, Rating, Review, Sale
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['id', 'title', 'category', 'price', 'count', 'date', 'in_stock']
-    list_filter = ['category', 'in_stock']
+    list_display = ['id', 'title', 'category', 'price', 'count', 'date', 'active']
+    list_filter = ['category', 'active']
     search_fields = ['title']
 
 @admin.register(ProductImage)
 class ProductImageAdmin(admin.ModelAdmin):
     list_display = ['id', 'image', 'product']
     list_filter = ['product']
+
+
 
 @admin.register(Rating)
 class RatingAdmin(admin.ModelAdmin):

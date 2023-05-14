@@ -1,8 +1,6 @@
 from datetime import datetime
 
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.db import connection
-from django.db.models import Q
 from django.shortcuts import render
 from django.views import View
 from rest_framework import viewsets, status
@@ -12,11 +10,9 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from product.models import Product, Review, Sale
-from product.serializers import ProductSerializer, ReviewSerializer, SaleSerializer
+from product.models import Product, Review
+from product.serializers import ProductSerializer, ReviewSerializer
 
-from catalog.models import Catalog
-from catalog.serializers import CatalogSerializer
 
 
 class MainPageView(View):
@@ -107,7 +103,6 @@ class FilterAndSort(View):
             'free_delivery': free_delivery,
             'in_stock': in_stock,
         }
-        print(88888, context)
 
         return render(request, self.template_name, context)
 
@@ -115,26 +110,7 @@ class FilterAndSort(View):
 
 
 
-class ProductPopularView(View):
-    """
-        Представление для отображения популярных продуктов
-    """
-    def get(self, request, *args, **kwargs):
-        products = Product.objects.filter(category=self.kwargs['category']).prefetch_related('images')
-        return render(request, 'product/catalog.html', context={'products': products[:6]})
 
-
-class ProductLimitedView(APIView):
-    """
-    Представление для отображения лимитированных продуктов
-    """
-
-    def get(self, request):
-        products = Product.objects.prefetch_related('images')
-        for product in products:
-            product.categoryName = product.category
-        serializer = ProductSerializer(products, many=True)
-        return Response(serializer.data)
 
 
 class FilterProduct(View):
@@ -164,22 +140,6 @@ class SortedPrice(View):
         sorted_products = Product.objects.order_by('-price')
 
 
-class SalesView(APIView):
-    """
-    Представление для отображения товаров со скидками.
-    """
-    def get(self, request, *args, **kwargs):
-        count_products_on_page = 8  # Определяем количество продуктов на странице
-        products = (Sale.objects.filter(Q(dateFrom__gte=datetime.today()) | Q(dateTo__gte=datetime.today())).
-                    select_related('product').filter(product__active=True))
-        paginator = Paginator(products, 8)
-        current_page = paginator.get_page(request.GET.get('page'))
-        if len(products) % count_products_on_page == 0:
-            lastPage = len(products) // count_products_on_page
-        else:
-            lastPage = len(products) // count_products_on_page + 1
-        serializer = SaleSerializer(current_page, many=True)
-        return Response({'salesCards': serializer.data, 'currentPage': request.GET.get('page'), 'lastPage': lastPage})
 
 
 class BannerView(APIView):
@@ -189,7 +149,7 @@ class BannerView(APIView):
 
 class ProductDetailView(viewsets.ViewSet):
     """
-    Представление для отображения детальной страницы продукта
+    Представление для получения детальной страницы продукта
     """
 
     def retrieve(self, request, pk):

@@ -14,6 +14,7 @@ class ProductImageSerializer(serializers.ModelSerializer):
         fields = ('src',)
 
 
+
 class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
@@ -37,7 +38,7 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = (
-        'id', 'category', 'price', 'count', 'date', 'title', 'description', 'href', 'freeDelivery', 'images', 'tags',
+        'id', 'category', 'price', 'count', 'date', 'title', 'description', 'href', 'freeDelivery', 'images',
         'reviews', 'rating')
 
     def get_reviews(self, obj):

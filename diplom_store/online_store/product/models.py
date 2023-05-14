@@ -1,9 +1,6 @@
-import os
 from django.utils.translation import gettext_lazy as _
 from django.db import models
-import django_filters
-from django.urls import reverse
-from django.utils.timezone import now
+
 
 from catalog.models import Catalog, Category
 
@@ -20,19 +17,19 @@ def get_upload_path_by_products(instance, filename):
 
 
 class Product(models.Model):  # товар
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name=_('Product category'))
-    price = models.DecimalField(decimal_places=2, max_digits=10, verbose_name=_('Price'))
-    count = models.IntegerField(default=0, verbose_name=_('Quantity'))
-    date = models.DateTimeField(auto_now_add=True, verbose_name=_('Created data'))
-    title = models.CharField(max_length=150, verbose_name=_('Title'))
-    fullDescription = models.TextField(max_length=100, verbose_name=_('Full description product'))
-    freeDelivery = models.BooleanField(default=False, verbose_name=_('Free shipping'))  # бесплатная доставка
-    tag = models.SlugField(max_length=200, db_index=True, verbose_name=_('Tag product'))
-    limited = models.BooleanField(default=False, verbose_name=_('Limited edition'))  # ограниченный тираж
-    banner = models.BooleanField(default=False, verbose_name=_('Banner on home page'))
-    brand = models.CharField(max_length=100, verbose_name=_('Brand'))
-    attributes = models.JSONField(default=dict, blank=True, verbose_name=_('Attributes'))
-    in_stock = models.BooleanField(default=True, verbose_name=_('In stock'))
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name=_('product category'))
+    price = models.DecimalField(decimal_places=2, max_digits=10, verbose_name=_('price'))
+    count = models.IntegerField(default=0, verbose_name=_('quantity'))
+    date = models.DateTimeField(auto_now_add=True, verbose_name=_('created data'))
+    title = models.CharField(max_length=150, verbose_name=_('title'))
+    fullDescription = models.TextField(max_length=100, verbose_name=_('full description product'))
+    freeDelivery = models.BooleanField(default=False, verbose_name=_('free shipping'))  # бесплатная доставка
+    limited = models.BooleanField(default=False, verbose_name=_('limited edition'))  # ограниченный тираж
+    banner = models.BooleanField(default=False, verbose_name=_('banner on home page'))
+    active = models.BooleanField(default=True, verbose_name=_('active'))
+    brand = models.CharField(max_length=100, verbose_name=_('brand'))
+    attributes = models.JSONField(default=dict, blank=True, verbose_name=_('attributes'))
+
 
     class Meta:
         verbose_name = _('product')
@@ -103,6 +100,9 @@ class Product(models.Model):  # товар
     def id(self):
         return f'{self.pk}'
 
+    def tag(self):
+        return self.tags.name
+
     def __str__(self):
         return self.title
 
@@ -128,6 +128,8 @@ class ProductImage(models.Model):
 
     def __str__(self):
         return f'/{self.image}'
+
+
 
 
 class Rating(models.Model):
