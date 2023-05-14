@@ -1,0 +1,58 @@
+<form action="{% url 'shop:home' %}" method="get" id="sortProduct">
+
+    <div class="box sort pull-right">
+        <span>Сортировка:</span>
+        <button value="Сортировка" class="dropdown-toggle" type="submit" data-toggle="dropdown" id="menu2">
+            <span class="dropdown-label">По умолчанию</span>
+        </button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="menu2">
+            <li><input type="submit" name="orderby" value="-id"></li>
+            <li><input type="submit" name="orderby" value="price"></li>
+            <li><input type="submit" name="orderby" value="-price"></li>
+        </ul>
+    </div>
+</form>
+
+<!--class IndexView(ListView):-->
+<!--    # Вывод всех товаров на главной странице-->
+<!--    model = Product-->
+<!--    paginate_by = 12-->
+<!--    queryset = Product.objects.all()-->
+<!--    template_name = 'main/index.html'-->
+
+<!--    def get_ordering(self):-->
+<!--        ordering = self.request.GET.get('orderby')-->
+<!--        print(ordering)-->
+<!--        return ordering-->
+<form class="form" action="{% url 'product:product-catalog' category=request.category %}" method="get">
+    <div class="form-group">
+        <div class="range Section-columnRange">
+            <input class="range-line" id="price" name="price" type="text" data-type="double" data-min="7" data-max="50"
+                   data-from="7" data-to="27"/>
+            <div class="range-price">Цена:&#32;
+                <div class="rangePrice">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <input class="form-input form-input_full" id="title" name="title" type="text" placeholder="Название"/>
+    </div>
+    <div class="form-group">
+        <!-- - var options = setOptions(items, ['value', 'selected', 'disabled']);-->
+    </div>
+    <div class="form-group">
+        <label class="toggle">
+            <input name="in_stock" type="checkbox"/><span class="toggle-box"></span><span class="toggle-text">Только товары в наличии</span>
+        </label>
+    </div>
+    <div class="form-group">
+        <label class="toggle">
+            <input name="free_shipping" type="checkbox"/><span class="toggle-box"></span><span class="toggle-text">С бесплатной доставкой</span>
+        </label>
+    </div>
+    <div class="form-group">
+        <div class="buttons"><a class="btn btn_square btn_dark btn_narrow" href="#">Фильтр</a>
+        </div>
+    </div>
+</form>
