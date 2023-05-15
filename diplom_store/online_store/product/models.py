@@ -50,16 +50,8 @@ class Product(models.Model):  # товар
         self.save()
 
     def rating_info(self):
-        rating_info = getattr(self, 'rating_info', None)
-        if rating_info is None:
-            return {
-                'rating': None,
-                'count': 0,
-            }
-        return {
-            'rating': rating_info.rating,
-            'count': rating_info.count,
-        }
+        rating_info, created = Rating.objects.get_or_create(product=self)
+        return rating_info
 
     def reviews_list(self):
         return list(self.reviews.all())
@@ -100,8 +92,6 @@ class Product(models.Model):  # товар
     def id(self):
         return f'{self.pk}'
 
-    def tag(self):
-        return self.tags.name
 
     def __str__(self):
         return self.title

@@ -12,13 +12,16 @@ import json
 from django.utils.timezone import now
 
 from catalog.models import Category
-from product.models import ProductImage, Product
-
+from product.models import ProductImage, Product, Rating
+from tag.models import Tag
 
 new_dir_file = now().date().strftime("%Y/%m/%d")
 uploaded_file_path = Path().parent / "media/product_images" / new_dir_file
 uploaded_file_path.mkdir(exist_ok=True, parents=True)
 uploaded_file_path = uploaded_file_path.absolute()
+
+
+
 
 
 class Command(BaseCommand):
@@ -49,7 +52,7 @@ class Command(BaseCommand):
             except requests.exceptions.RequestException as err:
                 error = {"Error": err}
 
-
+            # product_tag = []
             if not error.get("Error"):
 
                 filename = str(uuid.uuid4())
@@ -80,11 +83,18 @@ class Command(BaseCommand):
                             fullDescription=description,
                             attributes=attributes,
                             price=price,
-                            quantity=50,
-                            tag=value.get('nameTranslit'),
+                            count=50,
                             brand=value.get('brandName')
                         )
                 ProductImage.objects.create(image=file_path, product_id=product.pk)
+                if value.get('rating'):
+                    Rating.objects.create(product=product, rating=value.get('rating')['star'], count=value.get('rating')['count'])
+                t = value.get('nameTranslit').split('-')[:2]
+                product.tags.name = ('-').join(t)
+                product.save()
+                # tag.product.add(product=product)
+
+                # product_tag.append(('-').join(t))
 
                 self.stdout.write(self.style.SUCCESS(f"Product {product} created"))
 

@@ -2,6 +2,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
+from django.views.generic import TemplateView
 from rest_framework import permissions
 from django.utils.translation import gettext_lazy as _
 from drf_yasg.views import get_schema_view
@@ -16,6 +17,7 @@ schema_view = get_schema_view(
       contact=openapi.Contact(email="contact@snippets.local"),
       license=openapi.License(name=""),
    ),
+   # patterns=[path('api/', include('api.urls')), ],
    public=True,
    permission_classes=[permissions.AllowAny],
 )

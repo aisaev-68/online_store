@@ -29,9 +29,10 @@ class CatalogView(APIView):
     Представление для получения товаров каталога.
     """
 
-    def get(self, request):
+    def get(self, request, *args, **kwargs):
         products = Product.objects.all()
         serializer = ProductSerializer(products, many=True)
+        print(88888, serializer.data)
         return Response(
             {
                 'items': serializer.data,
@@ -46,8 +47,23 @@ class CatalogByIdView(APIView):
     Представление для получения каталога по ID.
     """
 
-    def get(self, request, *args, **kwargs):
-        pass
+    def get(self, request, id=None):
+        products = Product.objects.filter(category_id=id).all()
+        serializer = ProductSerializer(products, many=True)
+        print(88888, serializer.data)
+        context = {
+                'items': serializer.data,
+                'currentPage': 5,
+                'lastPage': 10
+            }
+        # return Response(
+        #     {
+        #         'items': serializer.data,
+        #         'currentPage': 5,
+        #         'lastPage': 10
+        #     }
+        # )
+        return render(request, 'frontend/catalog.html', context=context)
 
 class ProductPopularView(View):
     """

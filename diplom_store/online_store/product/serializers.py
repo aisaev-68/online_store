@@ -3,7 +3,7 @@ import datetime
 from rest_framework import serializers
 import locale
 from product.models import Product, Review, Sale, ProductImage, Rating
-
+from tag.serializers import TagSerializer
 
 locale.setlocale(locale.LC_ALL, 'ru_RU.UTF-8')
 
@@ -11,15 +11,15 @@ locale.setlocale(locale.LC_ALL, 'ru_RU.UTF-8')
 class ProductImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductImage
-        fields = ('src',)
+        fields = ('image',)
 
 
 
 class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
-        fields = ('author', 'email', 'text', 'date')
-
+        # fields = ('author', 'email', 'text', 'date')
+        fields = ('id',)
 
 class RatingSerializer(serializers.ModelSerializer):
     class Meta:
@@ -28,44 +28,52 @@ class RatingSerializer(serializers.ModelSerializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
-    images = ProductImageSerializer(many=True, read_only=True)
+    images = ProductImageSerializer(many=True)
+    rating = serializers.DecimalField(decimal_places=1, max_digits=2, source='rating_info.rating')
     reviews = serializers.SerializerMethodField()
-    rating = serializers.SerializerMethodField()
-    href = serializers.SerializerMethodField()
     description = serializers.SerializerMethodField()
-    count = serializers.IntegerField(source='count')  # Просто чтобы показать, как использовать source
+    href = serializers.SerializerMethodField()
+    tags = TagSerializer(many=True)
 
     class Meta:
         model = Product
-        fields = (
-        'id', 'category', 'price', 'count', 'date', 'title', 'description', 'href', 'freeDelivery', 'images',
-        'reviews', 'rating')
+        fields = ('id', 'category', 'price', 'count', 'date', 'title', 'description', 'href', 'freeDelivery',
+                  'images', 'tags', 'reviews', 'rating')
 
     def get_reviews(self, obj):
         return obj.reviews.count()
 
-    def get_rating(self, obj):
-        rating_info = obj.rating_info()
-        return rating_info['rating']
+    def get_count(self, obj):
+        return obj.rating_info.count
+
 
     def get_href(self, obj):
         return obj.href()
 
     def get_description(self, obj):
-        return obj.description()
+        if len(obj.fullDescription) > 50:
+            return f'{obj.fullDescription[:50]}...'
+        return obj.fullDescription
 
 
 class SaleSerializer(serializers.ModelSerializer):
     """
     Сериализация товаров со скидками
     """
-    images = serializers.StringRelatedField(many=True)
-    title = serializers.StringRelatedField()
-    href = serializers.StringRelatedField()
-    price = serializers.StringRelatedField()
-    dateFrom = serializers.DateField(format='%d.%b')
-    dateTo = serializers.DateField(format='%d.%b')
+    price = serializers.SerializerMethodField()
+    images = serializers.SerializerMethodField()
+    href = serializers.SerializerMethodField()
+
+    def get_price(self, obj):
+        return obj.product.price
+    def get_images(self, obj):
+        product_images = obj.product.images.all()
+        return [image.src() for image in product_images]
+
+    def get_href(self, obj):
+        return f'/product/{obj.product.pk}'
 
     class Meta:
         model = Sale
-        fields = '__all__'
+        fields = ('id', 'price', 'salePrice', 'dateFrom', 'dateTo', 'title', 'href', 'images')
+
