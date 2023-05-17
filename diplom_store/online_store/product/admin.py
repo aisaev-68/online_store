@@ -5,8 +5,8 @@ from product.models import Product, ProductImage, Rating, Review, Sale
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['id', 'title', 'category', 'price', 'count', 'date', 'active']
-    list_filter = ['category', 'active']
+    list_display = ['id', 'title', 'category', 'price', 'count', 'date', 'available']
+    list_filter = ['category', 'available']
     search_fields = ['title']
 
 @admin.register(ProductImage)

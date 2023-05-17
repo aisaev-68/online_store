@@ -54,3 +54,5 @@ class BannersSerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ['title', 'href', 'price', 'images']
+
+

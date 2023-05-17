@@ -98,7 +98,7 @@ class Category(models.Model):
         Получение ссылки
         :return: ссылка
         """
-        return f'/catalog/{self.pk}'
+        return f'/api/catalog/{self.pk}'
 
     def __str__(self):
         return self.title

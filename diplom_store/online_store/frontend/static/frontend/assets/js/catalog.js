@@ -72,10 +72,18 @@ var mix = {
 
         this.getCatalogs()
         this.getTags()
-        this.category = location.pathname.startsWith('/catalog/')
-            ? Number(location.pathname.replace('/catalog/', ''))
-            : null
+        //window.alert("THIS.CATEGORY ", this.$route.path)
+//        this.category = location.pathname.startsWith('/catalog/')
+//            ? Number(location.pathname.replace('/catalog/', ''))
+//            : null
     },
+     created: function(){
+            this.category = window.location.pathname.startsWith('/api/catalog/')
+                ? Number(window.location.pathname.split('/')[3])
+                : null
+//            window.alert(this.category)
+      },
+
     data() {
         return {
             pages: 1,

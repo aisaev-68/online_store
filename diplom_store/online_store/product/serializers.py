@@ -14,7 +14,6 @@ class ProductImageSerializer(serializers.ModelSerializer):
         fields = ('image',)
 
 
-
 class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
@@ -26,9 +25,25 @@ class RatingSerializer(serializers.ModelSerializer):
         model = Rating
         fields = ('rating', 'count')
 
+class CurrentLastPageSerializer(serializers.Serializer):
+    current_page = serializers.SerializerMethodField()
+    last_page = serializers.SerializerMethodField()
+
+    def get_current_page(self, obj):
+        request = self.context['request']
+        if request is not None:
+            return int(request.query_params.get('page', 1))
+        return None
+
+    def get_last_page(self, obj):
+        paginator = self.context['view'].paginator
+        if paginator is not None:
+            return paginator.num_pages
+        return None
+
 
 class ProductSerializer(serializers.ModelSerializer):
-    images = ProductImageSerializer(many=True)
+    images = serializers.SerializerMethodField()
     rating = serializers.DecimalField(decimal_places=1, max_digits=2, source='rating_info.rating')
     reviews = serializers.SerializerMethodField()
     description = serializers.SerializerMethodField()
@@ -46,6 +61,8 @@ class ProductSerializer(serializers.ModelSerializer):
     def get_count(self, obj):
         return obj.rating_info.count
 
+    def get_images(self, obj):
+        return ['/media/' + str(image.image) for image in obj.images.all()]
 
     def get_href(self, obj):
         return obj.href()
@@ -54,6 +71,8 @@ class ProductSerializer(serializers.ModelSerializer):
         if len(obj.fullDescription) > 50:
             return f'{obj.fullDescription[:50]}...'
         return obj.fullDescription
+
+
 
 
 class SaleSerializer(serializers.ModelSerializer):

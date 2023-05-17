@@ -13,11 +13,11 @@ def get_upload_path_by_products(instance, filename):
         :param filename: имя файла изображения
         :return: путь для сохранения
         """
-    return f'product/images/{instance.product.pk}/{filename}'
+    return f'product_images/"%Y/%m/%d"/{filename}'
 
 
 class Product(models.Model):  # товар
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name=_('product category'))
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products', verbose_name=_('product category'))
     price = models.DecimalField(decimal_places=2, max_digits=10, verbose_name=_('price'))
     count = models.IntegerField(default=0, verbose_name=_('quantity'))
     date = models.DateTimeField(auto_now_add=True, verbose_name=_('created data'))
@@ -26,7 +26,7 @@ class Product(models.Model):  # товар
     freeDelivery = models.BooleanField(default=False, verbose_name=_('free shipping'))  # бесплатная доставка
     limited = models.BooleanField(default=False, verbose_name=_('limited edition'))  # ограниченный тираж
     banner = models.BooleanField(default=False, verbose_name=_('banner on home page'))
-    active = models.BooleanField(default=True, verbose_name=_('active'))
+    available = models.BooleanField(default=True, verbose_name=_('available'))
     brand = models.CharField(max_length=100, verbose_name=_('brand'))
     attributes = models.JSONField(default=dict, blank=True, verbose_name=_('attributes'))
 
@@ -61,7 +61,7 @@ class Product(models.Model):  # товар
         Получение ссылки для продукта
         :return: ссылка на детальную информацию о продукте
         """
-        return f'/product/{self.pk}'
+        return f'/catalog/{self.pk}'
 
     def description(self):
         """
@@ -72,7 +72,7 @@ class Product(models.Model):  # товар
             return f'{self.fullDescription[:50]}...'
         return self.fullDescription
 
-    def photoSrc(self):
+    def photo(self):
         """
         Получение главного изображения продукта
         :return: изображение
