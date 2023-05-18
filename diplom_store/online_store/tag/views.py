@@ -11,4 +11,4 @@ class TagsView(APIView):
     def get(self, request, *args, **kwargs):
         tags = Tag.objects.all()
         serializer = TagSerializer(tags, many=True)
-        return Response([serializer.data])
+        return Response(serializer.data)

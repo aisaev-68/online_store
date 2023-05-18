@@ -39,6 +39,7 @@ var mix = {
                         this.topTags = []
                         console.warn('Ошибка получения тегов')
                 })
+
         },
         getCatalogs(page) {
             if(typeof page === "undefined") {
@@ -72,7 +73,7 @@ var mix = {
 
         this.getCatalogs()
         this.getTags()
-        //window.alert("THIS.CATEGORY ", this.$route.path)
+//        window.alert("THIS.TAGS ", getTags())
 //        this.category = location.pathname.startsWith('/catalog/')
 //            ? Number(location.pathname.replace('/catalog/', ''))
 //            : null

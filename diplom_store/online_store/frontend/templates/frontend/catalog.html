@@ -101,11 +101,11 @@
               <div class="buttons">
 
                 <!-- Получаем популярные тэги -->
+
                 <button v-for="tag in topTags"
                         :key="tag.id"
                         :class="['btn btn_sm', tag.selected ? 'btn_warning' : 'btn_default']"
-                        @click="setTag(tag.id)"
-                >
+                        @click="setTag(tag.id)">
                   ${ tag.name }$
                 </button>
                 <!-- Получаем популярные тэги -->
@@ -127,8 +127,7 @@
                       ? `Sort-sortBy_${selectedSort.selected}`
                       : null
                    ]"
-                   @click="setSort(sort.id)"
-              >
+                   @click="setSort(sort.id)">
                 ${ sort.title }$
               </div>
 
@@ -137,6 +136,7 @@
           <div class="Cards">
 
             <!-- Получаем товары по фильтрам -->
+
             <div v-for="card in catalogCards" class="Card" :key="id">
               <a class="Card-picture" :href="card.href">
                 <img :src="card.images[0]" :alt="card.title"/>

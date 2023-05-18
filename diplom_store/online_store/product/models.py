@@ -3,7 +3,7 @@ from django.db import models
 
 
 from catalog.models import Catalog, Category
-
+from tag.models import Tag
 
 
 def get_upload_path_by_products(instance, filename):
@@ -29,6 +29,9 @@ class Product(models.Model):  # товар
     available = models.BooleanField(default=True, verbose_name=_('available'))
     brand = models.CharField(max_length=100, verbose_name=_('brand'))
     attributes = models.JSONField(default=dict, blank=True, verbose_name=_('attributes'))
+    tags = models.ManyToManyField(Tag, verbose_name=_('tag'), blank=True, related_name='product_tags')
+
+
 
 
     class Meta:

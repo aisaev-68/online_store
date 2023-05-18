@@ -48,7 +48,7 @@ class ProductSerializer(serializers.ModelSerializer):
     reviews = serializers.SerializerMethodField()
     description = serializers.SerializerMethodField()
     href = serializers.SerializerMethodField()
-    tags = TagSerializer(many=True)
+    tags = serializers.SerializerMethodField()
 
     class Meta:
         model = Product
@@ -72,7 +72,8 @@ class ProductSerializer(serializers.ModelSerializer):
             return f'{obj.fullDescription[:50]}...'
         return obj.fullDescription
 
-
+    def get_tags(self, obj):
+        return [tag.name for tag in obj.tags.all()]
 
 
 class SaleSerializer(serializers.ModelSerializer):

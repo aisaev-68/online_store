@@ -37,7 +37,14 @@ class Command(BaseCommand):
         prod_len = len(data)
         # user = User.objects.filter(username='editor').first()
 
+        # for v in data:
+        #     t = v.get('nameTranslit').split('-')[:2]
+        #     for item in t:
+        #         tag = Tag.objects.objects.get_or_create(name=item)
 
+        #     product.tags.name = ('-').join(t)
+        #
+        # tag = Tag.objects.create(name='Laptop')
         for value in data:
             error = {}
             try:
@@ -52,7 +59,7 @@ class Command(BaseCommand):
             except requests.exceptions.RequestException as err:
                 error = {"Error": err}
 
-            # product_tag = []
+
             if not error.get("Error"):
 
                 filename = str(uuid.uuid4())
@@ -77,6 +84,9 @@ class Command(BaseCommand):
                             attributes[item] = values['value']
 
                 category = Category.objects.get(pk=12)
+
+
+
                 product = Product.objects.create(
                             category=category,
                             title=value.get('name'),
@@ -84,17 +94,20 @@ class Command(BaseCommand):
                             attributes=attributes,
                             price=price,
                             count=50,
-                            brand=value.get('brandName')
+                            brand=value.get('brandName'),
                         )
                 ProductImage.objects.create(image=file_path, product_id=product.pk)
+
+                t = value.get('nameTranslit').split('-')[:2]
+                tag_list = []
+                for item in t:
+                    tag_list.append(Tag.objects.filter(name=item).first())
+
+                product.tags.add(tag_list[0], tag_list[1])
+
                 if value.get('rating'):
                     Rating.objects.create(product=product, rating=value.get('rating')['star'], count=value.get('rating')['count'])
-                t = value.get('nameTranslit').split('-')[:2]
-                product.tags.name = ('-').join(t)
-                product.save()
-                # tag.product.add(product=product)
 
-                # product_tag.append(('-').join(t))
 
                 self.stdout.write(self.style.SUCCESS(f"Product {product} created"))
 

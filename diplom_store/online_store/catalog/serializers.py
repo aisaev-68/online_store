@@ -34,15 +34,6 @@ class CatalogSerializer(serializers.ModelSerializer):
 
 
 
-# class TagsSerializer(serializers.ModelSerializer):
-#     """
-#     Сериализация тегов товара
-#     """
-#
-#     class Meta:
-#         model = Tag
-#         exclude = ['product']
-
 
 class BannersSerializer(serializers.ModelSerializer):
     """
