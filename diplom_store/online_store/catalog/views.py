@@ -1,19 +1,16 @@
 import random
 from datetime import datetime
 from django.core.paginator import Paginator
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.views import View
-from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework import viewsets, filters, pagination
 from rest_framework.pagination import PageNumberPagination
-from catalog.filters import ProductFilterSet
 from catalog.models import Category, Catalog
 from catalog.serializers import CatalogSerializer
 
 from product.models import Product, Sale
-from product.serializers import ProductSerializer, SaleSerializer, CurrentLastPageSerializer
+from product.serializers import ProductSerializer, SaleSerializer
 
 
 class CategoryView(APIView):
