@@ -45,7 +45,7 @@ class CatalogView(APIView):
         max_price = self.request.query_params.get('filter[maxPrice]')
         free_delivery = self.request.query_params.get('filter[freeDelivery]')
         available = self.request.query_params.get('filter[available]')
-
+        tags = self.request.query_params.get('tags[]')
         # Применение фильтров к queryset
         if category:
             queryset = queryset.filter(category_id=category)
@@ -59,6 +59,8 @@ class CatalogView(APIView):
             queryset = queryset.filter(freeDelivery=free_delivery.lower() == 'true')
         if available:
             queryset = queryset.filter(available=available.lower() == 'true')
+        if tags:
+            queryset = queryset.filter(tags=tags)
         if sort:
             sort_field = '-' + sort if sort_type == 'dec' else sort
             print("SORT_TYPE", sort_type)
