@@ -73,13 +73,18 @@ class CatalogView(APIView):
 
         paginator = PageNumberPagination()
         limit = int(request.GET.get('limit', 8))
+        print('LIMIT ', limit, len_products)
         paginator.page_size = limit
         paginated_queryset = paginator.paginate_queryset(queryset, request)
+        print(len(paginated_queryset))
         serialized_data = ProductSerializer(paginated_queryset, many=True).data
 
         current_page = int(request.GET.get('page', 1))
-        last_page = len_products // limit + 1
-
+        if len_products % limit == 0:
+            last_page = len_products // limit
+        else:
+            last_page = len_products // limit + 1
+        print('LAST PAGE ', last_page)
         response_data = {
             'items': serialized_data,
             'currentPage': current_page,
@@ -115,7 +120,7 @@ class ProductPopularView(View):
     """
     def get(self, request, *args, **kwargs):
         products = Product.objects.filter(category_id=self.kwargs['id']).prefetch_related('images')
-        return render(request, 'product/catalog.html', context={'products': products[:6]})
+        return render(request, 'frontend/catalog.html', context={'products': products[:6]})
 
 
 class ProductLimitedView(APIView):

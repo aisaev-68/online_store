@@ -45,7 +45,7 @@ var mix = {
             if(typeof page === "undefined") {
                 page = 1
             }
-            const PAGE_LIMIT = 20
+            const PAGE_LIMIT = 6
             const tags = this.topTags.filter(tag => !!tag.selected).map(tag => tag.id)
             this.getData("/api/catalog", {
                 page,

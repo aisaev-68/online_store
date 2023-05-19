@@ -107,10 +107,10 @@ class UserRegistrationForm(forms.ModelForm):
     #     return avatar
 
 
-class UserChangeForm(ChangeForm):
-    class Meta:
-        model = User
-        fields = ['fullName', 'email', 'phone', 'avatar']
+# class UserChangeForm(ChangeForm):
+#     class Meta:
+#         model = User
+#         fields = ['fullName', 'email', 'phone', 'avatar']
 
 
 class LoginForm(forms.Form):
@@ -139,22 +139,22 @@ class LoginForm(forms.Form):
         self.fields['password'].widget.attrs['style'] = "height: 30px; padding-left: 5px;"
 
 
-class UserUpdateForm(forms.ModelForm):
-    class Meta:
-        model = User
-        fields = ['fullName', 'email', 'phone', 'avatar']
-
-    def __init__(self, *args, **kwargs):
-        super(UserUpdateForm, self).__init__(*args, **kwargs)
-        self.fields['avatar'].widget.attrs.update({'class': 'form-control-file'})
-        self.fields['email'].widget.attrs.update({'class': 'form-control', 'readonly': True})
-        self.fields['fullName'].widget.attrs.update({'class': 'form-control'})
-        self.fields['phone'].widget.attrs.update({'class': 'form-control'})
-
-    def clean(self):
-        cleaned_data = super().clean()
-        self.instance.clean_avatar()
-        return cleaned_data
+# class UserUpdateForm(forms.ModelForm):
+#     class Meta:
+#         model = User
+#         fields = ['fullName', 'email', 'phone', 'avatar']
+#
+#     def __init__(self, *args, **kwargs):
+#         super(UserUpdateForm, self).__init__(*args, **kwargs)
+#         self.fields['avatar'].widget.attrs.update({'class': 'form-control-file'})
+#         self.fields['email'].widget.attrs.update({'class': 'form-control', 'readonly': True})
+#         self.fields['fullName'].widget.attrs.update({'class': 'form-control'})
+#         self.fields['phone'].widget.attrs.update({'class': 'form-control'})
+#
+#     def clean(self):
+#         cleaned_data = super().clean()
+#         self.instance.clean_avatar()
+#         return cleaned_data
 
 class UserUpdateView(forms.Form):
     fullName = forms.CharField(

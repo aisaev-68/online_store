@@ -29,7 +29,7 @@ def validate_image_file_extension(image):
 
 
 class User(AbstractUser):
-    fullName = models.CharField(max_length=100, blank=True, verbose_name=_("Full name"))
+    # fullName = models.CharField(max_length=100, blank=True, verbose_name=_("Full name"))
     email = models.EmailField(unique=True, verbose_name=_("Email"))
     surname = models.CharField(max_length=50, blank=True, verbose_name=_("Surname"))
     phone = models.CharField(max_length=20, blank=True, verbose_name=_("Phone"), unique=True)
@@ -40,12 +40,6 @@ class User(AbstractUser):
     def __str__(self):
         return self.username
 
-    def save(self, *args, **kwargs):
-        if self.fullName:
-            self.last_name, self.first_name, self.surname = str(self.fullName).split(' ', 2)
-        else:
-            self.fullName = f'{self.last_name} {self.first_name} {self.surname}'
-        super().save(*args, **kwargs)
 
     def clean(self):
         super().clean()

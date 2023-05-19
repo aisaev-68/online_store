@@ -1,14 +1,15 @@
 var mix = {
     methods: {
         getProfile() {
-            this.getData(`/api/profile/`).then(data => {
-                this.fullName = data.fullName
-                this.avatar = data.avatar
-                this.phone = data.phone
-                this.email = data.email
-            }).catch(() => {
-                console.warn('Ошибка при получении профиля')
-            })
+          this.getData('/api/profile').then(response => {
+            const data = response.data; // Доступ к данным ответа сервера
+            this.fullName = data.fullName;
+            this.avatar = data.avatar;
+            this.phone = data.phone;
+            this.email = data.email;
+          }).catch(() => {
+            console.warn('Ошибка при получении профиля');
+          });
         },
         changeProfile () {
             if(!this.fullName.trim().length || !this.phone.trim().length || !this.email.trim().length) {
@@ -93,4 +94,9 @@ var mix = {
             passwordReply: ''
         }
     },
-}
+};
+
+new Vue({
+  el: '#app',
+  mixins: [mix]
+});

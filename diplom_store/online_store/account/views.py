@@ -2,6 +2,7 @@ from django.contrib.auth import authenticate, login, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm, UserChangeForm
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.transaction import atomic
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import Group
@@ -13,8 +14,12 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from django.views import View
 from django.views.generic import CreateView, UpdateView
+from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from account.forms import UserRegistrationForm, LoginForm, UserUpdateForm
+from account.forms import UserRegistrationForm, LoginForm
 from account.models import User
 from account.serializers import UserPasswordChangeSerializer, UserAvatarSerializer, UserSerializer
 from order.models import Order
@@ -100,48 +105,6 @@ class ChangePasswordViewDone(PasswordChangeDoneView):
     template_name = 'account/password_change_done.html'
 
 
-class UserAvatarView(View):
-    def get(self, request, *args, **kwargs):
-        return render(request, 'account/account.html')
-
-
-class UpdateProfileView(View):
-    def get(self, request):
-        user_form = UserUpdateForm(instance=request.user)
-        password_form = PasswordChangeForm(user=request.user)
-        return render(request, 'account/profile.html', {'user_form': user_form, 'password_form': password_form})
-
-    def post(self, request):
-        if 'fullName' in request.POST:
-            user_form = UserUpdateForm(request.POST, request.FILES, instance=request.user)
-            if user_form.is_valid():
-                user_form.save()
-                messages.success(request, _('Your profile was updated successfully.'))
-                return redirect('account:profile')
-            else:
-                if user_form.errors.get('avatar'):
-                    messages.error(request, user_form.errors['avatar'])
-                elif user_form.errors.get('email'):
-                    messages.error(request, user_form.errors['email'])
-                else:
-                    messages.error(request, _('There was an error updating your profile. Please try again.'))
-        elif 'new_password1' in request.POST:
-            password_form = PasswordChangeForm(data=request.POST, user=request.user)
-
-            if password_form.is_valid():
-                password_form.save()
-                update_session_auth_hash(request, password_form.user)
-                messages.success(request, _('Your password was updated successfully.'))
-                return redirect('account:profile')
-            else:
-                if password_form.errors.get('old_password'):
-                    messages.error(request, _('Your old password was entered incorrectly. Please enter it again.'))
-                else:
-                    messages.error(request, _('The two password fields didn’t match.'))
-        else:
-            messages.error(request, _('Invalid request. Please try again.'))
-        return redirect('account:profile')
-
 
 class HistoryOrder(View):
 
@@ -151,3 +114,46 @@ class HistoryOrder(View):
         }
         print(1111, context)
         return render(request, 'frontend/historyorder.html', context=context)
+
+
+class UserProfileView(APIView):
+    permission_classes = (IsAuthenticated,)
+    def get(self, request):
+        user = request.user
+        serializer = UserSerializer(user)
+        print(2, serializer.data)
+        return Response(serializer.data)
+
+    def post(self, request, *args, **kwargs):
+        serializer = UserSerializer(request.user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserAvatarView(APIView):
+    permission_classes = (IsAuthenticated,)
+    def post(self, request):
+        user = request.user
+        serializer = UserAvatarSerializer(user, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserPasswordChangeView(APIView):
+    permission_classes = (IsAuthenticated,)
+    def post(self, request, *args, **kwargs):
+        serializer = UserPasswordChangeSerializer(request.user, data=request.data)
+        if serializer.is_valid():
+            user = serializer.save()
+            update_session_auth_hash(request, user)  # Обновление сессии после изменения пароля
+            return Response(status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ProfileView(View):
+    def get(self, request):
+        return render(request, 'frontend/profile.html')

@@ -1,17 +1,22 @@
 {% extends "frontend/base.html" %}
 {% load static %}
+{% load i18n %}
+
+{% block title %}
+Catalog
+{% endblock %}
 
 {% block content %}
   <div class="Middle Middle_top">
     <div class="Middle-top">
       <div class="wrap">
         <div class="Middle-header">
-          <h1 class="Middle-title">Catalog Megano
+          <h1 class="Middle-title">{% trans 'Catalog Megano' %}
           </h1>
           <ul class="breadcrumbs Middle-breadcrumbs">
-            <li class="breadcrumbs-item"><a href="index.html">home</a>
+            <li class="breadcrumbs-item"><a href="index.html">{% trans 'Home' %}</a>
             </li>
-            <li class="breadcrumbs-item breadcrumbs-item_current"><span>Каталог</span>
+            <li class="breadcrumbs-item breadcrumbs-item_current"><span>{% trans 'Catalog' %}</span>
             </li>
           </ul>
         </div>
@@ -22,15 +27,14 @@
         <div class="Section-column">
           <div class="Section-columnSection">
             <header class="Section-header">
-              <strong class="Section-title">Фильтр
+              <strong class="Section-title">{% trans 'Filter' %}
               </strong>
             </header>
             <div class="Section-columnContent">
               <form class="form"
                     action="/api/catalog"
                     method="post"
-                    @submit.prevent="getCatalogs(1)"
-              >
+                    @submit.prevent="getCatalogs(1)">
                 {% csrf_token %}
                 <div class="form-group">
                   <div class="range Section-columnRange">
@@ -71,30 +75,30 @@
                   <label class="toggle">
                     <input type="checkbox" name="available" v-model="filter.available"/>
                     <span class="toggle-box"></span>
-                    <span class="toggle-text">Только товары в наличии</span>
+                    <span class="toggle-text">{% trans 'Only items in stock' %}</span>
                   </label>
                 </div>
                 <div class="form-group">
                   <label class="toggle">
                     <input type="checkbox" name="freeDelivery" v-model="filter.freeDelivery"/>
                     <span class="toggle-box"></span>
-                    <span class="toggle-text">С бесплатной доставкой</span>
+                    <span class="toggle-text">{% trans 'With free shipping' %}</span>
                   </label>
                 </div>
                 <div class="form-group">
                   <div class="buttons">
                     <button type="submit"
                             class="btn btn_square btn_dark btn_narrow" >
-                      Фильтровать
+                      {% trans 'Apply' %}
                     </button>
-                  </div> <!-- TODO отправка формы фильтрации -->
+                  </div>
                 </div>
               </form>
             </div>
           </div>
           <div class="Section-columnSection">
             <header class="Section-header">
-              <strong class="Section-title">Популярные теги
+              <strong class="Section-title">{% trans 'Popular tags' %}
               </strong>
             </header>
             <div class="Section-columnContent">
@@ -116,7 +120,7 @@
         </div>
         <div class="Section-content">
           <div class="Sort">
-            <div class="Sort-title">Сортировать по:</div>
+            <div class="Sort-title">{% trans 'Sort by:' %}</div>
             <div class="Sort-variants">
               <div v-for="sort in sortRules"
                    :key="sort.id"
@@ -158,7 +162,7 @@
 
           </div>
 
-          <!-- Доработать апгинацию!  -->
+          <!-- Пагинация!  -->
           <div class="Pagination">
             <div class="Pagination-ins">
               <a class="Pagination-element Pagination-element_prev" @click.prevent="getCatalogs(1)" href="#">
@@ -172,7 +176,7 @@
               </a>
             </div>
           </div>
-          <!-- Доработать пагинацию!  -->
+          <!-- Пагинация!  -->
 
         </div>
       </div>
