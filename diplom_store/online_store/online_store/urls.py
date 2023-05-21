@@ -26,6 +26,8 @@ urlpatterns = [
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('admin/doc/', include('django.contrib.admindocs.urls')),
     path('admin/', admin.site.urls, name="admin"),
+    # path('auth/', include('rest_framework.urls')),
+    path('', include('frontend.urls')),
     path('', include('catalog.urls')),
     path('', include('product.urls')),
     path('', include('tag.urls')),

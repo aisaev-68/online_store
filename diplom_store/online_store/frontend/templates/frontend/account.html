@@ -1,17 +1,18 @@
 {% extends "frontend/base.html" %}
 {% load static %}
+{% load i18n %}
 
 {% block content %}
   <div class="Middle Middle_top">
     <div class="Middle-top">
       <div class="wrap">
         <div class="Middle-header">
-          <h1 class="Middle-title">Личный кабинет
+          <h1 class="Middle-title">{% trans 'My account' %}
           </h1>
           <ul class="breadcrumbs Middle-breadcrumbs">
-            <li class="breadcrumbs-item"><a href="index.html">home</a>
+            <li class="breadcrumbs-item"><a href="/">{% trans 'Home' %}</a>
             </li>
-            <li class="breadcrumbs-item breadcrumbs-item_current"><span>Личный кабинет</span>
+            <li class="breadcrumbs-item breadcrumbs-item_current"><span>{% trans 'My account' %}</span>
             </li>
           </ul>
         </div>
@@ -21,35 +22,20 @@
       <div class="wrap">
         <div class="Section-column">
           <div class="Section-columnSection">
-            <header class="Section-header">
-              <strong class="Section-title">Навигация
-              </strong>
-            </header>
-            <div class="Section-columnContent">
-              <div class="NavigateProfile">
-                <ul class="menu menu_vt">
-                  <li class="menu-item"><a class="menu-link" href="/profile">Профиль</a>
-                  </li>
-                  <li class="menu-item"><a class="menu-link" href="/history-order">История заказов</a>
-                  </li>
-                  <li class="menu-item"><a class="menu-link" href="/historyview">История просмотра</a>
-                  </li>
-                </ul>
-              </div>
-            </div>
+            {% include 'includes/profile-menu.html' %}
           </div>
         </div>
         <div class="Section-content">
           <div class="Account">
-            <div class="Account-group">
+            <div class="Account-group" >
               <div class="Account-column">
-                <div class="Account-avatar">
-                  <img :src="avatar.src" :alt="avatar.alt"/>
+                <div class="Account-avatar" >
+                  <img :src="avatar" :alt="avatar.alt"/>
                 </div>
               </div>
               <div class="Account-column">
                 <div class="Account-name">${ fullName }$</div>
-                <a class="Account-editLink" href="profile.html">Редактировать профиль</a>
+                <a class="Account-editLink" href="/profile">{% trans 'Edit profile' %}</a>
               </div>
             </div>
             <div class="Account-group">
@@ -60,7 +46,7 @@
                       <div class="row-block">
                         <a class="Order-title" href="oneorder.html">Заказ&#32;<span class="Order-numberOrder">№${order.id}$</span>&#32;от&#32;<span class="Order-dateOrder">${order.createdAt}$</span></a>
                         <div class="Account-editLink">
-                          <a href="historyorder.html">История заказов</a>
+                          <a href="historyorder.html">{% trans 'History orders' %}</a>
                         </div>
                       </div>
                       <div class="row-block">

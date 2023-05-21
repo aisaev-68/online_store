@@ -12,6 +12,7 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1', config('ALLOWED_HOSTS', default='loca
 USER_ADMIN = config('USER_ADMIN')
 EMAIL = config('EMAIL')
 PASSWORD = config('PASSWORD')
+# APPEND_SLASH = False
 
 CART_SESSION_ID = 'cart'
 
@@ -29,6 +30,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'corsheaders',
     'drf_yasg',
     'django_filters',
     'frontend.apps.FrontendConfig',
@@ -44,12 +46,15 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+CORS_ORIGIN_ALLOW_ALL = True
 
 ROOT_URLCONF = 'online_store.urls'
 
@@ -103,9 +108,18 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 REST_FRAMEWORK = {
+    # 'DEFAULT_PERMISSION_CLASSES': [
+    #     'rest_framework.permissions.AllowAny',
+    # ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 8
 }
+
+# AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.ModelBackend',]
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
@@ -125,7 +139,9 @@ SHORT_DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 
 STATIC_URL = 'static/'
 #STATICFILES_DIRS = os.path.join(BASE_DIR, 'frontend')
-LOGIN_REDIRECT_URL = reverse_lazy("frontend:profile")
+
+LOGOUT_REDIRECT_URL = '/'
+
 # media directory in the root directory
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'

@@ -4,24 +4,47 @@ from django.views import View
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
+from rest_framework.permissions import IsAuthenticated
+from drf_yasg.utils import swagger_auto_schema
 from cart.cart import Cart
 from order.models import Order
 from order.serializers import OrderSerializer
 
+from product.serializers import ProductSerializer
 
-class OrderView(View):
+
+class OrderView(APIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = OrderSerializer
+
     def get(self, request, *args, **kwargs):
-        queryset = Order.objects.filter(user_id=request.user.pk)
-        page = Paginator(queryset)
-        if page is not None:
-            serializer = OrderSerializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
-        serializer = OrderSerializer(queryset, many=True)
-        return Response({'orders': serializer.data})
+        orders = Order.objects.all()
+        serializer = OrderSerializer(orders, many=True)
+        return Response(serializer.data)
 
-    def post(self, request, *args, **kwargs):
-        pass
+    @swagger_auto_schema(
+        request_body=ProductSerializer,
+        responses={201: OrderSerializer}
+    )
+    def post(self, request):
+        product_data = request.data[0]  # Получаем данные товара из параметра запроса
+        product_serializer = ProductSerializer(data=product_data)
+        if product_serializer.is_valid():
+            product_instance = product_serializer.save()  # Сохраняем товар и получаем его экземпляр
+            order_data = {
+                'products': [product_instance.id],  # Передаем список ID товаров в поле "products"
+                'totalCost': product_instance.price,  # Устанавливаем общую стоимость заказа
+                # Добавьте остальные поля заказа, если требуется
+            }
+            order_serializer = OrderSerializer(data=order_data)
+            if order_serializer.is_valid():
+                order_instance = order_serializer.save()  # Сохраняем заказ
+                return Response(order_serializer.data, status=201)
+            else:
+                product_instance.delete()  # Удаляем сохраненный товар в случае ошибки создания заказа
+                return Response(order_serializer.errors, status=400)
+        else:
+            return Response(product_serializer.errors, status=400)
 
 
 class OrderByIdView(View):

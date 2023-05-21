@@ -21,9 +21,6 @@ uploaded_file_path.mkdir(exist_ok=True, parents=True)
 uploaded_file_path = uploaded_file_path.absolute()
 
 
-
-
-
 class Command(BaseCommand):
     """
     Creates products
@@ -35,17 +32,9 @@ class Command(BaseCommand):
         with open(str(Path(__file__).parent.joinpath('json_data-planshet.json'))) as json_file:
             data = json.load(json_file)
         prod_len = len(data)
-        # user = User.objects.filter(username='editor').first()
 
-        # for v in data:
-        #     t = v.get('nameTranslit').split('-')[:2]
-        #     for item in t:
-        #         tag = Tag.objects.objects.get_or_create(name=item)
-
-        #     product.tags.name = ('-').join(t)
-        #
-        # tag = Tag.objects.create(name='Laptop')
         for value in data:
+
             error = {}
             try:
                 request = requests.get(f"https://img.mvideo.ru/{value.get('image')}")
@@ -59,7 +48,6 @@ class Command(BaseCommand):
             except requests.exceptions.RequestException as err:
                 error = {"Error": err}
 
-
             if not error.get("Error"):
 
                 filename = str(uuid.uuid4())
@@ -69,7 +57,6 @@ class Command(BaseCommand):
                 path_absolute = str(Path(uploaded_file_path, file_name))
                 with open(path_absolute, 'wb') as f:
                     f.write(request.content)
-
 
                 price = decimal.Decimal(value.get('item_base_price'))
                 # rating = value.get('rating')
@@ -85,17 +72,15 @@ class Command(BaseCommand):
 
                 category = Category.objects.get(pk=12)
 
-
-
                 product = Product.objects.create(
-                            category=category,
-                            title=value.get('name'),
-                            fullDescription=description,
-                            attributes=attributes,
-                            price=price,
-                            count=50,
-                            brand=value.get('brandName'),
-                        )
+                    category=category,
+                    title=value.get('name'),
+                    fullDescription=description,
+                    attributes=attributes,
+                    price=price,
+                    count=50,
+                    brand=value.get('brandName'),
+                )
                 ProductImage.objects.create(image=file_path, product_id=product.pk)
 
                 t = value.get('nameTranslit').split('-')[:2]
@@ -106,10 +91,12 @@ class Command(BaseCommand):
                 product.tags.add(tag_list[0], tag_list[1])
 
                 if value.get('rating'):
-                    Rating.objects.create(product=product, rating=value.get('rating')['star'], count=value.get('rating')['count'])
-
+                    rating = value.get('rating')['star']
+                    count = value.get('rating')['count']
+                    if rating is None:
+                        rating, count = [0.0, 0]
+                    Rating.objects.create(product=product, rating=rating, count=count)
 
                 self.stdout.write(self.style.SUCCESS(f"Product {product} created"))
-
 
         self.stdout.write(self.style.SUCCESS("Products created"))

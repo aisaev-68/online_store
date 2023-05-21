@@ -2,11 +2,11 @@ var mix = {
     methods: {
         getUserAccount() {
             this.getData("/api/account").then(data => {
-                this.firstname = data.firstname
-                this.secondname = data.secondname
+                this.firstname = data.first_name
+                this.lastname = data.last_name
                 this.surname = data.surname
                 this.avatar = data.avatar
-                this.orders = data.orders
+                //this.orders = data.orders
             })
         },
     },
@@ -15,16 +15,17 @@ var mix = {
     },
     data() {
         return {
+            lastname: "",
             firstname: "",
-            secondname: "",
             surname: "",
             avatar: {},
-            orders: [],
+            //orders: [],
         }
     },
     computed: {
         fullName() {
-            return [this.surname, this.firstname, this.secondname].join(" ")
+            return [this.lastname, this.firstname, this.surname].join(" ")
+//            return this.lastname + ' ' + this.firstname + ' ' + this.surname
         },
     },
 }

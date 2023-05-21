@@ -915,7 +915,7 @@ select + select {
   text-align: center;
 }
 .form-group + .form-group {
-  margin-top: 25px;
+  margin-top: 15px;
 }
 .form_contacts .form-input {
   min-width: auto;

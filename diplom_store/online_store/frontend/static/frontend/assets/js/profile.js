@@ -1,14 +1,17 @@
 var mix = {
     methods: {
         getProfile() {
-          this.getData('/api/profile').then(response => {
-            const data = response.data; // Доступ к данным ответа сервера
+            this.getData('/api/profile').then(data => {
             this.fullName = data.fullName;
             this.avatar = data.avatar;
             this.phone = data.phone;
             this.email = data.email;
           }).catch(() => {
-            console.warn('Ошибка при получении профиля');
+//            console.warn('Ошибка при получении профиля');
+            this.fullName = 'Полное имя'
+            this.avatar = 'https://i.pravatar.cc/300'
+            this.phone = '88002000600'
+            this.email = 'no-reply@mail.ru'
           });
         },
         changeProfile () {
@@ -17,7 +20,7 @@ var mix = {
                 return
             }
 
-            this.postData('/api/profile', {
+            this.postData('/api/profile/', {
                 fullName: this.fullName,
                 avatar: this.avatar,
                 phone: this.phone,
@@ -38,7 +41,7 @@ var mix = {
                 alert('В форме присутствуют незаполненные поля или пароли не совпадают')
                 return
             }
-            this.postData('/api/profile/password').then(data => {
+            this.postData('/api/profile/password/').then(data => {
                alert('Успешно сохранено')
                 this.passwordCurrent = ''
                 this.password = ''
@@ -52,7 +55,7 @@ var mix = {
             const file = target.files?.[0] ?? null
             if (!file) return
 
-            this.postData('/api/profile/avatar', file, {
+            this.postData('/api/profile/avatar/', file, {
                 headers: {
                   'Content-Type': file.type,
                   'X-CSRFToken': this.getCookie('csrftoken')
@@ -95,8 +98,3 @@ var mix = {
         }
     },
 };
-
-new Vue({
-  el: '#app',
-  mixins: [mix]
-});

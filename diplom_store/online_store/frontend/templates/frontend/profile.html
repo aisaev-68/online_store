@@ -1,17 +1,22 @@
 {% extends "frontend/base.html" %}
 {% load static %}
+{% load i18n %}
+
+{% block title %}
+Profile
+{% endblock %}
 
 {% block content %}
 <div class="Middle Middle_top">
     <div class="Middle-top">
         <div class="wrap">
             <div class="Middle-header">
-                <h1 class="Middle-title">Профиль
+                <h1 class="Middle-title">{% trans 'Profile' %}
                 </h1>
                 <ul class="breadcrumbs Middle-breadcrumbs">
-                    <li class="breadcrumbs-item"><a href="/">home</a>
+                    <li class="breadcrumbs-item"><a href="/">{% trans 'Home' %}</a>
                     </li>
-                    <li class="breadcrumbs-item breadcrumbs-item_current"><span>Профиль</span>
+                    <li class="breadcrumbs-item breadcrumbs-item_current"><span>{% trans 'Profile' %}</span>
                     </li>
                 </ul>
             </div>
@@ -21,29 +26,15 @@
         <div class="wrap">
             <div class="Section-column">
                 <div class="Section-columnSection">
-                    <header class="Section-header">
-                        <strong class="Section-title">Навигация
-                        </strong>
-                    </header>
-                    <div class="Section-columnContent">
-                        <div class="NavigateProfile">
-                            <ul class="menu menu_vt">
-                                <li class="menu-item"><a class="menu-link" href="/profile">Профиль</a>
-                                </li>
-                                <li class="menu-item"><a class="menu-link" href="/history-order">История заказов</a>
-                                </li>
-                                <!--                  <li class="menu-item"><a class="menu-link" href="/historyview">История просмотра</a>-->
-                                <!--                  </li>-->
-                            </ul>
-                        </div>
-                    </div>
+                    {% include 'includes/profile-menu.html' %}
                 </div>
             </div>
             <div class="Section-content">
-                <div class="Profile" >
+                <div class="Profile">
                     <div class="row">
-                        <div class="row-block" id="app">
-                            <form action="/api/profile/" @submit.prevent="changeProfile" >
+                        <div class="row-block">
+                            <!--                             enctype='multipart/form-data'-->
+                            <form action="" @submit.prevent="changeProfile">
                                 <div class="form-group">
                                     <label class="form-label" for="avatar">Аватар</label>
                                     <div v-if="!avatar" class="Profile-avatar Profile-avatar_noimg">
@@ -53,12 +44,16 @@
                                                data-validate="onlyImgAvatar"/>
                                     </div>
                                     <div v-else class="Profile-img">
-                                        <img :src="avatar"/>
+                                        <img :src="avatar" style="height: 150px;"/>
+                                        <label class="Profile-fileLabel" for="avatar1">Выберите аватар</label>
+                                        <input class="Profile-file form-input" @change="setAvatar"
+                                               @click="$event.target.value = null" type="file" id="avatar1" name="avatar"
+                                               data-validate="onlyImgAvatar"/>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label" for="name">ФИО</label>
-                                    <input class="form-input" id="name" name="name" type="text" required
+                                    <input class="form-input" id="name" name="name" type="text"
                                            v-model="fullName"/>
                                 </div>
                                 <div class="form-group">
@@ -79,7 +74,7 @@
                         </div>
 
                         <div class="row-block">
-                            <form action="/api/profile/password" method="POST" @submit.prevent="changePassword">
+                            <form action="" @submit.prevent="changePassword">
                                 <div class="form-group">
                                     <label class="form-label" for="passwordCurrent">Текущий пароль</label>
                                     <input class="form-input" id="passwordCurrent" name="passwordCurrent"
@@ -111,10 +106,6 @@
 {% endblock %}
 
 {% block mixins %}
-<!-- TODO prod -->
 <script>var pk = {{request.user.pk}}</script>
-
-<!-- TODO test -->
-<!--<script>var pk = 7</script>-->
 <script src="{% static 'frontend/assets/js/profile.js' %}"></script>
 {% endblock %}

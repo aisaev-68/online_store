@@ -1,11 +1,14 @@
-import random
 from datetime import datetime
 from django.core.paginator import Paginator
 from django.shortcuts import render
 from django.views import View
+from django.utils.decorators import method_decorator
 from rest_framework.response import Response
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 from rest_framework.views import APIView
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.permissions import AllowAny
 from catalog.models import Category, Catalog
 from catalog.serializers import CatalogSerializer
 
@@ -13,11 +16,62 @@ from product.models import Product, Sale
 from product.serializers import ProductSerializer, SaleSerializer
 
 
+def add_catalog_params(func):
+    return swagger_auto_schema(
+        operation_description='get catalog items',
+        manual_parameters=[
+            openapi.Parameter(
+                'filter',
+                openapi.IN_QUERY,
+                description='Search text',
+                type=openapi.TYPE_STRING
+            ),
+            openapi.Parameter(
+                'page',
+                openapi.IN_QUERY,
+                description='Page number',
+                type=openapi.TYPE_INTEGER
+            ),
+            openapi.Parameter(
+                'category',
+                openapi.IN_QUERY,
+                description='Category ID',
+                type=openapi.TYPE_INTEGER
+            ),
+            openapi.Parameter(
+                'sort',
+                openapi.IN_QUERY,
+                description='Sort field',
+                type=openapi.TYPE_STRING,
+                enum=['date', 'price', 'rating', 'reviews']  # Здесь указываем доступные значения
+            ),
+            openapi.Parameter(
+                'sortType',
+                openapi.IN_QUERY,
+                description='Sort type (dec/inc)',
+                type=openapi.TYPE_STRING,
+                enum=['dec', 'inc']
+            ),
+            openapi.Parameter(
+                'limit',
+                openapi.IN_QUERY,
+                description='Items per page',
+                type=openapi.TYPE_INTEGER
+            ),
+        ]
+    )(func)
+
+
 class CategoryView(APIView):
     """
     Представление для получения категорий товаров.
     """
+    permission_classes = (AllowAny,)
 
+    @swagger_auto_schema(
+        responses={200: CatalogSerializer},
+        operation_description="get catalog menu",
+    )
     def get(self, request, *args, **kwargs):
         catalogs = Catalog.objects.all()
         serializer = CatalogSerializer(catalogs, many=True)
@@ -25,16 +79,16 @@ class CategoryView(APIView):
 
 
 class CatalogView(APIView):
+    permission_classes = (AllowAny,)
 
     def filter_queryset(self, queryset):
         # Извлечение параметров запроса
-        print(44444, self.request.query_params)
+
         if self.request.query_params.get('category'):
             category = self.request.query_params.get('category')
         else:
             category = self.kwargs.get('id')
-        # category = self.request.query_params.get('category')
-        # print(111, category)
+
         sort = self.request.query_params.get('sort')
         sort_type = self.request.query_params.get('sortType')
         name_filter = self.request.query_params.get('filter[name]')
@@ -60,64 +114,72 @@ class CatalogView(APIView):
             queryset = queryset.filter(tags=tags)
         if sort:
             sort_field = '-' + sort if sort_type == 'dec' else sort
-            print("SORT_TYPE", sort_type)
-            print("CURRENT_SORT ", sort_field)
             queryset = queryset.order_by(sort_field)
 
         return queryset
-
-    def get(self, request):
-        queryset = self.filter_queryset(Product.objects.all())
+    
+    def pagination_queryset(self, queryset):
         len_products = len(queryset)
-        serializer = ProductSerializer(queryset, many=True)
-
         paginator = PageNumberPagination()
-        limit = int(request.GET.get('limit', 8))
-        print('LIMIT ', limit, len_products)
-        paginator.page_size = limit
-        paginated_queryset = paginator.paginate_queryset(queryset, request)
-        print(len(paginated_queryset))
-        serialized_data = ProductSerializer(paginated_queryset, many=True).data
+        limit = int(self.request.GET.get('limit', 8))
 
-        current_page = int(request.GET.get('page', 1))
+        paginator.page_size = limit
+        paginated_queryset = paginator.paginate_queryset(queryset, self.request)
+        current_page = int(self.request.GET.get('page', 1))
         if len_products % limit == 0:
             last_page = len_products // limit
         else:
             last_page = len_products // limit + 1
-        print('LAST PAGE ', last_page)
-        response_data = {
-            'items': serialized_data,
+
+        return {
+            'pagination': paginated_queryset,
             'currentPage': current_page,
             'lastPage': last_page,
+        }
+
+    @add_catalog_params
+    def get(self, request):
+        queryset = self.filter_queryset(Product.objects.all())
+        data = self.pagination_queryset(queryset)
+        paginated_queryset = data['pagination']
+        serialized_data = ProductSerializer(paginated_queryset, many=True).data
+
+        response_data = {
+            'items': serialized_data,
+            'currentPage': data['currentPage'],
+            'lastPage': data['lastPage'],
         }
 
         return Response(response_data)
 
 
-
-
-class CatalogByIdView(APIView):
+class CatalogByIdView(CatalogView):
     """
     Представление для получения каталога по ID.
     """
 
-    def get(self, request, id):
-        products = Product.objects.filter(category_id=id).all()
-        serializer = ProductSerializer(products, many=True)
-        print(88888, serializer.data)
-        context = {
-                'items': serializer.data,
-                'currentPage': 5,
-                'lastPage': 10
+    @add_catalog_params
+    def get(self, request, id: int):
+        response = super().get(request)
+        if id is not None:
+            queryset = Product.objects.filter(category_id=id).all()
+            data = self.pagination_queryset(queryset)
+            paginated_queryset = data['pagination']
+            serialized_data = ProductSerializer(paginated_queryset, many=True).data
+
+            response_data = {
+                'items': serialized_data,
+                'currentPage': data['currentPage'],
+                'lastPage': data['lastPage'],
             }
-        # return Response(data=context, template_name='frontend/catalog.html')
-        return render(request, 'frontend/catalog.html', context=context)
+            return Response(response_data)
 
 
 class ProductPopularView(View):
     """
     Представление для получения популярных продуктов
     """
+
     def get(self, request, *args, **kwargs):
         products = Product.objects.filter(category_id=self.kwargs['id']).prefetch_related('images')
         return render(request, 'frontend/catalog.html', context={'products': products[:6]})
@@ -140,6 +202,7 @@ class SalesView(APIView):
     """
     Представление для получения товаров со скидками.
     """
+
     def get(self, request, *args, **kwargs):
         count_products_on_page = 8  # Определяем количество продуктов на странице
         products = (Sale.objects.filter(Q(dateFrom__gte=datetime.today()) | Q(dateTo__gte=datetime.today())).

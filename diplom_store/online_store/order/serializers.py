@@ -5,44 +5,40 @@ from order.models import Order
 from product.models import Product
 from product.serializers import ProductSerializer
 
+from account.serializers import UserSerializer
+
+
+# "orderId": "123",
+#     "createdAt": "2023-05-05 12:12",
+#     "fullName": "Annoying Orange",
+#     "email": "no-reply@mail.ru",
+#     "phone": "88002000600",
+#     "deliveryType": "free",
+#     "paymentType": "online",
+#     "totalCost": 567.8,
+#     "status": "accepted",
+#     "city": "Moscow",
+#     "address": "red square 1",
+#     "products": [
 
 class OrderSerializer(serializers.ModelSerializer):
     """
     Сериализация заказа
     """
     products = ProductSerializer(many=True)
-    fullName = serializers.StringRelatedField()
-    email = serializers.StringRelatedField()
-    phone = serializers.StringRelatedField()
-    createdAt = serializers.SerializerMethodField()
+
 
     class Meta:
         model = Order
-        fields = '__all__'
+        fields = ('orderId', 'createdAt', 'fullName', 'email', 'phone', 'deliveryType', 'paymentType', 'totalCost', 'status', 'city', 'address', 'products')
 
-    def get_createdAt(self, instance):
-        date = instance.createdAt + datetime.timedelta(hours=3)
-        return datetime.datetime.strftime(date, '%d.%m.%Y %H:%M')
-
-    def create(self, validated_data):
-        products_tmp = (validated_data.pop('products'))
-        products_id = [dict(product).get('id') for product in products_tmp]
-        products = Product.objects.filter(pk__in=products_id)
-        for product in products:
-            print(product)
-        order = Order.objects.create(**validated_data)
-        order.products.set(products)
-        return order
-
-    def update(self, instance, validated_data):
-        products_id = [dict(product).get('id') for product in validated_data.get('products')]
-        products = Product.objects.filter(pk__in=products_id)
-        instance.city = validated_data.get('city')
-        instance.address = validated_data.get('address')
-        instance.deliveryType = validated_data.get('deliveryType')
-        instance.paymentType = validated_data.get('paymentType')
-        instance.status = validated_data.get('status')
-        instance.products.set(products)
-        instance.save()
-        return instance
-
+    def to_representation(self, obj):
+        data = super().to_representation(obj)
+        user = UserSerializer()
+        data['orderId'] = str(obj.id)
+        data['createdAt'] = obj.createdAt.strftime('%Y-%m-%d %H:%M')
+        data['fullName'] = user.fullName
+        data['email'] = user.email
+        data['phone'] = user.phone
+        data['deliveryType'] = 'free' if obj.deliveryType else 'not free'
+        return data

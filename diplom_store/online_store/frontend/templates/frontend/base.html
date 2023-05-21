@@ -1,5 +1,6 @@
 {% load static %}
 {% load i18n %}
+<!DOCTYPE html>
 <html lang="ru">
 <head>
     <title>Megano</title>
@@ -19,7 +20,7 @@
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
-    <!--  <script src="{% static 'frontend/assets/plg/vue.global.js' %}"></script>-->
+<!--      <script src="{% static 'frontend/assets/plg/vue.global.js' %}"></script>-->
     <script src="{% static 'frontend/assets/plg/CountDown/countdown.js' %}"></script>
 </head>
 <body class="Site" id="site">
@@ -61,14 +62,17 @@
                     <div class="row ControlPanel-rowSplit">
                         {% if user.is_authenticated %}
                         <div class="row-block">
-                            <a class="ControlPanel-title" href="/profile/">{{ user.username }}</a>
+                            <a class="ControlPanel-title" href="{{ request.user.get_url }}">{{ user.username }}</a>
+                        </div>
+                        <div class="row-block">
+                            <a class="ControlPanel-title" href="{% url 'account:logout' %}">{% trans 'Logout' %}</a>
                         </div>
                         {% else %}
                         <div class="row-block">
-                            <a class="ControlPanel-title" href="/admin/login/">{% trans 'Login' %}</a>
+                            <a class="ControlPanel-title" href="{% url 'account:login' %}">{% trans 'Login' %}</a>
                         </div>
                         <div class="row-block">
-                            <a class="ControlPanel-title" href="/admin/login/">{% trans 'Register' %}</a>
+                            <a class="ControlPanel-title" href="{% url 'account:register' %}">{% trans 'Register' %}</a>
                         </div>
                         {% endif %}
                     </div>
@@ -270,7 +274,8 @@
     </div>
 </footer>
 
-{% block mixins %}{% endblock %}
+{% block mixins %}
+{% endblock %}
 <script src="{% static 'frontend/assets/js/app.js' %}"></script>
 <script src="{% static 'frontend/assets/plg/jQuery/jquery-3.5.0.slim.min.js' %}"></script>
 <script src="{% static 'frontend/assets/plg/form/jquery.form.js' %}"></script>

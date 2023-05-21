@@ -1,28 +1,31 @@
 from django.contrib.auth import authenticate, login, update_session_auth_hash
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import PasswordChangeForm, UserChangeForm
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.transaction import atomic
-from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import Group
 from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeDoneView, PasswordChangeView
 from django.contrib import messages
-from django.contrib.auth.hashers import check_password
-from django.http import request, HttpResponse, HttpResponseRedirect, HttpRequest
 from django.shortcuts import render, redirect
+from drf_yasg.utils import swagger_auto_schema
 from django.urls import reverse_lazy, reverse
 from django.views import View
-from django.views.generic import CreateView, UpdateView
-from rest_framework import status
+from rest_framework import status, generics, mixins
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from account.forms import UserRegistrationForm, LoginForm
-from account.models import User
 from account.serializers import UserPasswordChangeSerializer, UserAvatarSerializer, UserSerializer
 from order.models import Order
+
+from account.models import User
+
+class AccountUser(APIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = UserAvatarSerializer
+
+    def get(self, request, *args, **kwargs):
+        user = self.request.user
+        serializer = self.serializer_class(user)
+        return Response(serializer.data)
 
 
 class RegisterView(View):
@@ -58,7 +61,8 @@ class RegisterView(View):
             messages.success(request, _('Created profile.'))
             user = authenticate(request, username=new_user, password=password)
             login(request, user)
-            return redirect(reverse('account:profile'))
+            # return redirect(reverse('account:profile'))
+            return redirect('/profile')
         else:
             messages.error(request, _('Profile creation error.'))
 
@@ -80,18 +84,18 @@ class MyLoginView(View):
         if form.is_valid():
             cd = form.cleaned_data
             user = authenticate(username=cd['username'], password=cd['password'])
+
             if user is not None:
                 if user.is_active:
                     login(request, user)
-                    return redirect(reverse('account:profile'))
+                    return redirect('/account')
                 else:
                     messages.error(request, _('Disabled account.'))
-                    # return HttpResponse('Disabled account')
                     return redirect('account:login')
             else:
                 messages.error(request, _('Password or username does not match.'))
                 return redirect('account:login')
-                # return HttpResponse('Invalid login')
+
 
 
 class MyLogoutView(LogoutView):
@@ -105,7 +109,6 @@ class ChangePasswordViewDone(PasswordChangeDoneView):
     template_name = 'account/password_change_done.html'
 
 
-
 class HistoryOrder(View):
 
     def get(self, request):
@@ -116,35 +119,52 @@ class HistoryOrder(View):
         return render(request, 'frontend/historyorder.html', context=context)
 
 
-class UserProfileView(APIView):
+
+
+
+class UserProfileView(generics.RetrieveAPIView, mixins.UpdateModelMixin):
     permission_classes = (IsAuthenticated,)
-    def get(self, request):
-        user = request.user
-        serializer = UserSerializer(user)
-        print(2, serializer.data)
+    serializer_class = UserSerializer
+
+    @swagger_auto_schema(
+        responses={200: UserSerializer},
+        operation_description="Get user profile",
+    )
+    def get(self, request, *args, **kwargs):
+        user = self.request.user
+        serializer = self.serializer_class(user)
         return Response(serializer.data)
 
-    def post(self, request, *args, **kwargs):
-        serializer = UserSerializer(request.user, data=request.data, partial=True)
+    @swagger_auto_schema(
+        request_body=UserSerializer,
+        responses={200: UserSerializer},
+        operation_description="Update user profile",
+    )
+    def patch(self, request, *args, **kwargs):
+        serializer = self.serializer_class(request.user, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
-            return Response(status=status.HTTP_200_OK)
+            return Response(data=serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 
 
 class UserAvatarView(APIView):
     permission_classes = (IsAuthenticated,)
+
     def post(self, request):
         user = request.user
         serializer = UserAvatarSerializer(user, data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserPasswordChangeView(APIView):
     permission_classes = (IsAuthenticated,)
+
     def post(self, request, *args, **kwargs):
         serializer = UserPasswordChangeSerializer(request.user, data=request.data)
         if serializer.is_valid():
