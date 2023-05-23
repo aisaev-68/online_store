@@ -8,8 +8,8 @@ from account.views import AccountUser, RegisterView, MyLoginView, MyLogoutView, 
 app_name = 'account'
 urlpatterns = [
     path('api/account/', AccountUser.as_view()),
-    path('api/profile/', UserProfileView.as_view(), name='profile'),
-    path('api/profile/avatar/', UserAvatarView.as_view(), name='user-avatar'),
+    path('api/profile/', UserProfileView.as_view()),
+    path('api/profile/avatar/', UserAvatarView.as_view()),
     path('api/profile/password/', UserPasswordChangeView.as_view(), name='user-password-change'),
     path('api/history-order/', HistoryOrder.as_view(), name='history_order'),
     path('register/', RegisterView.as_view(), name='register'),

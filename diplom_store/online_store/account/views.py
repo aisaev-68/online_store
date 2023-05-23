@@ -7,16 +7,20 @@ from django.shortcuts import render, redirect
 from drf_yasg.utils import swagger_auto_schema
 from django.urls import reverse_lazy, reverse
 from django.views import View
+from rest_framework.parsers import MultiPartParser, FormParser, JSONParser, FileUploadParser
 from rest_framework import status, generics, mixins
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.authentication import SessionAuthentication
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
 
 from account.forms import UserRegistrationForm, LoginForm
 from account.serializers import UserPasswordChangeSerializer, UserAvatarSerializer, UserSerializer
 from order.models import Order
 
 from account.models import User
+
 
 class AccountUser(APIView):
     permission_classes = (IsAuthenticated,)
@@ -122,8 +126,10 @@ class HistoryOrder(View):
 
 
 
-class UserProfileView(generics.RetrieveAPIView, mixins.UpdateModelMixin):
+class UserProfileView(generics.RetrieveAPIView, mixins.RetrieveModelMixin):
     permission_classes = (IsAuthenticated,)
+    authentication_classes = (SessionAuthentication,)
+    # permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = UserSerializer
 
     @swagger_auto_schema(
@@ -140,9 +146,12 @@ class UserProfileView(generics.RetrieveAPIView, mixins.UpdateModelMixin):
         responses={200: UserSerializer},
         operation_description="Update user profile",
     )
-    def patch(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
+        print(88888888888)
         serializer = self.serializer_class(request.user, data=request.data, partial=True)
+        print(99999, serializer)
         if serializer.is_valid():
+            print(1111111111)
             serializer.save()
             return Response(data=serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -151,19 +160,24 @@ class UserProfileView(generics.RetrieveAPIView, mixins.UpdateModelMixin):
 
 
 class UserAvatarView(APIView):
-    permission_classes = (IsAuthenticated,)
+    parser_classes = [MultiPartParser]
 
-    def post(self, request):
-        user = request.user
-        serializer = UserAvatarSerializer(user, data=request.data)
+    @swagger_auto_schema(
+        request_body=UserAvatarSerializer,
+        responses={200: UserAvatarSerializer},
+        operation_description="URL of the uploaded avatar.",
+    )
+    def post(self, request, *args, **kwargs):
+        serializer = UserAvatarSerializer(request.user, data=request.data, partial=True)
         if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            user = serializer.save()
+            return Response({'url': user.avatar.url})
+        return Response(serializer.errors, status=400)
 
 
 class UserPasswordChangeView(APIView):
     permission_classes = (IsAuthenticated,)
+    authentication_classes = (SessionAuthentication,)
 
     def post(self, request, *args, **kwargs):
         serializer = UserPasswordChangeSerializer(request.user, data=request.data)
