@@ -2528,3 +2528,13 @@ button.link {
 .wrap-content {
   margin: 0 auto;
 }
+
+.error {
+  border: 1px solid red;
+}
+
+.error-text {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+}

@@ -24,6 +24,7 @@ from account.models import User
 
 class AccountUser(APIView):
     permission_classes = (IsAuthenticated,)
+    authentication_classes = (SessionAuthentication,)
     serializer_class = UserAvatarSerializer
 
     def get(self, request, *args, **kwargs):
@@ -126,10 +127,9 @@ class HistoryOrder(View):
 
 
 
-class UserProfileView(generics.RetrieveAPIView, mixins.RetrieveModelMixin):
+class UserProfileView(generics.ListCreateAPIView):
     permission_classes = (IsAuthenticated,)
     authentication_classes = (SessionAuthentication,)
-    # permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = UserSerializer
 
     @swagger_auto_schema(
@@ -137,8 +137,7 @@ class UserProfileView(generics.RetrieveAPIView, mixins.RetrieveModelMixin):
         operation_description="Get user profile",
     )
     def get(self, request, *args, **kwargs):
-        user = self.request.user
-        serializer = self.serializer_class(user)
+        serializer = self.serializer_class(self.request.user)
         return Response(serializer.data)
 
     @swagger_auto_schema(
@@ -147,7 +146,6 @@ class UserProfileView(generics.RetrieveAPIView, mixins.RetrieveModelMixin):
         operation_description="Update user profile",
     )
     def post(self, request, *args, **kwargs):
-        print(88888888888)
         serializer = self.serializer_class(request.user, data=request.data, partial=True)
         print(99999, serializer)
         if serializer.is_valid():
@@ -157,10 +155,8 @@ class UserProfileView(generics.RetrieveAPIView, mixins.RetrieveModelMixin):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-
-
 class UserAvatarView(APIView):
-    parser_classes = [MultiPartParser]
+    parser_classes = [MultiPartParser,]
 
     @swagger_auto_schema(
         request_body=UserAvatarSerializer,

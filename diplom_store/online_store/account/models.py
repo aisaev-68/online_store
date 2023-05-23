@@ -29,10 +29,10 @@ def validate_image_file_extension(image):
 
 
 class User(AbstractUser):
-    fullName = models.CharField(max_length=100, blank=True, null=True, verbose_name=_("Full name"))
+    fullName = models.CharField(max_length=100, verbose_name=_("Full name"))
     email = models.EmailField(unique=True, verbose_name=_("Email"))
     surname = models.CharField(max_length=50, blank=True, verbose_name=_("Surname"))
-    phone = models.CharField(max_length=20, verbose_name=_("Phone"), unique=True)
+    phone = models.CharField(max_length=20, blank=True, null=True, verbose_name=_("Phone"), unique=True)
     avatar = models.ImageField(upload_to=get_upload_path_by_user, blank=True, null=True,
                                validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png']),
                                            validate_image_file_extension], verbose_name=_("Avatar"))

@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from django.contrib.auth.hashers import make_password
 from drf_yasg import openapi
 from account.models import User
 
@@ -29,17 +30,17 @@ class UserAvatarSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = User
-        fields = ['avatar', ]
+        fields = ['avatar', 'last_name', 'first_name', 'surname']
 
     def validate_avatar(self, avatar):
         if avatar and avatar.size > 2 * 1024 * 1024:
             raise serializers.ValidationError('The image file size should not exceed 2 MB.')
         return avatar
 
-    def update(self, instance, validated_data):
-        instance.avatar = validated_data.get('avatar', instance.avatar)
-        instance.save()
-        return instance
+    def update(self,obj, validated_data):
+        obj.avatar = validated_data.get('avatar', obj.avatar)
+        obj.save()
+        return obj
 
 class UserPasswordChangeSerializer(serializers.ModelSerializer):
     """
@@ -49,3 +50,8 @@ class UserPasswordChangeSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['password']
+
+    def save(self, **kwargs):
+        self.instance.password = make_password(self.validated_data['password'])
+        self.instance.save()
+        return self.instance
