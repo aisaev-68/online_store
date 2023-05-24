@@ -11,6 +11,7 @@ var mix = {
           this.avatar = data.avatar;
           this.phone = data.phone;
           this.email = data.email;
+
         })
         .catch(() => {
           console.warn('Ошибка при получении профиля');
@@ -48,23 +49,27 @@ var mix = {
         {
           fullName: this.fullName,
           phone: this.phone,
-          email: this.email
+          email: this.email,
+
         },
         { headers: { 'X-CSRFToken': csrfToken } }
       )
         .then(({ data }) => {
           // Если нет ошибок, выполняем необходимые действия
+
           this.fullName = data.fullName;
           this.phone = data.phone;
           this.email = data.email;
-          alert('Успешно сохранено');
+          //alert('Успешно сохранено');
 
           // Очищаем поля от ошибок
           this.clearErrors();
+
         })
         .catch(() => {
           console.warn('Ошибка при обновлении профиля');
         });
+        this.profileUpdated = true;
     },
 
     changePassword() {
@@ -102,6 +107,7 @@ var mix = {
         .catch(() => {
           console.warn('Ошибка при сохранении пароля');
         });
+        this.passwordUpdated = true;
     },
 
     setAvatar(event) {
@@ -126,6 +132,7 @@ var mix = {
         .catch(() => {
           console.warn('Ошибка при обновлении изображения');
         });
+        this.avatarUpdated = true;
     },
 
     getCookie(name) {
@@ -182,7 +189,10 @@ var mix = {
       avatar: '',
       password: '',
       passwordCurrent: '',
-      passwordReply: ''
+      passwordReply: '',
+      profileUpdated: false,
+      avatarUpdated: false,
+      passwordUpdated: false
     };
   }
 };
