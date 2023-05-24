@@ -175,14 +175,17 @@ class CatalogByIdView(CatalogView):
             return Response(response_data)
 
 
-class ProductPopularView(View):
+class ProductPopularView(APIView):
     """
     Представление для получения популярных продуктов
     """
 
     def get(self, request, *args, **kwargs):
         products = Product.objects.filter(category_id=self.kwargs['id']).prefetch_related('images')
-        return render(request, 'frontend/catalog.html', context={'products': products[:6]})
+        for product in products:
+            product.categoryName = product.category
+        serializer = ProductSerializer(products, many=True)
+        return Response(serializer.data)
 
 
 class ProductLimitedView(APIView):

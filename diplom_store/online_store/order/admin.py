@@ -7,17 +7,16 @@ from product.models import Product
 
 
 class ProductItemInline(admin.TabularInline):
-    model = Product
-    extra = 5
+    model = Order.products.through
+    extra = 0
 
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    # inlines = [
-    #     ProductItemInline,
-    # ]
+    inlines = [
+        ProductItemInline,
+    ]
     list_display = ('user',
-                    'products',
                     'createdAt',
                     'deliveryType',
                     'paymentType',
@@ -29,3 +28,17 @@ class OrderAdmin(admin.ModelAdmin):
     search_fields = ('user__username', 'products__title', 'city', 'address')
     date_hierarchy = 'createdAt'
     ordering = ('-createdAt',)
+    # fieldsets = (
+    #     (_('Информация о покупателе'), {
+    #         'classes': ('collapse', 'wide'),
+    #         'fields': ('user', 'fullname', 'email', 'phone'),
+    #     }),
+    #     (_('Информация о заказе'), {
+    #         'classes': ('collapse', 'wide'),
+    #         'fields': ('status', 'city', 'address')
+    #     }),
+    #     (_('Оплата и доставка'), {
+    #         'classes': ('collapse', 'wide'),
+    #         'fields': ('totalCost', 'deliveryCost', 'freeDelivery', 'deliveryType', 'paymentType')
+    #     }),
+    # )

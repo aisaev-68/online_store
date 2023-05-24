@@ -129,7 +129,7 @@
               <div v-for="card in limitedCards" class="Slider-item">
                 <div class="Slider-content">
                   <div class="Card"><a class="Card-picture" :href="card.href">
-                    <img v-if="card.images.length > 0" :src="card.images[0]" :alt="card.title"/></a>
+                    <img v-if="card.images.length > 0" :src="card.images[0]" :alt="card.title" /></a>
                     <div class="Card-content">
                       <strong class="Card-title"><a :href="card.href">${ card.title }$</a>
                       </strong>

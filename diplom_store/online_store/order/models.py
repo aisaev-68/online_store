@@ -12,7 +12,9 @@ class Order(models.Model):  # Заказы
         verbose_name=_('user'),
         null=True
     )
-    products = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name=_('product'))
+    products = models.ManyToManyField(Product, verbose_name=_('товары в заказе'),
+                                      through='OrderProducts', related_name='order_products')
+
     createdAt = models.DateField(auto_now_add=True, verbose_name=_('created order'))
     deliveryType = models.BooleanField(default=False, verbose_name=_('availability of free shipping'))
     paymentType = models.TextField(max_length=30, default=_('not specified'), verbose_name=_('payment method'))
@@ -27,3 +29,26 @@ class Order(models.Model):  # Заказы
 
     def __str__(self):
         return self.products
+
+
+class OrderProducts(models.Model):
+    """
+    Модель Продукты в заказе
+    """
+    class Meta:
+        """
+        Метакласс для определения названий в единственном и множественном числе
+        """
+        verbose_name = _('товар из заказа')
+        verbose_name_plural = _('все товары из заказа')
+
+    id = models.AutoField(primary_key=True, unique=True)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, verbose_name=_('заказ'))
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name=_('товар'))
+    count_in_order = models.PositiveIntegerField(default=0, verbose_name=_('количество товара в заказе'))
+
+    def __str__(self):
+        """
+        Возвращается название товара
+        """
+        return f'{self.product}'
