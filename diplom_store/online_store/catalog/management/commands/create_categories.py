@@ -49,7 +49,7 @@ class Command(BaseCommand):
         id_catalog = Catalog.objects.filter(title='Электроника').first()
         for category in categories:
             if category['fields']['catalog'] == 1:
-                item_category = Category.objects.create(title=category['fields']['title'], catalog=id_catalog)
+                item_category = Category.objects.create(active=True, title=category['fields']['title'], catalog=id_catalog)
                 CategoryIcons.objects.create(category=item_category, src=category['fields']['src'])
                 src_path = os.path.join(BASE_DIR, f"commands/{category['fields']['src']}")
                 dst_path = os.path.join(BASE_DIR_MEDIA, f"{category['fields']['src']}")

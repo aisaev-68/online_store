@@ -1,4 +1,5 @@
 from datetime import datetime
+from django.db.models import F, FloatField, Count
 from django.core.paginator import Paginator
 from django.shortcuts import render
 from django.views import View
@@ -74,6 +75,11 @@ class CategoryView(APIView):
     )
     def get(self, request, *args, **kwargs):
         catalogs = Catalog.objects.all()
+        # catalogs = Catalog.objects.filter(
+        #     subcategories__active=True
+        # ).annotate(num_categories=Count(
+        #     'subcategories')
+        # ).filter(num_categories__gt=0)
         serializer = CatalogSerializer(catalogs, many=True)
         return Response(serializer.data)
 
@@ -88,7 +94,7 @@ class CatalogView(APIView):
             category = self.request.query_params.get('category')
         else:
             category = self.kwargs.get('id')
-
+        print('CATEGORY', self.request.query_params.get('category'))
         sort = self.request.query_params.get('sort')
         sort_type = self.request.query_params.get('sortType')
         name_filter = self.request.query_params.get('filter[name]')
@@ -139,6 +145,7 @@ class CatalogView(APIView):
 
     @add_catalog_params
     def get(self, request):
+        print('CATEGORY9', self.args)
         queryset = self.filter_queryset(Product.objects.all())
         data = self.pagination_queryset(queryset)
         paginated_queryset = data['pagination']
@@ -161,6 +168,7 @@ class CatalogByIdView(CatalogView):
     @add_catalog_params
     def get(self, request, id: int):
         response = super().get(request)
+        print(7777, response)
         if id is not None:
             queryset = Product.objects.filter(category_id=id).all()
             data = self.pagination_queryset(queryset)
@@ -181,10 +189,13 @@ class ProductPopularView(APIView):
     """
 
     def get(self, request, *args, **kwargs):
-        products = Product.objects.filter(category_id=self.kwargs['id']).prefetch_related('images')
+        products = Product.objects.annotate(
+            sort_index=(1 / F('price')) + F('rating_info__rating'),
+        ).order_by('sort_index', '-count')[:8]
         for product in products:
             product.categoryName = product.category
         serializer = ProductSerializer(products, many=True)
+
         return Response(serializer.data)
 
 
@@ -194,10 +205,12 @@ class ProductLimitedView(APIView):
     """
 
     def get(self, request):
-        products = Product.objects.prefetch_related('images')
+        products = Product.objects.filter(limited=False).prefetch_related('images').order_by('id')[:16]
+
         for product in products:
             product.categoryName = product.category
         serializer = ProductSerializer(products, many=True)
+
         return Response(serializer.data)
 
 

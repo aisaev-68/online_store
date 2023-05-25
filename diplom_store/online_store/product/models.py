@@ -95,7 +95,6 @@ class Product(models.Model):  # товар
     def id(self):
         return f'{self.pk}'
 
-
     def __str__(self):
         return self.title
 

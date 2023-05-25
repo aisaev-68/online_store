@@ -31,6 +31,7 @@ class Catalog(models.Model):
     """
     title = models.CharField(max_length=128, db_index=True, verbose_name=_('catalog'))
 
+
     class Meta:
         ordering = ["title", "pk"]
         verbose_name = _("catalog")
@@ -87,6 +88,7 @@ class Category(models.Model):
         related_name='subcategories',
         verbose_name=_('catalog'),
     )
+    active = models.BooleanField(default=False, verbose_name=_('active'))
 
     class Meta:
         ordering = ["title", "pk"]

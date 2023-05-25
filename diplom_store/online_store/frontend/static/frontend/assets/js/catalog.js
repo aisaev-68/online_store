@@ -47,7 +47,7 @@ var mix = {
             }
             const PAGE_LIMIT = 6
             const tags = this.topTags.filter(tag => !!tag.selected).map(tag => tag.id)
-            this.getData("/api/catalog", {
+            this.getData("/api/catalog/", {
                 page,
                 category: this.category,
                 sort: this.selectedSort ? this.selectedSort.id : null,
@@ -74,15 +74,18 @@ var mix = {
         this.getCatalogs()
         this.getTags()
 //        window.alert("THIS.TAGS ", getTags())
-//        this.category = location.pathname.startsWith('/catalog/')
-//            ? Number(location.pathname.replace('/catalog/', ''))
-//            : null
-    },
-     created: function(){
-            this.category = window.location.pathname.startsWith('/api/catalog/')
-                ? Number(window.location.pathname.split('/')[3])
-                : null
-//            window.alert(this.category)
+        this.category = location.pathname.startsWith('/catalog/')
+            ? Number(location.pathname.replace('/catalog/', ''))
+            : null
+        window.alert(this.category)
+
+    //},
+//     created: function(){
+//            this.category = window.location.pathname.startsWith('/catalog/')
+//                ? Number(window.location.pathname.split('/')[3])
+//                //? Number(windows.location.pathname.replace('/api/catalog/', ''))
+//                : null
+            //window.alert(this.category)
       },
 
     data() {
