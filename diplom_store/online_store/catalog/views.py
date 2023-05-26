@@ -1,5 +1,5 @@
 from datetime import datetime
-from django.db.models import F, FloatField, Count
+from django.db.models import F, FloatField, Count, Q
 from django.core.paginator import Paginator
 from django.shortcuts import render
 from django.views import View
@@ -74,12 +74,15 @@ class CategoryView(APIView):
         operation_description="get catalog menu",
     )
     def get(self, request, *args, **kwargs):
-        catalogs = Catalog.objects.all()
+
+        # catalogs = Catalog.objects.all()
         # catalogs = Catalog.objects.filter(
         #     subcategories__active=True
         # ).annotate(num_categories=Count(
         #     'subcategories')
         # ).filter(num_categories__gt=0)
+        active_categories = Category.objects.filter(active=True)
+        catalogs = Catalog.objects.filter(Q(subcategories__in=active_categories) | Q(subcategories__isnull=True)).distinct()
         serializer = CatalogSerializer(catalogs, many=True)
         return Response(serializer.data)
 
@@ -144,8 +147,8 @@ class CatalogView(APIView):
         }
 
     @add_catalog_params
-    def get(self, request):
-        print('CATEGORY9', self.args)
+    def get(self, request, id=None):
+        print('CATEGORY9', self.request.query_params.get('category'))
         queryset = self.filter_queryset(Product.objects.all())
         data = self.pagination_queryset(queryset)
         paginated_queryset = data['pagination']
