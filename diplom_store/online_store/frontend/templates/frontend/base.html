@@ -136,11 +136,14 @@
                     <div class="CategoriesButton-content">
 
                         <!-- Получаем категории и подкатегории  -->
-                        <div class="CategoriesButton-link" v-for="category in categories"><a :href="category.href">
-                            <div class="CategoriesButton-icon">
-                                <img :src="category.image.src" :alt="category.image.alt" style="height:25px;"/>
-                            </div>
-                            <span class="CategoriesButton-text" style="white-space: nowrap;">${ category.title }$</span></a>
+
+                        <div class="CategoriesButton-link" v-for="category in categories">
+                            <a :href="category.href">
+                                <div class="CategoriesButton-icon">
+                                    <img :src="category.image.src" :alt="category.image.alt" style="height:25px;"/>
+                                </div>
+                                <span class="CategoriesButton-text" style="white-space: nowrap;">${ category.title }$</span>
+                            </a>
                             <a v-if="category.subcategories.length > 0" class="CategoriesButton-arrow" href="#"></a>
 
                             <div v-if="category.subcategories.length > 0" class="CategoriesButton-submenu">
@@ -150,7 +153,8 @@
                                             <img :src="subcategory.image.src" :alt="subcategory.alt"
                                                  style="height:25px;"/>
                                         </div>
-                                        <span class="CategoriesButton-text" style="white-space: nowrap;">${ subcategory.title }$</span></a>
+                                        <span class="CategoriesButton-text" style="white-space: nowrap;">${ subcategory.title }$</span>
+                                    </a>
                                 </div>
                             </div>
                         </div>

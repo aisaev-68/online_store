@@ -3,7 +3,7 @@ import os
 import shutil
 from django.core.management import BaseCommand
 
-from catalog.models import Catalog, Category, CatalogIcons, CategoryIcons
+from catalog.models import Category
 
 
 class Command(BaseCommand):
@@ -31,8 +31,11 @@ class Command(BaseCommand):
             catalogs = json.load(json_file)
 
         for catalog in catalogs:
-            item_catalog = Catalog.objects.create(title=catalog["fields"]["title"])
-            CatalogIcons.objects.create(catalog=item_catalog, src=catalog["fields"]["src"])
+            item_catalog = Category.objects.create(
+                title=catalog["fields"]["title"],
+                src=catalog["fields"]["src"],
+            )
+
             src_path = os.path.join(BASE_DIR, f"commands/{catalog['fields']['src']}")
             dst_path = os.path.join(BASE_DIR_MEDIA, f"{catalog['fields']['src']}")
             shutil.copyfile(src_path, dst_path)
@@ -46,11 +49,14 @@ class Command(BaseCommand):
         with open(os.path.join(BASE_DIR, 'commands/category-data.json')) as json_file:
             categories = json.load(json_file)
 
-        id_catalog = Catalog.objects.filter(title='Электроника').first()
+        id_catalog = Category.objects.filter(title='Электроника').first()
         for category in categories:
             if category['fields']['catalog'] == 1:
-                item_category = Category.objects.create(active=True, title=category['fields']['title'], catalog=id_catalog)
-                CategoryIcons.objects.create(category=item_category, src=category['fields']['src'])
+                item_category = Category.objects.create(
+                    title=category['fields']['title'],
+                    src=category['fields']['src'],
+                    parent=id_catalog)
+
                 src_path = os.path.join(BASE_DIR, f"commands/{category['fields']['src']}")
                 dst_path = os.path.join(BASE_DIR_MEDIA, f"{category['fields']['src']}")
                 shutil.copyfile(src_path, dst_path)

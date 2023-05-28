@@ -2,7 +2,7 @@ import datetime
 
 from rest_framework import serializers
 import locale
-from product.models import Product, Review, Sale, ProductImage, Rating
+from product.models import Product, Review, Sale, ProductImage, Rating, Seller, Manufacturer
 from tag.serializers import TagSerializer
 
 locale.setlocale(locale.LC_ALL, 'ru_RU.UTF-8')
@@ -97,3 +97,14 @@ class SaleSerializer(serializers.ModelSerializer):
         model = Sale
         fields = ('id', 'price', 'salePrice', 'dateFrom', 'dateTo', 'title', 'href', 'images')
 
+
+class ManufacturerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Manufacturer
+        fields = ('pk', 'name',)
+
+
+class SellerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Seller
+        fields = ('pk', 'name', 'city', 'address')

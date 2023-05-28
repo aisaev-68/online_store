@@ -17,10 +17,10 @@ class Order(models.Model):  # Заказы
 
     createdAt = models.DateField(auto_now_add=True, verbose_name=_('created order'))
     deliveryType = models.BooleanField(default=False, verbose_name=_('availability of free shipping'))
-    paymentType = models.TextField(max_length=30, default=_('not specified'), verbose_name=_('payment method'))
-    status = models.TextField(max_length=30, default=_('not specified'), verbose_name=_('payment state'))
-    city = models.TextField(max_length=30, default=_('not specified'), verbose_name=_('delivery city'))
-    address = models.TextField(max_length=30, default=_('not specified'), verbose_name=_('delivery address'))
+    paymentType = models.TextField(max_length=50, default=_('not specified'), verbose_name=_('payment method'))
+    status = models.TextField(max_length=50, default=_('not specified'), verbose_name=_('payment state'))
+    city = models.TextField(max_length=100, default=_('not specified'), verbose_name=_('delivery city'))
+    address = models.TextField(max_length=100, default=_('not specified'), verbose_name=_('delivery address'))
     totalCost = models.IntegerField(default=0, verbose_name=_('total order value'))
 
     class Meta:

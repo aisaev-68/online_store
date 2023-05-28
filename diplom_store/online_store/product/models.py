@@ -2,7 +2,7 @@ from django.utils.translation import gettext_lazy as _
 from django.db import models
 
 
-from catalog.models import Catalog, Category
+from catalog.models import Category
 from tag.models import Tag
 
 
@@ -27,7 +27,9 @@ class Product(models.Model):  # товар
     limited = models.BooleanField(default=False, verbose_name=_('limited edition'))  # ограниченный тираж
     banner = models.BooleanField(default=False, verbose_name=_('banner on home page'))
     available = models.BooleanField(default=True, verbose_name=_('available'))
-    brand = models.CharField(max_length=100, verbose_name=_('brand'))
+    brand = models.ForeignKey('Manufacturer', on_delete=models.CASCADE, related_name='products', verbose_name='manufacturer')
+    seller = models.ForeignKey('Seller', on_delete=models.CASCADE, related_name='products',
+                              verbose_name='seller')
     attributes = models.JSONField(default=dict, blank=True, verbose_name=_('attributes'))
     tags = models.ManyToManyField(Tag, verbose_name=_('tag'), blank=True, related_name='product_tags')
 
@@ -200,3 +202,27 @@ class Sale(models.Model):
 
     def __str__(self):
         return self.product.title
+
+
+class Manufacturer(models.Model):
+    name = models.CharField(max_length=150, verbose_name=_('name'))
+
+    def __str__(self):
+        return self.name
+
+
+class Seller(models.Model):
+    name = models.CharField(max_length=150, verbose_name=_('name'))
+    city = models.TextField(max_length=100, verbose_name=_('city'))
+    address = models.TextField(max_length=100, verbose_name=_('address'))
+
+    def __str__(self):
+        return self.name
+
+
+
+class Specification(models.Model):
+    name = models.CharField(max_length=150, verbose_name=_('name'))
+
+    def __str__(self):
+        return self.name

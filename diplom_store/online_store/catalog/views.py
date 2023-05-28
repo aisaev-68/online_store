@@ -5,16 +5,20 @@ from django.shortcuts import render
 from django.views import View
 from django.utils.decorators import method_decorator
 from rest_framework.response import Response
+from django.http import JsonResponse
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from rest_framework.views import APIView
+from rest_framework import generics
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import AllowAny
-from catalog.models import Category, Catalog
-from catalog.serializers import CatalogSerializer
+from catalog.models import Category
+from catalog.serializers import CategorySerializer
 
 from product.models import Product, Sale
 from product.serializers import ProductSerializer, SaleSerializer
+
+from catalog.examples import example
 
 
 def add_catalog_params(func):
@@ -63,6 +67,9 @@ def add_catalog_params(func):
     )(func)
 
 
+
+
+
 class CategoryView(APIView):
     """
     Представление для получения категорий товаров.
@@ -70,21 +77,16 @@ class CategoryView(APIView):
     permission_classes = (AllowAny,)
 
     @swagger_auto_schema(
-        responses={200: CatalogSerializer},
+        responses={200: CategorySerializer(many=True)},
         operation_description="get catalog menu",
     )
     def get(self, request, *args, **kwargs):
+        categories = Category.objects.filter(parent=None)
+        serializer = CategorySerializer(categories, many=True)
+        return Response(data=serializer.data, status=200)
 
-        # catalogs = Catalog.objects.all()
-        # catalogs = Catalog.objects.filter(
-        #     subcategories__active=True
-        # ).annotate(num_categories=Count(
-        #     'subcategories')
-        # ).filter(num_categories__gt=0)
-        active_categories = Category.objects.filter(active=True)
-        catalogs = Catalog.objects.filter(Q(subcategories__in=active_categories) | Q(subcategories__isnull=True)).distinct()
-        serializer = CatalogSerializer(catalogs, many=True)
-        return Response(serializer.data)
+
+
 
 
 class CatalogView(APIView):
@@ -92,21 +94,20 @@ class CatalogView(APIView):
 
     def filter_queryset(self, queryset):
         # Извлечение параметров запроса
-
-        if self.request.query_params.get('category'):
-            category = self.request.query_params.get('category')
-        else:
-            category = self.kwargs.get('id')
-        print('CATEGORY', self.request.query_params.get('category'))
+        # print(555, self.request.query_params)
+        category = self.request.query_params.get('category')
         sort = self.request.query_params.get('sort')
         sort_type = self.request.query_params.get('sortType')
         name_filter = self.request.query_params.get('filter[name]')
         min_price = self.request.query_params.get('filter[minPrice]')
         max_price = self.request.query_params.get('filter[maxPrice]')
+        sellers_filter = [value for key, value in self.request.query_params.items() if 'filter[sellers]' in key]
+        manufacturers_filter = [value for key, value in self.request.query_params.items() if 'filter[manufacturers]' in key]
         free_delivery = self.request.query_params.get('filter[freeDelivery]')
         available = self.request.query_params.get('filter[available]')
         tags = self.request.query_params.get('tags[]')
         # Применение фильтров к queryset
+
         if category:
             queryset = queryset.filter(category_id=category)
         if name_filter:
@@ -115,12 +116,25 @@ class CatalogView(APIView):
             queryset = queryset.filter(price__gte=min_price)
         if max_price:
             queryset = queryset.filter(price__lte=max_price)
+        filters_sellers = Q()
+        if len(sellers_filter) >= 1:
+            for seller in sellers_filter:
+                filters_sellers |= Q(seller__name=seller)
+            queryset = queryset.filter(filters_sellers)
+
+        filters_manufacturers = Q()
+        if len(manufacturers_filter) >= 1:
+            for manufacturer in manufacturers_filter:
+                filters_manufacturers |= Q(brand__name=manufacturer)
+            queryset = queryset.filter(filters_manufacturers)
+
         if free_delivery:
             queryset = queryset.filter(freeDelivery=free_delivery.lower() == 'true')
         if available:
             queryset = queryset.filter(available=available.lower() == 'true')
         if tags:
             queryset = queryset.filter(tags=tags)
+
         if sort:
             sort_field = '-' + sort if sort_type == 'dec' else sort
             queryset = queryset.order_by(sort_field)
@@ -147,12 +161,16 @@ class CatalogView(APIView):
         }
 
     @add_catalog_params
-    def get(self, request, id=None):
-        print('CATEGORY9', self.request.query_params.get('category'))
-        queryset = self.filter_queryset(Product.objects.all())
+    def get(self, request, pk=None):
+        print('CATEGORY11', request)
+        if pk is not None:
+            queryset = self.filter_queryset(Product.objects.filter(category_id=pk).all())
+        else:
+            queryset = self.filter_queryset(Product.objects.all())
         data = self.pagination_queryset(queryset)
         paginated_queryset = data['pagination']
         serialized_data = ProductSerializer(paginated_queryset, many=True).data
+        # print(666666, data['pagination'], data['currentPage'], data['lastPage'])
 
         response_data = {
             'items': serialized_data,
@@ -169,11 +187,12 @@ class CatalogByIdView(CatalogView):
     """
 
     @add_catalog_params
-    def get(self, request, id: int):
-        response = super().get(request)
-        print(7777, response)
+    def get(self, request, pk: int):
+        super().get(request)
+
+        print(7777, self.request)
         if id is not None:
-            queryset = Product.objects.filter(category_id=id).all()
+            queryset = Product.objects.filter(category_id=pk).all()
             data = self.pagination_queryset(queryset)
             paginated_queryset = data['pagination']
             serialized_data = ProductSerializer(paginated_queryset, many=True).data
@@ -236,10 +255,16 @@ class SalesView(APIView):
         return Response({'salesCards': serializer.data, 'currentPage': request.GET.get('page'), 'lastPage': lastPage})
 
 
-class BannersView(View):
+class BannersView(APIView):
     """
     Представление для получения баннеров главной страницы.
     """
 
     def get(self, request, *args, **kwargs):
-        pass
+        products = Product.objects.filter(banner=True).prefetch_related('images').order_by('id')[:4]
+
+        for product in products:
+            product.categoryName = product.category
+        serializer = ProductSerializer(products, many=True)
+
+        return Response(serializer.data)

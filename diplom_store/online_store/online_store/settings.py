@@ -20,8 +20,14 @@ FIXTURE_DIRS =['online_store/tests/fixtures/']
 
 AUTH_USER_MODEL = 'account.User'
 
-# Application definition
+CSRF_FAILURE_VIEW = 'online_store.views.error_403'
 
+
+SWAGGER_SETTINGS = {
+    "DEFAULT_MODEL_RENDERING": "example"
+}
+
+# Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',

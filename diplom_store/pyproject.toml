@@ -19,6 +19,7 @@ selenium = "^4.9.1"
 scrapy-user-agents = "^0.1.1"
 django-filter = "^23.2"
 django-cors-headers = "^4.0.0"
+mimesis = "^10.1.0"
 
 
 [build-system]

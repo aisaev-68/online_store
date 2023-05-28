@@ -12,7 +12,7 @@ import json
 from django.utils.timezone import now
 
 from catalog.models import Category
-from product.models import ProductImage, Product, Rating
+from product.models import ProductImage, Product, Rating, Manufacturer, Seller
 from tag.models import Tag
 
 new_dir_file = now().date().strftime("%Y/%m/%d")
@@ -32,7 +32,7 @@ class Command(BaseCommand):
         with open(str(Path(__file__).parent.joinpath('json_data-planshet.json'))) as json_file:
             data = json.load(json_file)
         prod_len = len(data)
-
+        sellers = [shop for shop in Seller.objects.all()]
         for value in data:
 
             error = {}
@@ -70,8 +70,9 @@ class Command(BaseCommand):
                         if key == 'name':
                             attributes[item] = values['value']
 
-                category = Category.objects.get(pk=12)
+                category = Category.objects.get(title='Планшеты')
 
+                manufacturer, create = Manufacturer.objects.get_or_create(name=value.get('brandName'))
                 product = Product.objects.create(
                     category=category,
                     title=value.get('name'),
@@ -79,7 +80,8 @@ class Command(BaseCommand):
                     attributes=attributes,
                     price=price,
                     count=50,
-                    brand=value.get('brandName'),
+                    brand=manufacturer,
+                    seller=random.choice(sellers),
                 )
                 ProductImage.objects.create(image=file_path, product_id=product.pk)
 

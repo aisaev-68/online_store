@@ -10,8 +10,9 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from product.models import Product, Review
-from product.serializers import ProductSerializer, ReviewSerializer
+from product.models import Product, Review, Manufacturer, Seller
+from product.serializers import ProductSerializer, ReviewSerializer, ManufacturerSerializer, SellerSerializer
+
 
 
 
@@ -182,4 +183,24 @@ class ProductReviewView(CreateModelMixin, GenericAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
+class ManufacturerListAPIView(APIView):
+    """
+    Представление для получения производителей.
+    """
+    def get(self, request):
+        manufacturers = Manufacturer.objects.all()
+        print(7777777, manufacturers)
+        serializer = ManufacturerSerializer(manufacturers, many=True)
+        print(serializer)
+        return Response(serializer.data)
 
+
+class SellerListAPIView(APIView):
+    """
+    Предсталение для получения продавцов.
+    """
+    def get(self, request):
+        sellers = Seller.objects.all()
+        serializer = SellerSerializer(sellers, many=True)
+
+        return Response(serializer.data)

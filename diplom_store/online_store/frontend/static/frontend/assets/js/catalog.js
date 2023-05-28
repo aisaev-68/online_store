@@ -1,17 +1,17 @@
 var mix = {
-    methods: {
-        setTag (id) {
-            this.topTags = this.topTags.map(tag => {
-                return  tag.id === id
-                    ? {
-                        ...tag,
-                        selected: !tag.selected
-                    }
-                    : tag
-            })
-            this.getCatalogs()
-        },
-        setSort (id) {
+  methods: {
+    setTag(id) {
+      this.topTags = this.topTags.map((tag) => {
+        if (tag.id === id) {
+          tag.selected = !tag.selected;
+        } else {
+          tag.selected = false;
+        }
+        return tag;
+      });
+      this.getCatalogs();
+    },
+    setSort (id) {
             if (this.selectedSort?.id === id) {
                 this.selectedSort.selected =
                     this.selectedSort.selected === 'dec'
@@ -28,81 +28,125 @@ var mix = {
                 }
             }
             this.getCatalogs()
-        },
-        getTags() {
-            this.getData('/api/tags', { category: this.category })
-                .then(data => this.topTags = data.map(tag => ({
-                    ...tag,
-                    selected: false
-                })))
-                .catch(() => {
-                        this.topTags = []
-                        console.warn('Ошибка получения тегов')
-                })
-
-        },
-        getCatalogs(page) {
-            if(typeof page === "undefined") {
-                page = 1
-            }
-            const PAGE_LIMIT = 6
-            const tags = this.topTags.filter(tag => !!tag.selected).map(tag => tag.id)
-            this.getData("/api/catalog/", {
-                page,
-                category: this.category,
-                sort: this.selectedSort ? this.selectedSort.id : null,
-                sortType: this.selectedSort ? this.selectedSort.selected : null,
-                filter: this.filter,
-                tags,
-                limit: PAGE_LIMIT
-            })
-                .then(data => {
-                    this.catalogCards = data.items
-                    this.currentPage = data.currentPage
-                    this.lastPage = data.lastPage
-
-                }).catch(() => {
-                    console.warn('Ошибка при получении каталога')
-                })
-        }
     },
-    mounted() {
-        this.selectedSort = this.sortRules?.[1]
-            ? { ...this.sortRules?.[1], selected: 'inc' }
-            :  null
+    getSellers() {
+      this.getData("/api/sellers/")
+        .then((data) => {
+          this.sellers = data;
+        })
+        .catch(() => {
+          this.sellers = [];
+          console.warn("Ошибка получения продавцов");
+        });
+    },
+    getSellers() {
+      this.getData("/api/specifications/")
+        .then((data) => {
+          this.specifications = data;
+        })
+        .catch(() => {
+          this.specifications = [];
+          console.warn("Ошибка получения продавцов");
+        });
+    },
+    getManufacturers() {
+      this.getData("/api/manufacturers/")
+        .then((data) => {
+          this.manufacturers = data;
+        })
+        .catch(() => {
+          this.manufacturers = [];
+          console.warn("Ошибка получения производителей");
+        });
+    },
+    updateSellers() {
+      this.filter.sellers = this.sellers.filter((seller) => this.selectedSellers.includes(seller.id));
+      this.getCatalogs();
+    },
+    updateManufacturers() {
+      this.filter.manufacturers = this.manufacturers.filter((manufacturer) => this.selectedManufacturers.includes(manufacturer.id));
+      this.getCatalogs();
+    },
+    getTags() {
+      this.getData("/api/tags", { category: this.category })
+        .then((data) => (this.topTags = data.map((tag) => ({ ...tag, selected: false }))))
+        .catch(() => {
+          this.topTags = [];
+          console.warn("Ошибка получения тегов");
+        });
+    },
+    getCatalogs(page) {
+      if (typeof page === "undefined") {
+        page = 1;
+      }
+      const PAGE_LIMIT = 6;
+      const tags = this.topTags.filter((tag) => tag.selected).map((tag) => tag.id);
 
-        this.getCatalogs()
-        this.getTags()
-//        window.alert("THIS.TAGS ", getTags())
-        this.category = location.pathname.startsWith('/catalog/')
-            ? Number(location.pathname.replace('/catalog/', ''))
-            : null
-        window.alert(this.category)
+      this.category = location.pathname.startsWith("/catalog/") ? Number(location.pathname.replace("/catalog/", "")) : null;
 
-    //},
-//     created: function(){
-//            this.category = window.location.pathname.startsWith('/catalog/')
-//                ? Number(window.location.pathname.split('/')[3])
-//                //? Number(windows.location.pathname.replace('/api/catalog/', ''))
-//                : null
-            //window.alert(this.category)
+      this.getData("/api/catalog/", {
+        page,
+        category: this.category,
+        sort: this.selectedSort ? this.selectedSort.id : null,
+        sortType: this.selectedSort ? this.selectedSort.selected : null,
+        filter: {
+          name: this.filter.name,
+          minPrice: this.filter.minPrice,
+          maxPrice: this.filter.maxPrice,
+          freeDelivery: this.filter.freeDelivery,
+          available: this.filter.available,
+          sellers: this.filter.sellers,
+          manufacturers: this.filter.manufacturers,
+          specifications: this.filter.specifications,
+        },
+        tags,
+        limit: PAGE_LIMIT,
+      })
+        .then((data) => {
+          this.catalogCards = data.items;
+          this.currentPage = data.currentPage;
+          this.lastPage = data.lastPage;
+        })
+        .catch(() => {
+          console.warn("Ошибка при получении каталога");
+        });
+    },
+  },
+  mounted() {
+    this.selectedSort = this.sortRules.find((sort) => sort.id === "price");
+    this.selectedSort.selected = "inc";
+
+    this.getTags();
+    this.getSellers();
+    this.getManufacturers();
+    this.updateSellers();
+    this.updateManufacturers();
+    this.getSpecifications;
+
+    this.category = location.pathname.startsWith("/catalog/")
+    ? Number(location.pathname.replace("/catalog/", "")) : null;
+  },
+  data() {
+    return {
+      pages: 1,
+      category: null,
+      catalogCards: [],
+      currentPage: null,
+      lastPage: 1,
+      selectedSort: null,
+      filter: {
+        name: "",
+        minPrice: 0,
+        maxPrice: 50000,
+        freeDelivery: false,
+        available: true,
+        sellers: [], // список выбранных продавцов
+        manufacturers: [], // список выбранных производителей
+        specifications: []
       },
-
-    data() {
-        return {
-            pages: 1,
-            category: null,
-            catalogCards: [],
-            currentPage: null,
-            lastPage: 1,
-            selectedSort: null,
-            filter: {
-                name: '',
-                minPrice: 0,
-                maxPrice: 50000,
-                freeDelivery: false,
-                available: true
-            }
-        }
-    }
-}
+      sellers: [], // список всех продавцов
+      manufacturers: [], // список всех производителей
+      specifications: []
+    };
+  },
+};

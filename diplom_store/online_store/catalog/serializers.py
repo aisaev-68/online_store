@@ -1,36 +1,41 @@
 from rest_framework import serializers
-
-from catalog.models import Catalog, CatalogIcons, Category, CategoryIcons
-# from product.models import Tag
-
-
-class CategoryIconsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CategoryIcons
-        fields = ('src', 'alt')
+from drf_yasg.utils import swagger_serializer_method
+from catalog.models import Category
 
 
 class CategorySerializer(serializers.ModelSerializer):
-    image = CategoryIconsSerializer(read_only=True)
+    image = serializers.SerializerMethodField()
+    subcategories = serializers.SerializerMethodField()
 
     class Meta:
         model = Category
-        fields = ('id', 'title', 'image', 'href')
+        fields = ['id', 'title', 'image', 'href', 'subcategories']
+
+    def get_image(self, obj):
+        return {
+            'src': obj.src.url if obj.src else '',
+            'alt': obj.title
+        }
+
+    def get_subcategories(self, obj):
+        subcategories = obj.children.all()
+        serializer = SubcategorySerializer(subcategories, many=True)
+        return serializer.data
 
 
-class CatalogIconsSerializer(serializers.ModelSerializer):
+class SubcategorySerializer(serializers.ModelSerializer):
+    image = serializers.SerializerMethodField()
+
     class Meta:
-        model = CatalogIcons
-        fields = ('src', 'alt')
+        model = Category
+        fields = ['id', 'title', 'image', 'href']
 
+    def get_image(self, obj):
+        return {
+            'src': obj.src.url if obj.src else '',
+            'alt': obj.title
+        }
 
-class CatalogSerializer(serializers.ModelSerializer):
-    image = CatalogIconsSerializer(read_only=True)
-    subcategories = CategorySerializer(many=True, read_only=True)
-
-    class Meta:
-        model = Catalog
-        fields = ('id', 'title', 'image', 'href', 'subcategories')
 
 
 

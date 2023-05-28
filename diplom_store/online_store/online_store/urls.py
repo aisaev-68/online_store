@@ -8,6 +8,11 @@ from django.utils.translation import gettext_lazy as _
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
+from online_store.views import error_404, error_500
+
+handler404 = error_404
+handler500 = error_500
+
 schema_view = get_schema_view(
    openapi.Info(
       title="Swagger Diploma Project",

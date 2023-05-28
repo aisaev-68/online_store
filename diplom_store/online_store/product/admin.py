@@ -1,7 +1,7 @@
 from django.utils.translation import gettext_lazy as _
 from django.contrib import admin
 from django.utils.html import format_html
-from product.models import Product, ProductImage, Rating, Review, Sale
+from product.models import Product, ProductImage, Rating, Review, Sale, Manufacturer, Seller
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
@@ -15,6 +15,16 @@ class ProductImageAdmin(admin.ModelAdmin):
     list_filter = ['product']
 
 
+@admin.register(Seller)
+class SellerAdmin(admin.ModelAdmin):
+    list_display = ['pk', 'name', 'city', 'address']
+    list_filter = ['name', 'address']
+
+
+@admin.register(Manufacturer)
+class ManufacturerAdmin(admin.ModelAdmin):
+    list_display = ['pk', 'name']
+    list_filter = ['name',]
 
 @admin.register(Rating)
 class RatingAdmin(admin.ModelAdmin):
