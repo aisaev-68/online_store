@@ -39,7 +39,7 @@ var mix = {
           console.warn("Ошибка получения продавцов");
         });
     },
-    getSellers() {
+    getSpecifications() {
       this.getData("/api/specifications/")
         .then((data) => {
           this.specifications = data;
