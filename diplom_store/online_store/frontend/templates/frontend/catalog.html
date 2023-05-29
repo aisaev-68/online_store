@@ -71,23 +71,51 @@ Catalog
                             </div>
                             <div class="form-group">
                                 <label for="sellers">Specification:</label>
-                                <select id="specification" class="form-input form-input_full" multiple v-model="filter.specifications">
+                                <select id="specification" class="form-input form-input_full" multiple
+                                        v-model="filter.specifications">
                                     <option v-for="specification in specifications">
                                         ${ specification.name }$
                                     </option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="sellers">Seller:</label>
-                                <select id="sellers" class="form-input form-input_full" multiple v-model="filter.sellers">
-                                    <option v-for="seller in sellers">
-                                        ${ seller.name }$
-                                    </option>
-                                </select>
+                                <p>Seller:</p>
+                                <ul>
+                                    <li v-for="(seller, index) in displayedSellers" :key="seller.id">
+
+                                        <input
+                                                class="form-input form-input_full custom-checkbox"
+                                                type="checkbox"
+                                                id="'seller-' + seller.id"
+                                                :value="seller.id"
+                                                v-model="filter.sellers"
+                                                name="'seller-' + seller.id"
+                                                :checked="filter.sellers.includes(seller.id)"
+                                                @change="updateSellers"
+                                        />
+                                        <label for="'seller-' + seller.id" style="font-size:14px;">
+                                            ${ seller.name }$
+                                        </label>
+                                    </li>
+                                </ul>
+                                <button v-if="displayedSellers.length < sellers.length" @click="showMoreSellers">Show
+                                    More Sellers
+                                </button>
                             </div>
+
+
+                            <!--                            <div class="form-group">-->
+                            <!--                                <label for="sellers">Seller:</label>-->
+                            <!--                                <select id="sellers" class="form-input form-input_full" multiple v-model="filter.sellers">-->
+                            <!--                                    <option v-for="seller in sellers">-->
+                            <!--                                        ${ seller.name }$-->
+                            <!--                                    </option>-->
+                            <!--                                </select>-->
+                            <!--                            </div>-->
                             <div class="form-group">
                                 <label for="manufacturers">Manufacturer:</label>
-                                <select id="manufacturers" class="form-input form-input_full" multiple v-model="filter.manufacturers">
+                                <select id="manufacturers" class="form-input form-input_full" multiple
+                                        v-model="filter.manufacturers">
                                     <option v-for="manufacturer in manufacturers">
                                         ${ manufacturer.name }$
                                     </option>
@@ -215,3 +243,4 @@ Catalog
 {% block mixins %}
 <script src="{% static 'frontend/assets/js/catalog.js' %}"></script>
 {% endblock %}
+

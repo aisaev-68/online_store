@@ -11,80 +11,97 @@ var mix = {
       });
       this.getCatalogs();
     },
-    setSort (id) {
-            if (this.selectedSort?.id === id) {
-                this.selectedSort.selected =
-                    this.selectedSort.selected === 'dec'
-                        ? 'inc'
-                        : 'dec'
-            } else {
-                if (this.selectedSort) {
-                    this.selectedSort = null
-                }
-                this.selectedSort = this.sortRules.find(sort => sort.id === id)
-                this.selectedSort = {
-                    ...this.selectedSort,
-                    selected: 'dec'
-                }
-            }
-            this.getCatalogs()
+    setSort(id) {
+      if (this.selectedSort?.id === id) {
+        this.selectedSort.selected =
+          this.selectedSort.selected === 'dec' ? 'inc' : 'dec';
+      } else {
+        if (this.selectedSort) {
+          this.selectedSort = null;
+        }
+        this.selectedSort = this.sortRules.find((sort) => sort.id === id);
+        this.selectedSort = {
+          ...this.selectedSort,
+          selected: 'dec',
+        };
+      }
+      this.getCatalogs();
+    },
+    showMoreSellers() {
+      this.sellerPage++; // Увеличиваем номер текущей страницы продавцов
+      this.updateDisplayedSellers(); // Обновляем отображаемых продавцов
+    },
+    updateDisplayedSellers() {
+
+      const startIndex = (this.sellerPage - 1) * this.sellersPerPage; // Индекс начала отображения продавцов
+      const endIndex = startIndex + this.sellersPerPage; // Индекс конца отображения продавцов
+      this.displayedSellers = this.sellers.slice(startIndex, endIndex); // Выбираем продавцов для отображения
     },
     getSellers() {
-      this.getData("/api/sellers/")
+      this.getData('/api/sellers/')
         .then((data) => {
           this.sellers = data;
+          this.updateDisplayedSellers(); // Обновляем отображаемых продавцов
         })
         .catch(() => {
           this.sellers = [];
-          console.warn("Ошибка получения продавцов");
+          console.warn('Ошибка получения продавцов');
         });
     },
     getSpecifications() {
-      this.getData("/api/specifications/")
+      this.getData('/api/specifications/')
         .then((data) => {
           this.specifications = data;
         })
         .catch(() => {
           this.specifications = [];
-          console.warn("Ошибка получения продавцов");
+          console.warn('Ошибка получения продавцов');
         });
     },
     getManufacturers() {
-      this.getData("/api/manufacturers/")
+      this.getData('/api/manufacturers/')
         .then((data) => {
           this.manufacturers = data;
         })
         .catch(() => {
           this.manufacturers = [];
-          console.warn("Ошибка получения производителей");
+          console.warn('Ошибка получения производителей');
         });
     },
     updateSellers() {
-      this.filter.sellers = this.sellers.filter((seller) => this.selectedSellers.includes(seller.id));
+      this.filter.sellers = this.sellers.filter((seller) =>
+        this.selectedSellers.includes(seller.id)
+      );
       this.getCatalogs();
     },
     updateManufacturers() {
-      this.filter.manufacturers = this.manufacturers.filter((manufacturer) => this.selectedManufacturers.includes(manufacturer.id));
+      this.filter.manufacturers = this.manufacturers.filter((manufacturer) =>
+        this.selectedManufacturers.includes(manufacturer.id)
+      );
       this.getCatalogs();
     },
     getTags() {
-      this.getData("/api/tags", { category: this.category })
+      this.getData('/api/tags', { category: this.category })
         .then((data) => (this.topTags = data.map((tag) => ({ ...tag, selected: false }))))
         .catch(() => {
           this.topTags = [];
-          console.warn("Ошибка получения тегов");
+          console.warn('Ошибка получения тегов');
         });
     },
     getCatalogs(page) {
-      if (typeof page === "undefined") {
+      if (typeof page === 'undefined') {
         page = 1;
       }
       const PAGE_LIMIT = 6;
-      const tags = this.topTags.filter((tag) => tag.selected).map((tag) => tag.id);
+      const tags = this.topTags
+        .filter((tag) => tag.selected)
+        .map((tag) => tag.id);
 
-      this.category = location.pathname.startsWith("/catalog/") ? Number(location.pathname.replace("/catalog/", "")) : null;
+      this.category = location.pathname.startsWith('/catalog/')
+        ? Number(location.pathname.replace('/catalog/', ''))
+        : null;
 
-      this.getData("/api/catalog/", {
+      this.getData('/api/catalog/', {
         page,
         category: this.category,
         sort: this.selectedSort ? this.selectedSort.id : null,
@@ -108,23 +125,24 @@ var mix = {
           this.lastPage = data.lastPage;
         })
         .catch(() => {
-          console.warn("Ошибка при получении каталога");
+          console.warn('Ошибка при получении каталога');
         });
     },
   },
   mounted() {
-    this.selectedSort = this.sortRules.find((sort) => sort.id === "price");
-    this.selectedSort.selected = "inc";
+    this.selectedSort = this.sortRules.find((sort) => sort.id === 'price');
+    this.selectedSort.selected = 'inc';
 
     this.getTags();
     this.getSellers();
     this.getManufacturers();
     this.updateSellers();
     this.updateManufacturers();
-    this.getSpecifications;
+    this.getSpecifications();
 
-    this.category = location.pathname.startsWith("/catalog/")
-    ? Number(location.pathname.replace("/catalog/", "")) : null;
+    this.category = location.pathname.startsWith('/catalog/')
+      ? Number(location.pathname.replace('/catalog/', ''))
+      : null;
   },
   data() {
     return {
@@ -135,18 +153,21 @@ var mix = {
       lastPage: 1,
       selectedSort: null,
       filter: {
-        name: "",
+        name: '',
         minPrice: 0,
         maxPrice: 50000,
         freeDelivery: false,
         available: true,
         sellers: [], // список выбранных продавцов
         manufacturers: [], // список выбранных производителей
-        specifications: []
+        specifications: [],
       },
       sellers: [], // список всех продавцов
       manufacturers: [], // список всех производителей
-      specifications: []
+      specifications: [],
+      displayedSellers: [], // Отображаемые продавцы
+      sellersPerPage: 3, // Количество продавцов на странице
+      sellerPage: 1, // Текущая страница продавцов
     };
   },
 };
