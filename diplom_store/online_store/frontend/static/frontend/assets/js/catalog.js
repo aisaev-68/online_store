@@ -129,8 +129,8 @@ var mix = {
     this.updateSellers();
     this.updateManufacturers();
     this.getSpecifications();
-    this.selectedSellers = []; // список выбранных продавцов
-    this.selectedManufacturers = []; // список выбранных производителей
+    //this.selectedSellers = []; // список выбранных продавцов
+    //this.selectedManufacturers = []; // список выбранных производителей
 
     this.category = location.pathname.startsWith('/catalog/')
       ? Number(location.pathname.replace('/catalog/', ''))

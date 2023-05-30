@@ -79,13 +79,15 @@ Catalog
                                     </option>
                                 </select>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group" >
                                 <label for="sellers">Seller:</label>
-                                <div id="sellers" class="form-input form-input_full" style="display: flex; flex-direction: column;">
+                                <div style="overflow: auto;max-height: 150px;">
+                                    <div id="sellers" class="form-input form-input_full" style="display: flex; flex-direction: column;">
                                     <label v-for="seller in sellers" :key="seller.id">
                                         <input type="checkbox" v-model="filter.sellers" :value="seller.name">
                                         ${ seller.name }$
                                     </label>
+                                </div>
                                 </div>
                             </div>
 
