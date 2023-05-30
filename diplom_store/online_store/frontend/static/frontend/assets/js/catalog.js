@@ -28,6 +28,7 @@ var mix = {
       this.getCatalogs();
     },
     showMoreSellers() {
+
       this.sellerPage++; // Увеличиваем номер текущей страницы продавцов
       this.updateDisplayedSellers(); // Обновляем отображаемых продавцов
     },

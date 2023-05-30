@@ -80,8 +80,8 @@ Catalog
                             </div>
                             <div class="form-group">
                                 <p>Seller:</p>
-                                <ul>
-                                    <li v-for="(seller, index) in displayedSellers" :key="seller.id">
+<!--                                <ul>-->
+                                    <div v-for="(seller, index) in displayedSellers" :key="seller.id">
 
                                         <input
                                                 class="form-input form-input_full custom-checkbox"
@@ -90,14 +90,14 @@ Catalog
                                                 :value="seller.id"
                                                 v-model="filter.sellers"
                                                 name="'seller-' + seller.id"
-                                                :checked="filter.sellers.includes(seller.id)"
+                                                :checked="seller.id"
                                                 @change="updateSellers"
                                         />
                                         <label for="'seller-' + seller.id" style="font-size:14px;">
                                             ${ seller.name }$
                                         </label>
-                                    </li>
-                                </ul>
+                                    </div>
+<!--                                </ul>-->
                                 <button v-if="displayedSellers.length < sellers.length" @click="showMoreSellers">Show
                                     More Sellers
                                 </button>
