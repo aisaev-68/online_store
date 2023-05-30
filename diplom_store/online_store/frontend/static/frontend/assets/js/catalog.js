@@ -27,60 +27,49 @@ var mix = {
       }
       this.getCatalogs();
     },
-    showMoreSellers() {
 
-      this.sellerPage++; // Увеличиваем номер текущей страницы продавцов
-      this.updateDisplayedSellers(); // Обновляем отображаемых продавцов
-    },
-    updateDisplayedSellers() {
-
-      const startIndex = (this.sellerPage - 1) * this.sellersPerPage; // Индекс начала отображения продавцов
-      const endIndex = startIndex + this.sellersPerPage; // Индекс конца отображения продавцов
-      this.displayedSellers = this.sellers.slice(startIndex, endIndex); // Выбираем продавцов для отображения
-    },
     getSellers() {
-      this.getData('/api/sellers/')
-        .then((data) => {
-          this.sellers = data;
-          this.updateDisplayedSellers(); // Обновляем отображаемых продавцов
-        })
-        .catch(() => {
-          this.sellers = [];
-          console.warn('Ошибка получения продавцов');
-        });
-    },
-    getSpecifications() {
-      this.getData('/api/specifications/')
-        .then((data) => {
-          this.specifications = data;
-        })
-        .catch(() => {
-          this.specifications = [];
-          console.warn('Ошибка получения продавцов');
-        });
-    },
-    getManufacturers() {
-      this.getData('/api/manufacturers/')
-        .then((data) => {
-          this.manufacturers = data;
-        })
-        .catch(() => {
-          this.manufacturers = [];
-          console.warn('Ошибка получения производителей');
-        });
-    },
-    updateSellers() {
-      this.filter.sellers = this.sellers.filter((seller) =>
-        this.selectedSellers.includes(seller.id)
-      );
-      this.getCatalogs();
-    },
-    updateManufacturers() {
-      this.filter.manufacturers = this.manufacturers.filter((manufacturer) =>
-        this.selectedManufacturers.includes(manufacturer.id)
-      );
-      this.getCatalogs();
-    },
+        this.getData('/api/sellers/')
+          .then((data) => {
+            this.sellers = data;
+          })
+          .catch(() => {
+            this.sellers = [];
+            console.warn('Ошибка получения продавцов');
+          });
+      },
+      getSpecifications() {
+        this.getData('/api/specifications/')
+          .then((data) => {
+            this.specifications = data;
+          })
+          .catch(() => {
+            this.specifications = [];
+            console.warn('Ошибка получения продавцов');
+          });
+      },
+      getManufacturers() {
+        this.getData('/api/manufacturers/')
+          .then((data) => {
+            this.manufacturers = data;
+          })
+          .catch(() => {
+            this.manufacturers = [];
+            console.warn('Ошибка получения производителей');
+          });
+      },
+      updateManufacturers() {
+        this.filter.manufacturers = this.manufacturers.filter((manufacturer) =>
+          this.selectedManufacturers.includes(manufacturer.id)
+        );
+        this.getCatalogs();
+      },
+      updateSellers() {
+        this.filter.sellers = this.sellers.filter((seller) =>
+          this.selectedSellers.includes(seller.id)
+        );
+        this.getCatalogs();
+      },
     getTags() {
       this.getData('/api/tags', { category: this.category })
         .then((data) => (this.topTags = data.map((tag) => ({ ...tag, selected: false }))))
@@ -140,6 +129,8 @@ var mix = {
     this.updateSellers();
     this.updateManufacturers();
     this.getSpecifications();
+    this.selectedSellers = []; // список выбранных продавцов
+    this.selectedManufacturers = []; // список выбранных производителей
 
     this.category = location.pathname.startsWith('/catalog/')
       ? Number(location.pathname.replace('/catalog/', ''))
@@ -166,9 +157,7 @@ var mix = {
       sellers: [], // список всех продавцов
       manufacturers: [], // список всех производителей
       specifications: [],
-      displayedSellers: [], // Отображаемые продавцы
-      sellersPerPage: 3, // Количество продавцов на странице
-      sellerPage: 1, // Текущая страница продавцов
     };
   },
 };
+

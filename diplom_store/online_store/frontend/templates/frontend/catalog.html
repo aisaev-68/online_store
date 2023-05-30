@@ -70,8 +70,9 @@ Catalog
                                 />
                             </div>
                             <div class="form-group">
-                                <label for="sellers">Specification:</label>
-                                <select id="specification" class="form-input form-input_full" multiple
+                                <label for="'specification-' + specification.id">Specification:</label>
+                                <select id="'specification-' + specification.id" class="form-input form-input_full"
+                                        multiple
                                         v-model="filter.specifications">
                                     <option v-for="specification in specifications">
                                         ${ specification.name }$
@@ -79,34 +80,20 @@ Catalog
                                 </select>
                             </div>
                             <div class="form-group">
-                                <p>Seller:</p>
-<!--                                <ul>-->
-                                    <div v-for="(seller, index) in displayedSellers" :key="seller.id">
-
-                                        <input
-                                                class="form-input form-input_full custom-checkbox"
-                                                type="checkbox"
-                                                id="'seller-' + seller.id"
-                                                :value="seller.id"
-                                                v-model="filter.sellers"
-                                                name="'seller-' + seller.id"
-                                                :checked="seller.id"
-                                                @change="updateSellers"
-                                        />
-                                        <label for="'seller-' + seller.id" style="font-size:14px;">
-                                            ${ seller.name }$
-                                        </label>
-                                    </div>
-<!--                                </ul>-->
-                                <button v-if="displayedSellers.length < sellers.length" @click="showMoreSellers">Show
-                                    More Sellers
-                                </button>
+                                <label for="sellers">Seller:</label>
+                                <div id="sellers" class="form-input form-input_full" style="display: flex; flex-direction: column;">
+                                    <label v-for="seller in sellers" :key="seller.id">
+                                        <input type="checkbox" v-model="filter.sellers" :value="seller.name">
+                                        ${ seller.name }$
+                                    </label>
+                                </div>
                             </div>
 
 
                             <!--                            <div class="form-group">-->
                             <!--                                <label for="sellers">Seller:</label>-->
-                            <!--                                <select id="sellers" class="form-input form-input_full" multiple v-model="filter.sellers">-->
+                            <!--                                <select id="sellers" class="form-input form-input_full" multiple-->
+                            <!--                                        v-model="filter.sellers">-->
                             <!--                                    <option v-for="seller in sellers">-->
                             <!--                                        ${ seller.name }$-->
                             <!--                                    </option>-->
