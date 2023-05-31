@@ -2,7 +2,7 @@ import datetime
 
 from rest_framework import serializers
 import locale
-from product.models import Product, Review, Sale, ProductImage, Rating, Seller, Manufacturer
+from product.models import Product, Review, Sale, ProductImage, Rating, Seller, Manufacturer, Specification
 from tag.serializers import TagSerializer
 
 locale.setlocale(locale.LC_ALL, 'ru_RU.UTF-8')
@@ -108,3 +108,9 @@ class SellerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Seller
         fields = ('pk', 'name', 'city', 'address')
+
+
+class SpecificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Specification
+        fields = ('id', 'attributes')

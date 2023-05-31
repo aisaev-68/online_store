@@ -1,56 +1,123 @@
-[
-  {"name": "Apple"},
-  {"name": "Samsung"},
-  {"name": "Sony"},
-  {"name": "LG"},
-  {"name": "Microsoft"},
-  {"name": "HP"},
-  {"name": "Dell"},
-  {"name": "Lenovo"},
-  {"name": "Canon"},
-  {"name": "Nikon"},
-  {"name": "Nike"},
-  {"name": "Adidas"},
-  {"name": "Zara"},
-  {"name": "H&M"},
-  {"name": "Gucci"},
-  {"name": "Prada"},
-  {"name": "Calvin Klein"},
-  {"name": "Tommy Hilfiger"},
-  {"name": "Levi\"s"},
-  {"name": "Ralph Lauren"},
-  {"name": "L\"Oréal"},
-  {"name": "Estée Lauder"},
-  {"name": "Johnson & Johnson"},
-  {"name": "Procter & Gamble"},
-  {"name": "Unilever"},
-  {"name": "Colgate-Palmolive"},
-  {"name": "Avon"},
-  {"name": "Revlon"},
-  {"name": "Clinique"},
-  {"name": "Neutrogena"},
-  {"name": "Whirlpool"},
-  {"name": "Bosch"},
-  {"name": "Electrolux"},
-  {"name": "Panasonic"},
-  {"name": "Siemens"},
-  {"name": "Philips"},
-  {"name": "Haier"},
-  {"name": "Makita"},
-  {"name": "DeWalt"},
-  {"name": "Black & Decker"},
-  {"name": "Stanley"},
-  {"name": "Milwaukee"},
-  {"name": "Hilti"},
-  {"name": "Ryobi"},
-  {"name": "Craftsman"},
-  {"name": "Hitachi"},
-  {"name": "Puma"},
-  {"name": "Reebok"},
-  {"name": "Converse"},
-  {"name": "Vans"},
-  {"name": "New Balance"},
-  {"name": "Timberland"},
-  {"name": "Skechers"},
-  {"name": "Dr. Martens"}
-]
+{
+  "tablet": [
+    {
+      "name": "Apple"
+    },
+    {
+      "name": "Samsung"
+    },
+    {
+      "name": "Sony"
+    },
+    {
+      "name": "LG"
+    },
+    {
+      "name": "Microsoft"
+    },
+    {
+      "name": "HP"
+    },
+    {
+      "name": "Dell"
+    },
+    {
+      "name": "Lenovo"
+    },
+    {
+      "name": "Canon"
+    },
+    {
+      "name": "Panasonic"
+    },
+    {
+      "name": "Siemens"
+    },
+    {
+      "name": "Philips"
+    },
+    {
+      "name": "Huawei"
+    },
+    {
+      "name": "Honor"
+    },
+    {
+      "name": "Asus"
+    },
+    {
+      "name": "Acer"
+    },
+    {
+      "name": "Alcatel"
+    },
+    {
+      "name": "Google"
+    },
+    {
+      "name": "HTC"
+    },
+    {
+      "name": "Nokia"
+    },
+    {
+      "name": "realme"
+    },
+    {
+      "name": "OnePlus"
+    },
+    {
+      "name": "Xiaomi"
+    },
+    {
+      "name": "Motorola"
+    }
+  ],
+  "TV": [
+    {
+      "name": "JVC"
+    },
+    {
+      "name": "LG"
+    },
+    {
+      "name": "Philips"
+    },
+    {
+      "name": "Panasonic"
+    },
+    {
+      "name": "Sharp"
+    },
+    {
+      "name": "Sony"
+    },
+    {
+      "name": "Toshiba"
+    },
+    {
+      "name": "Xiaomi"
+    },
+    {
+      "name": "Realme"
+    },
+    {
+      "name": "Asus"
+    },
+    {
+      "name": "TCL"
+    },
+    {
+      "name": "Thomson"
+    },
+    {
+      "name": "Vestel"
+    },
+    {
+      "name": "Visio"
+    },
+    {
+      "name": "Nokia"
+    }
+  ]
+}

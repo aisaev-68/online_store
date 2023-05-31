@@ -102,7 +102,8 @@ class CatalogView(APIView):
         min_price = self.request.query_params.get('filter[minPrice]')
         max_price = self.request.query_params.get('filter[maxPrice]')
         sellers_filter = [value for key, value in self.request.query_params.items() if 'filter[sellers]' in key]
-        print(666666666666, sellers_filter)
+        specifications_filter = [{key:value} for key, value in self.request.query_params.items() if 'filter[specifications]' in key]
+        print(666666666666, specifications_filter)
         manufacturers_filter = [value for key, value in self.request.query_params.items() if 'filter[manufacturers]' in key]
         free_delivery = self.request.query_params.get('filter[freeDelivery]')
         available = self.request.query_params.get('filter[available]')
@@ -269,3 +270,4 @@ class BannersView(APIView):
         serializer = ProductSerializer(products, many=True)
 
         return Response(serializer.data)
+

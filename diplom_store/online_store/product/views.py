@@ -10,10 +10,9 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from product.models import Product, Review, Manufacturer, Seller
-from product.serializers import ProductSerializer, ReviewSerializer, ManufacturerSerializer, SellerSerializer
-
-
+from product.models import Product, Review, Manufacturer, Seller, Specification
+from product.serializers import ProductSerializer, ReviewSerializer, ManufacturerSerializer, SellerSerializer, \
+    SpecificationSerializer
 
 
 class MainPageView(View):
@@ -203,4 +202,15 @@ class SellerListAPIView(APIView):
         sellers = Seller.objects.all()
         serializer = SellerSerializer(sellers, many=True)
 
+        return Response(serializer.data)
+
+class SpecificationAPIView(APIView):
+    """
+    Представление для получения спецификаций.
+    """
+    def get(self, request, pk):
+        # id = self.request.query_params.get("category")
+        specifications = Specification.objects.filter(category=pk).first()
+        serializer = SpecificationSerializer(specifications)
+        print(888, serializer.data)
         return Response(serializer.data)

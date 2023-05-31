@@ -39,14 +39,17 @@ var mix = {
           });
       },
       getSpecifications() {
-        this.getData('/api/specifications/')
+       const url = '/api/specification/' + this.category + '/';
+        this.getData(url)
           .then((data) => {
             this.specifications = data;
+            //alert(JSON.stringify(this.specifications));
           })
           .catch(() => {
             this.specifications = [];
-            console.warn('Ошибка получения продавцов');
+            console.warn('Ошибка получения спецификаций');
           });
+
       },
       getManufacturers() {
         this.getData('/api/manufacturers/')
@@ -57,6 +60,12 @@ var mix = {
             this.manufacturers = [];
             console.warn('Ошибка получения производителей');
           });
+      },
+      updateSpecifications() {
+        this.filter.specifications = this.specifications.filter((specification) =>
+          this.selectedSpecifications.includes(specification.id)
+        );
+        this.getCatalogs();
       },
       updateManufacturers() {
         this.filter.manufacturers = this.manufacturers.filter((manufacturer) =>
@@ -129,6 +138,7 @@ var mix = {
     this.updateSellers();
     this.updateManufacturers();
     this.getSpecifications();
+    this.updateSpecifications();
     //this.selectedSellers = []; // список выбранных продавцов
     //this.selectedManufacturers = []; // список выбранных производителей
 

@@ -33,9 +33,6 @@ class Product(models.Model):  # товар
     attributes = models.JSONField(default=dict, blank=True, verbose_name=_('attributes'))
     tags = models.ManyToManyField(Tag, verbose_name=_('tag'), blank=True, related_name='product_tags')
 
-
-
-
     class Meta:
         verbose_name = _('product')
         verbose_name_plural = _('products')
@@ -222,7 +219,8 @@ class Seller(models.Model):
 
 
 class Specification(models.Model):
-    name = models.CharField(max_length=150, verbose_name=_('name'))
+    attributes = models.JSONField(default=dict, blank=True, verbose_name=_('attributes'))
+    category = models.OneToOneField(Category, on_delete=models.CASCADE, related_name='specifications', verbose_name=_('category'))
 
     def __str__(self):
-        return self.name
+        return str(self.attributes)

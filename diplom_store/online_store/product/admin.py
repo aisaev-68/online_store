@@ -1,7 +1,8 @@
 from django.utils.translation import gettext_lazy as _
 from django.contrib import admin
 from django.utils.html import format_html
-from product.models import Product, ProductImage, Rating, Review, Sale, Manufacturer, Seller
+from product.models import Product, ProductImage, Rating, Review, Sale, Manufacturer, Seller, Specification
+
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
@@ -38,3 +39,5 @@ class ReviewAdmin(admin.ModelAdmin):
 class SaleAdmin(admin.ModelAdmin):
     list_display = ['id', 'product', 'count', 'salePrice', 'dateFrom', 'dateTo']
     list_filter = ['dateFrom', 'dateTo']
+
+

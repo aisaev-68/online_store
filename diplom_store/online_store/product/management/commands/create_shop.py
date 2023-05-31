@@ -19,14 +19,14 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         self.stdout.write("Create sellers and manufacturers")
 
-        self.stdout.write("Create manufacturers")
-        with open(str(Path(__file__).parent.joinpath('manufacturer-json.json'))) as json_file:
-            data = json.load(json_file)
-        for value in data:
-            manufacturer = Manufacturer.objects.create(name=value['name'])
-            self.stdout.write(f"Create {manufacturer}")
-
-        self.stdout.write("Created manufacturers")
+        # self.stdout.write("Create manufacturers")
+        # with open(str(Path(__file__).parent.joinpath('manufacturer-json.json'))) as json_file:
+        #     data = json.load(json_file)
+        # for value in data:
+        #     manufacturer = Manufacturer.objects.create(name=value['name'])
+        #     self.stdout.write(f"Create {manufacturer}")
+        #
+        # self.stdout.write("Created manufacturers")
 
         self.stdout.write("Create sellers")
         for _ in range(20):

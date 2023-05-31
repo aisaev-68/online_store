@@ -9,4 +9,5 @@ urlpatterns = [
     path('', MainPageView.as_view(), name="index"),
     path('api/product/<int:id>/', ProductDetailView.as_view({'get': 'retrieve'})),
     path('api/product/<int:id>/review/', ProductReviewView.as_view()),
+
 ]

@@ -12,7 +12,7 @@ import json
 from django.utils.timezone import now
 
 from catalog.models import Category
-from product.models import ProductImage, Product, Rating, Manufacturer, Seller
+from product.models import ProductImage, Product, Rating, Manufacturer, Seller, Specification
 from tag.models import Tag
 
 new_dir_file = now().date().strftime("%Y/%m/%d")
@@ -29,10 +29,19 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
 
         self.stdout.write("Create products")
+
+
         with open(str(Path(__file__).parent.joinpath('json_data-planshet.json'))) as json_file:
             data = json.load(json_file)
         prod_len = len(data)
         sellers = [shop for shop in Seller.objects.all()]
+        category = Category.objects.get(title='Планшеты')
+
+        with open(str(Path(__file__).parent.joinpath('specifications.json'))) as j_file:
+            spec_data = json.load(j_file)
+
+        Specification.objects.create(category_id=category.id, attributes=spec_data['Планшеты'])
+
         for value in data:
 
             error = {}
@@ -67,10 +76,18 @@ class Command(BaseCommand):
                     for key, item in values.items():
                         if key == 'nameDescription':
                             description += str(item).replace('None', '')
-                        if key == 'name':
-                            attributes[item] = values['value']
+                        if values[key] == "Размер экрана":
+                            clean_string = values['value'].replace(' "value": "', '').replace('\"', '')
+                            st = clean_string.split('/')
+                            attributes["Размер экрана"] = st[0]
+                            attributes["Разрешение экрана"] = st[1]
+                        elif values[key] == "Встроенная память (ROM)":
+                            attributes["Объем встроенной памяти"] = values['value'] + ' ' + 'ГБ'
 
-                category = Category.objects.get(title='Планшеты')
+                        elif values[key] == "Оперативная память":
+                            attributes["Объем оперативной памяти"] = values['value'] + ' ' + 'ГБ'
+
+
 
                 manufacturer, create = Manufacturer.objects.get_or_create(name=value.get('brandName'))
                 product = Product.objects.create(

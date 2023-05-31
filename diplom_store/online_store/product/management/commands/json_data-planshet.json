@@ -45,8 +45,8 @@
         "propertiesPortion": [
             {
                 "id": 617122,
-                "name": "Экран",
-                "value": "12\"/1200x2000 Пикс",
+                "name": "Размер экрана",
+                "value": "12\"/1200x2000",
                 "nameDescription": null,
                 "valueDescription": null,
                 "priority": 1,
@@ -139,8 +139,8 @@
         "propertiesPortion": [
             {
                 "id": 617122,
-                "name": "Экран",
-                "value": "10.36\"/1200x2000 Пикс",
+                "name": "Размер экрана",
+                "value": "10.36\"/1200x2000",
                 "nameDescription": null,
                 "valueDescription": null,
                 "priority": 1,
@@ -238,8 +238,8 @@
         "propertiesPortion": [
             {
                 "id": 620469,
-                "name": "Экран",
-                "value": "10.2\"/1620x2160 Пикс",
+                "name": "Размер экрана",
+                "value": "10.2\"/1620x2160",
                 "nameDescription": null,
                 "valueDescription": null,
                 "priority": 1,
@@ -337,8 +337,8 @@
         "propertiesPortion": [
             {
                 "id": 620469,
-                "name": "Экран",
-                "value": "10.2\"/1620x2160 Пикс",
+                "name": "Размер экрана",
+                "value": "10.2\"/1620x2160",
                 "nameDescription": null,
                 "valueDescription": null,
                 "priority": 1,
@@ -427,8 +427,8 @@
         "propertiesPortion": [
             {
                 "id": 617122,
-                "name": "Экран",
-                "value": "10.36\"/1200x2000 Пикс",
+                "name": "Размер экрана",
+                "value": "10.36\"/1200x2000",
                 "nameDescription": null,
                 "valueDescription": null,
                 "priority": 1,
@@ -528,8 +528,8 @@
         "propertiesPortion": [
             {
                 "id": 617122,
-                "name": "Экран",
-                "value": "10.4\"/2000x1200 Пикс",
+                "name": "Размер экрана",
+                "value": "10.4\"/2000x1200",
                 "nameDescription": null,
                 "valueDescription": null,
                 "priority": 1,
@@ -624,8 +624,8 @@
         "propertiesPortion": [
             {
                 "id": 617122,
-                "name": "Экран",
-                "value": "10.4\"/1200x2000 Пикс",
+                "name": "Размер экрана",
+                "value": "10.4\"/1200x2000",
                 "nameDescription": null,
                 "valueDescription": null,
                 "priority": 1,
@@ -724,8 +724,8 @@
         "propertiesPortion": [
             {
                 "id": 617122,
-                "name": "Экран",
-                "value": "8\"/1280x800 Пикс",
+                "name": "Размер экрана",
+                "value": "8\"/1280x800",
                 "nameDescription": null,
                 "valueDescription": null,
                 "priority": 1,
@@ -822,8 +822,8 @@
         "propertiesPortion": [
             {
                 "id": 617122,
-                "name": "Экран",
-                "value": "8.7\"/1340x800 Пикс",
+                "name": "Размер экрана",
+                "value": "8.7\"/1340x800",
                 "nameDescription": null,
                 "valueDescription": null,
                 "priority": 1,
@@ -918,8 +918,8 @@
         "propertiesPortion": [
             {
                 "id": 617122,
-                "name": "Экран",
-                "value": "10.4\"/1200x2000 Пикс",
+                "name": "Размер экрана",
+                "value": "10.4\"/1200x2000",
                 "nameDescription": null,
                 "valueDescription": null,
                 "priority": 1,
@@ -1018,8 +1018,8 @@
         "propertiesPortion": [
             {
                 "id": 617122,
-                "name": "Экран",
-                "value": "10.95\"/1600x2560 Пикс",
+                "name": "Размер экрана",
+                "value": "10.95\"/1600x2560",
                 "nameDescription": null,
                 "valueDescription": null,
                 "priority": 1,
@@ -1116,8 +1116,8 @@
         "propertiesPortion": [
             {
                 "id": 617122,
-                "name": "Экран",
-                "value": "8\"",
+                "name": "Размер экрана",
+                "value": "8\"/1280x800",
                 "nameDescription": null,
                 "valueDescription": null,
                 "priority": 1,
@@ -1216,8 +1216,8 @@
         "propertiesPortion": [
             {
                 "id": 617122,
-                "name": "Экран",
-                "value": "8.7\"/1340x800 Пикс",
+                "name": "Размер экрана",
+                "value": "8.7\"/1340x800",
                 "nameDescription": null,
                 "valueDescription": null,
                 "priority": 1,
@@ -1312,8 +1312,8 @@
         "propertiesPortion": [
             {
                 "id": 617122,
-                "name": "Экран",
-                "value": "10.4\"/1200x2000 Пикс",
+                "name": "Размер экрана",
+                "value": "10.4\"/1200x2000",
                 "nameDescription": null,
                 "valueDescription": null,
                 "priority": 1,
@@ -1410,8 +1410,8 @@
         "propertiesPortion": [
             {
                 "id": 617122,
-                "name": "Экран",
-                "value": "8.7\"/1340x800 Пикс",
+                "name": "Размер экрана",
+                "value": "8.7\"/1340x800",
                 "nameDescription": null,
                 "valueDescription": null,
                 "priority": 1,
@@ -1504,8 +1504,8 @@
         "propertiesPortion": [
             {
                 "id": 617122,
-                "name": "Экран",
-                "value": "10.36\"/1200x2000 Пикс",
+                "name": "Размер экрана",
+                "value": "10.36\"/1200x2000",
                 "nameDescription": null,
                 "valueDescription": null,
                 "priority": 1,
@@ -1594,8 +1594,8 @@
         "propertiesPortion": [
             {
                 "id": 617122,
-                "name": "Экран",
-                "value": "10.36\"/1200x2000 Пикс",
+                "name": "Размер экрана",
+                "value": "10.36\"/1200x2000",
                 "nameDescription": null,
                 "valueDescription": null,
                 "priority": 1,
@@ -1685,8 +1685,8 @@
         "propertiesPortion": [
             {
                 "id": 617122,
-                "name": "Экран",
-                "value": "10.1\"/1200x1920 Пикс",
+                "name": "Размер экрана",
+                "value": "10.1\"/1200x1920",
                 "nameDescription": null,
                 "valueDescription": null,
                 "priority": 1,
@@ -1779,8 +1779,8 @@
         "propertiesPortion": [
             {
                 "id": 617122,
-                "name": "Экран",
-                "value": "10.1\"/1280x800 Пикс",
+                "name": "Размер экрана",
+                "value": "10.1\"/1280x800",
                 "nameDescription": null,
                 "valueDescription": null,
                 "priority": 1,
@@ -1879,8 +1879,8 @@
         "propertiesPortion": [
             {
                 "id": 617122,
-                "name": "Экран",
-                "value": "11\"/2560x1600 Пикс",
+                "name": "Размер экрана",
+                "value": "11\"/2560x1600",
                 "nameDescription": null,
                 "valueDescription": null,
                 "priority": 1,
@@ -1974,8 +1974,8 @@
         "propertiesPortion": [
             {
                 "id": 617122,
-                "name": "Экран",
-                "value": "10.1\"/1280x800 Пикс",
+                "name": "Размер экрана",
+                "value": "10.1\"/1280x800",
                 "nameDescription": null,
                 "valueDescription": null,
                 "priority": 1,
@@ -2073,8 +2073,8 @@
         "propertiesPortion": [
             {
                 "id": 617122,
-                "name": "Экран",
-                "value": "10.1\"/1200x800 Пикс",
+                "name": "Размер экрана",
+                "value": "10.1\"/1200x800",
                 "nameDescription": null,
                 "valueDescription": null,
                 "priority": 1,
@@ -2172,8 +2172,8 @@
         "propertiesPortion": [
             {
                 "id": 617122,
-                "name": "Экран",
-                "value": "10.61\"/1200x2000 Пикс",
+                "name": "Размер экрана",
+                "value": "10.61\"/1200x2000",
                 "nameDescription": null,
                 "valueDescription": null,
                 "priority": 1,
@@ -2270,8 +2270,8 @@
         "propertiesPortion": [
             {
                 "id": 617122,
-                "name": "Экран",
-                "value": "8\"/800x1280 Пикс",
+                "name": "Размер экрана",
+                "value": "8\"/800x1280",
                 "nameDescription": null,
                 "valueDescription": null,
                 "priority": 1,
