@@ -14,12 +14,14 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-
+from online_store import settings
 from account.forms import UserRegistrationForm, LoginForm
 from account.serializers import UserPasswordChangeSerializer, UserAvatarSerializer, UserSerializer
 from order.models import Order
 
 from account.models import User
+
+from payment.serializers import PaymentSettingsSerializer
 
 
 class AccountUser(APIView):
@@ -187,3 +189,20 @@ class UserPasswordChangeView(APIView):
 class ProfileView(View):
     def get(self, request):
         return render(request, 'frontend/profile.html')
+
+
+class SettingsAPIView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        setting = settings.PaymentSettings.objects.first()
+        serializer = PaymentSettingsSerializer(setting)
+        return Response(serializer.data)
+
+    def put(self, request):
+        setting = settings.PaymentSettings.objects.first()
+        serializer = settings.PaymentSettingsSerializer(setting, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -10,6 +10,7 @@ var mix = {
       });
     },
   },
+
   mounted() {
     this.getUserAccount();
   },

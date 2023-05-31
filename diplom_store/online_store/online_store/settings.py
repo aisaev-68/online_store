@@ -168,6 +168,22 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 
 SESSION_COOKIE_AGE = 30 * 24 * 60 * 60
 
-deliveryType = ['Обычная', 'Экспресс']
-paymentType = ['Онлайн картой', 'Онлайн со случайного чужого счета']
-status = ['Ожидает оплаты', 'Оплачено', 'Ошибка оплаты']
+
+PAYMENT_METHODS = [
+    ('paypal', 'PayPal'),
+    ('credit_card', _('Credit Card')),
+    # Другие методы оплаты
+]
+
+SHIPPING_METHODS = [
+    ('standard', _('Standard Shipping')),
+    ('express', _('Express Shipping')),
+    # Другие методы доставки
+]
+
+ORDER_STATUSES = [
+    ('pending_payment', 'Ожидает оплаты'),
+    ('paid', 'Оплачено'),
+    ('payment_error', 'Ошибка оплаты'),
+    # Другие статусы заказа
+]
