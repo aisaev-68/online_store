@@ -1,3 +1,4 @@
+from django.core.validators import MinValueValidator
 from django.db import models
 
 from online_store import settings
@@ -30,6 +31,10 @@ class PaymentSettings(models.Model):
         max_length=100,
         choices=settings.ORDER_STATUSES,
         default=settings.ORDER_STATUSES[0][0]
+    )
+    page_size = models.IntegerField(
+        default=settings.REST_FRAMEWORK['PAGE_SIZE'],
+        validators=[MinValueValidator(0)]
     )
     # Дополнительные поля, связанные с настройками оплаты и доставки
 

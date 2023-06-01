@@ -20,15 +20,23 @@ from account.serializers import UserPasswordChangeSerializer, UserAvatarSerializ
 from order.models import Order
 
 from account.models import User
+from payment.models import PaymentSettings
 
 from payment.serializers import PaymentSettingsSerializer
 
 
 class AccountUser(APIView):
+    """
+    API для получения аватара и полного имени.
+    """
     permission_classes = (IsAuthenticated,)
     authentication_classes = (SessionAuthentication,)
     serializer_class = UserAvatarSerializer
 
+    @swagger_auto_schema(
+        responses={200: UserAvatarSerializer},
+        operation_description=_("Get user full name and avatar"),
+    )
     def get(self, request, *args, **kwargs):
         user = self.request.user
         serializer = self.serializer_class(user)
@@ -37,7 +45,7 @@ class AccountUser(APIView):
 
 class RegisterView(View):
     """
-        Класс представление для регистрации пользователя.
+    Класс представление для регистрации пользователя.
     """
 
     def get(self, request, *args, **kwargs):
@@ -98,18 +106,17 @@ class MyLoginView(View):
                     return redirect('/account')
                 else:
                     messages.error(request, _('Disabled account.'))
-                    return redirect('account:login')
+                    return redirect('login')
             else:
                 messages.error(request, _('Password or username does not match.'))
-                return redirect('account:login')
-
+                return redirect('login')
 
 
 class MyLogoutView(LogoutView):
     """
-    Класс представление для выхода пользователя из системы
+    Класс представление для выхода пользователя из системы.
     """
-    next_page = reverse_lazy('account:login')
+    next_page = reverse_lazy('login')
 
 
 class ChangePasswordViewDone(PasswordChangeDoneView):
@@ -122,21 +129,20 @@ class HistoryOrder(View):
         context = {
             'order': Order.objects.all()
         }
-        print(1111, context)
         return render(request, 'frontend/historyorder.html', context=context)
 
 
-
-
-
 class UserProfileView(generics.ListCreateAPIView):
+    """
+    API для получения и обновления профиля пользователя.
+    """
     permission_classes = (IsAuthenticated,)
     authentication_classes = (SessionAuthentication,)
     serializer_class = UserSerializer
 
     @swagger_auto_schema(
         responses={200: UserSerializer},
-        operation_description="Get user profile",
+        operation_description=_("Get user profile"),
     )
     def get(self, request, *args, **kwargs):
         serializer = self.serializer_class(self.request.user)
@@ -149,24 +155,27 @@ class UserProfileView(generics.ListCreateAPIView):
     )
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(request.user, data=request.data, partial=True)
-        print(99999, serializer)
+
         if serializer.is_valid():
-            print(1111111111)
             serializer.save()
             return Response(data=serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserAvatarView(APIView):
-    parser_classes = [MultiPartParser,]
+    """
+    API для обновления автара.
+    """
+    parser_classes = [MultiPartParser, ]
+    serializer_class = UserAvatarSerializer
 
     @swagger_auto_schema(
         request_body=UserAvatarSerializer,
         responses={200: UserAvatarSerializer},
-        operation_description="URL of the uploaded avatar.",
+        operation_description=_("URL of the uploaded avatar."),
     )
     def post(self, request, *args, **kwargs):
-        serializer = UserAvatarSerializer(request.user, data=request.data, partial=True)
+        serializer = self.serializer_class(request.user, data=request.data, partial=True)
         if serializer.is_valid():
             user = serializer.save()
             return Response({'url': user.avatar.url})
@@ -174,11 +183,20 @@ class UserAvatarView(APIView):
 
 
 class UserPasswordChangeView(APIView):
+    """
+    API для обновления пароля пользователя.
+    """
     permission_classes = (IsAuthenticated,)
     authentication_classes = (SessionAuthentication,)
+    serializer_class = UserPasswordChangeSerializer
 
+    @swagger_auto_schema(
+        request_body=UserPasswordChangeSerializer,
+        responses={200: UserPasswordChangeSerializer},
+        operation_description=_("URL of the uploaded password."),
+    )
     def post(self, request, *args, **kwargs):
-        serializer = UserPasswordChangeSerializer(request.user, data=request.data)
+        serializer = self.serializer_class(request.user, data=request.data)
         if serializer.is_valid():
             user = serializer.save()
             update_session_auth_hash(request, user)  # Обновление сессии после изменения пароля
@@ -186,23 +204,46 @@ class UserPasswordChangeView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ProfileView(View):
-    def get(self, request):
-        return render(request, 'frontend/profile.html')
+# class ProfileView(View):
+#     def get(self, request):
+#         return render(request, 'frontend/profile.html')
 
 
 class SettingsAPIView(APIView):
+    """
+    API для получения и обновления настроек.
+    """
     permission_classes = (IsAuthenticated,)
+    authentication_classes = (SessionAuthentication,)
+    serializer_class = PaymentSettingsSerializer
 
+    @swagger_auto_schema(
+        responses={200: PaymentSettingsSerializer},
+        operation_description=_("Get settings"),
+    )
     def get(self, request):
-        setting = settings.PaymentSettings.objects.first()
-        serializer = PaymentSettingsSerializer(setting)
-        return Response(serializer.data)
+        payment_settings = PaymentSettings.objects.first()
+        serializer = self.serializer_class(payment_settings)
+        settings_data = serializer.data
 
-    def put(self, request):
-        setting = settings.PaymentSettings.objects.first()
-        serializer = settings.PaymentSettingsSerializer(setting, data=request.data)
+        # Добавляем возможные выборы для полей
+        settings_data['payment_methods_choices'] = dict(settings.PAYMENT_METHODS)
+        settings_data['shipping_methods_choices'] = dict(settings.SHIPPING_METHODS)
+        settings_data['order_status_choices'] = dict(settings.ORDER_STATUSES)
+
+        return Response(settings_data)
+
+    @swagger_auto_schema(
+        request_body=PaymentSettingsSerializer,
+        responses={200: PaymentSettingsSerializer},
+        operation_description=_("URL of the uploaded settings."),
+    )
+    def post(self, request):
+        payment_settings = PaymentSettings.objects.first()
+        serializer = self.serializer_class(payment_settings, data=request.data)
+
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

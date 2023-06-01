@@ -1,5 +1,8 @@
 from django.urls import path
+from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
+from account.views import RegisterView, MyLoginView, MyLogoutView
+
 
 name = 'frontend'
 urlpatterns = [
@@ -18,4 +21,8 @@ urlpatterns = [
     path('profile/', TemplateView.as_view(template_name="frontend/profile.html")),
     path('progress-payment/', TemplateView.as_view(template_name="frontend/progressPayment.html")),
     path('sale/', TemplateView.as_view(template_name="frontend/sale.html")),
+    path('settings/', TemplateView.as_view(template_name="frontend/settings.html")),
+    path('register/', RegisterView.as_view(), name='register'),
+    path('login/', MyLoginView.as_view(), name='login'),
+    path('logout/', MyLogoutView.as_view(), name='logout'),
 ]

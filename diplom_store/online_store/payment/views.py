@@ -18,3 +18,4 @@ class PaymentView(APIView):
             order.status = settings.status[2]
         order.save()
         return HttpResponse()
+

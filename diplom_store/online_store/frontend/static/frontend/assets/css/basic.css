@@ -2588,3 +2588,9 @@ button.link {
   user-select: none;
   overflow-x: auto;
 }
+
+.setting_select {
+  padding: 15px 25px;
+  min-height: 36px;
+
+}

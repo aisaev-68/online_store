@@ -7,6 +7,7 @@ Profile
 {% endblock %}
 
 {% block content %}
+{% if user.is_authenticated %}
 <div class="Middle Middle_top">
     <div class="Middle-top">
         <div class="wrap">
@@ -33,34 +34,35 @@ Profile
                 <div class="Profile">
                     <div class="row">
                         <div class="row-block">
+
                             <form action="" @submit.prevent="changeProfile">
                                 <div class="form-group">
-                                    <label class="form-label" for="avatar">Аватар</label>
+                                    <label class="form-label" for="avatar">{% trans 'Avatar' %}</label>
                                     <div v-if="!avatar" class="Profile-avatar Profile-avatar_noimg">
-                                        <label class="Profile-fileLabel" for="avatar">Выберите аватар</label>
+                                        <label class="Profile-fileLabel" for="avatar">{% trans 'Choose an avatar' %}</label>
                                         <input class="Profile-file form-input" @change="setAvatar"
                                                @click="$event.target.value = null" type="file"
                                                id="avatar" name="avatar" data-validate="onlyImgAvatar"/>
                                     </div>
                                     <div v-else class="Profile-img">
                                         <img :src="avatar" style="height: 150px;"/>
-                                        <label class="Profile-fileLabel" for="avatar1">Выберите аватар</label>
+                                        <label class="Profile-fileLabel" for="avatar1">{% trans 'Choose an avatar' %}</label>
                                         <input class="Profile-file form-input" @change="setAvatar"
                                                @click="$event.target.value = null" type="file"
                                                id="avatar1" name="avatar" data-validate="onlyImgAvatar"/>
                                     </div>
                                     <div v-if="avatarUpdated" class="success-message">
-                                        Аватар успешно обновлен!
+                                        {% trans 'Avatar successfully updated!' %}
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label" for="name">ФИО</label>
+                                    <label class="form-label" for="name">{% trans 'Full name' %}</label>
                                     <input class="form-input" id="name" name="name" type="text" v-model="fullName"
                                            :class="{ 'error': !fullName.trim().length }"/>
-                                    <span v-if="!fullName.trim().length" class="error-text">Поле ФИО должно быть заполнено</span>
+                                    <span v-if="!fullName.trim().length" class="error-text">{% trans 'Full name field must be filled' %}</span>
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label" for="phone">Телефон</label>
+                                    <label class="form-label" for="phone">{% trans 'Phone' %}</label>
                                     <input class="form-input" id="phone" name="phone" type="tel" v-model="phone"/>
                                     <!--            <span v-if="!phone.trim().length" class="error-text">Поле Телефон должно быть заполнено</span>-->
                                 </div>
@@ -69,17 +71,17 @@ Profile
                                     <input class="form-input" id="email" name="email" type="email" required
                                            v-model="email"
                                            :class="{ 'error': !email.trim().length || !isEmailValid(email) }"/>
-                                    <span class="error-text" v-if="!email.trim().length">Поле E-mail должно быть заполнено</span>
+                                    <span class="error-text" v-if="!email.trim().length">{% trans 'The field E-mail must be filled' %}</span>
                                     <span class="error-text"
-                                          v-else-if="!isEmailValid(email)">Некорректный формат E-mail</span>
+                                          v-else-if="!isEmailValid(email)">{% trans 'Incorrect email format' %}</span>
                                 </div>
 
                                 <div v-if="profileUpdated" class="success-message">
-                                    Профиль успешно обновлен!
+                                    {% trans 'Profile updated successfully!' %}
                                 </div>
 
                                 <div class="form-group">
-                                    <button class="btn btn_success" type="submit">Сохранить</button>
+                                    <button class="btn btn_success" type="submit">{% trans 'Save' %}</button>
                                 </div>
                             </form>
                         </div>
@@ -87,26 +89,26 @@ Profile
                         <div class="row-block">
                             <form action="" @submit.prevent="changePassword">
                                 <div class="form-group">
-                                    <label class="form-label" for="passwordCurrent">Текущий пароль</label>
+                                    <label class="form-label" for="passwordCurrent">{% trans 'Current password' %}</label>
                                     <input class="form-input" id="passwordCurrent" name="passwordCurrent"
-                                           type="password" placeholder="Введите текущий пароль"
+                                           type="password" placeholder="{% trans 'Enter the current password' %}"
                                            v-model="passwordCurrent"/>
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label" for="password">Пароль</label>
+                                    <label class="form-label" for="password">{% trans 'Password' %}</label>
                                     <input class="form-input" id="password" name="password" type="password"
-                                           placeholder="Тут можно изменить пароль" v-model="password"/>
+                                           placeholder="{% trans 'New password' %}" v-model="password"/>
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label" for="passwordReply">Подтверждение пароля</label>
+                                    <label class="form-label" for="passwordReply">{% trans 'Password confirmation' %}</label>
                                     <input class="form-input" id="passwordReply" name="passwordReply" type="password"
-                                           placeholder="Введите пароль повторно" v-model="passwordReply"/>
+                                           placeholder="{% trans 'Enter your password again' %}" v-model="passwordReply"/>
                                 </div>
                                 <div v-if="passwordUpdated" class="success-message">
-                                    Пароль успешно обновлен!
+                                    {% trans 'Password updated successfully!' %}
                                 </div>
                                 <div class="form-group">
-                                    <button class="btn btn_success" type="submit">Сохранить</button>
+                                    <button class="btn btn_success" type="submit">{% trans 'Save' %}</button>
                                 </div>
                             </form>
                         </div>
@@ -116,6 +118,9 @@ Profile
         </div>
     </div>
 </div>
+{% else %}
+{% include 'includes/no-authorized.html' %}
+{% endif %}
 {% endblock %}
 
 {% block mixins %}

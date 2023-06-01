@@ -65,14 +65,14 @@
                             <a class="ControlPanel-title" href="{{ request.user.get_url }}">{{ user.username }}</a>
                         </div>
                         <div class="row-block">
-                            <a class="ControlPanel-title" href="{% url 'account:logout' %}">{% trans 'Logout' %}</a>
+                            <a class="ControlPanel-title" href="{% url 'logout' %}">{% trans 'Logout' %}</a>
                         </div>
                         {% else %}
                         <div class="row-block">
-                            <a class="ControlPanel-title" href="{% url 'account:login' %}">{% trans 'Login' %}</a>
+                            <a class="ControlPanel-title" href="{% url 'login' %}">{% trans 'Login' %}</a>
                         </div>
                         <div class="row-block">
-                            <a class="ControlPanel-title" href="{% url 'account:register' %}">{% trans 'Register' %}</a>
+                            <a class="ControlPanel-title" href="{% url 'register' %}">{% trans 'Register' %}</a>
                         </div>
                         {% endif %}
                     </div>
