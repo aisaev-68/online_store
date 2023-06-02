@@ -182,8 +182,8 @@ SHIPPING_METHODS = [
 ]
 
 ORDER_STATUSES = [
-    ('pending_payment', 'Ожидает оплаты'),
-    ('paid', 'Оплачено'),
+    ('pending_payment', 'В ожидании'),
+    ('in_progress', 'В процессе'),
+    ('paid', 'Завершено'),
     ('payment_error', 'Ошибка оплаты'),
-    # Другие статусы заказа
 ]

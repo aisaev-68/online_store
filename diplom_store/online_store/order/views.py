@@ -2,10 +2,13 @@ from django.core.paginator import Paginator
 from django.shortcuts import render
 from django.views import View
 from rest_framework import viewsets
+from rest_framework.authentication import SessionAuthentication
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from drf_yasg.utils import swagger_auto_schema
+
+from account.models import User
 from cart.cart import Cart
 from order.models import Order
 from order.serializers import OrderSerializer
@@ -15,11 +18,13 @@ from product.serializers import ProductSerializer
 
 class OrderView(APIView):
     permission_classes = (IsAuthenticated,)
+    authentication_classes = (SessionAuthentication,)
     serializer_class = OrderSerializer
 
     def get(self, request, *args, **kwargs):
         orders = Order.objects.all()
-        serializer = OrderSerializer(orders, many=True)
+        serializer = self.serializer_class(orders, many=True)
+        print(3333, serializer.data)
         return Response(serializer.data)
 
     @swagger_auto_schema(
@@ -47,10 +52,16 @@ class OrderView(APIView):
             return Response(product_serializer.errors, status=400)
 
 
+
 class OrderByIdView(View):
-    def get(self, request, *args, **kwargs):
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (SessionAuthentication,)
+    serializer_class = OrderSerializer
+
+    def get(self, pk, request, *args, **kwargs):
         order = Order.objects.get(pk=pk)
-        serializer = OrderSerializer(order)
+        serializer = self.serializer_class(order)
+        print('ORDER_ID', serializer.data)
         return Response(serializer.data)
 
     def post(self, request, *args, **kwargs):
@@ -60,7 +71,8 @@ class OrderByIdView(View):
 class OrderActiveView(APIView):
 
     def get(self, request, *args, **kwargs):
-        order = Order.objects.all().select_related('user').prefetch_related('products').last()
+        order = Order.objects.all()
+        print("ORDER", order)
         cart = Cart(request).cart
 
         if cart:
@@ -79,7 +91,7 @@ class OrdersView(viewsets.ModelViewSet):
 
     def submit_basket(self, request, *args, **kwargs):
         if request.user.pk:
-            user = Profile.objects.get(pk=request.user.pk)
+            user = User.objects.get(pk=request.user.pk)
             fullName, email, phone = user.fullName, user.email, user.phone
         else:
             user = request.user

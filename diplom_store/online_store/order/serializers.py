@@ -2,10 +2,9 @@ import datetime
 
 from rest_framework import serializers
 from order.models import Order
-from product.models import Product
 from product.serializers import ProductSerializer
 
-from account.serializers import UserSerializer
+#from account.serializers import UserSerializer
 
 
 # "orderId": "123",
@@ -28,17 +27,17 @@ class OrderSerializer(serializers.ModelSerializer):
     products = ProductSerializer(many=True)
 
 
+
     class Meta:
         model = Order
-        fields = ('orderId', 'createdAt', 'fullName', 'email', 'phone', 'deliveryType', 'paymentType', 'totalCost', 'status', 'city', 'address', 'products')
+        fields = ('createdAt', 'deliveryType', 'paymentType',
+                  'totalCost', 'status', 'city', 'address', 'products')
 
     def to_representation(self, obj):
         data = super().to_representation(obj)
-        user = UserSerializer()
-        data['orderId'] = str(obj.id)
+        data['orderId'] = obj.pk
+        data['fullName'] = obj.user.fullName
+        data['email'] = obj.user.email
+        data['phone'] = obj.user.phone
         data['createdAt'] = obj.createdAt.strftime('%Y-%m-%d %H:%M')
-        data['fullName'] = user.fullName
-        data['email'] = user.email
-        data['phone'] = user.phone
-        data['deliveryType'] = 'free' if obj.deliveryType else 'not free'
         return data

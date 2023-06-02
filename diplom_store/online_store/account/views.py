@@ -40,6 +40,7 @@ class AccountUser(APIView):
     def get(self, request, *args, **kwargs):
         user = self.request.user
         serializer = self.serializer_class(user)
+        print(2323, serializer.data)
         return Response(serializer.data)
 
 

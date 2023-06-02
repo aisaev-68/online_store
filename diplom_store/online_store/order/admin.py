@@ -1,6 +1,8 @@
 
 from django.contrib import admin
+from django import forms
 
+from online_store import settings
 from order.models import Order
 
 from product.models import Product
@@ -10,9 +12,17 @@ class ProductItemInline(admin.TabularInline):
     model = Order.products.through
     extra = 0
 
+class OrderAdminForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = '__all__'
+
+    status = forms.ChoiceField(choices=settings.ORDER_STATUSES)
+    paymentType = forms.ChoiceField(choices=settings.PAYMENT_METHODS)
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
+    form = OrderAdminForm
     inlines = [
         ProductItemInline,
     ]

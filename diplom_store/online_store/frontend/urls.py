@@ -13,7 +13,7 @@ urlpatterns = [
     path('catalog/', TemplateView.as_view(template_name="frontend/catalog.html")),
     path('catalog/<int:pk>', TemplateView.as_view(template_name="frontend/catalog.html")),
     path('history-order/', TemplateView.as_view(template_name="frontend/historyorder.html")),
-    path('order-detail/<int:pk>', TemplateView.as_view(template_name="frontend/oneorder.html")),
+    path('order-detail/<int:pk>', TemplateView.as_view(template_name="frontend/oneorder.html"), name="oneorder"),
     path('order/', TemplateView.as_view(template_name="frontend/order.html")),
     path('payment/', TemplateView.as_view(template_name="frontend/payment.html")),
     path('payment-someone/', TemplateView.as_view(template_name="frontend/paymentsomeone.html")),

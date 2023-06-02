@@ -8,6 +8,7 @@ var mix = {
                 this.orders = []
                 console.warn('Ошибка при получении списка заказов')
             })
+            alert(this.orders)
         }
     },
     mounted() {

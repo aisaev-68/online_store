@@ -1,7 +1,7 @@
 var mix = {
     methods: {
         getOrder(orderId) {
-            this.getData(`/api/orders/active`).then(data => {
+            this.getData('/api/orders/active').then(data => {
                 this.orderId = data.orderId
                 this.createdAt = data.createdAt
                 this.fullName = data.fullName
@@ -17,7 +17,9 @@ var mix = {
                 if (typeof data.paymentError !== 'undefined'){
                     this.paymentError = data.paymentError
                 }
+
             })
+            alert(this.city)
         },
         confirmOrder() {
             if (this.order) {
@@ -35,7 +37,7 @@ var mix = {
         }
     },
     mounted() {
-        // this.getOrder(pk);
+        this.getOrder(pk);
 
     },
     data() {
