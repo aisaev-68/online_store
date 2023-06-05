@@ -37,7 +37,7 @@ var mix = {
         }
     },
     mounted() {
-        this.getOrder(pk);
+        //this.getOrder(pk);
 
     },
     data() {

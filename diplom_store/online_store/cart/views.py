@@ -41,7 +41,7 @@ class BasketAPIView(APIView):
     Представление для получения и удаления продуктов из корзины, добавления продуктов в корзину
     """
     serializer_class = BasketSerializer
-    # authentication_classes = (SessionAuthentication,)
+    authentication_classes = (SessionAuthentication,)
 
     def get(self, request, *args, **kwargs):
         cart = Cart(request)
@@ -82,61 +82,3 @@ class BasketAPIView(APIView):
             serializer = self.serializer_class(product, context=cart.cart)
         return Response(data=serializer.data, status=201)
 
-
-# class CartDetail(LoginRequiredMixin, View):
-#     def get(self, request, *args, **kwargs):
-#         cart = Cart(request)
-#         form = OrderModelForm()
-#         for item in cart:
-#             item['update_quantity_form'] = CartAddProductForm(
-#                 initial={'quantity': item['quantity'],
-#                          'update': True})
-#
-#         return render(request, 'shopapp/cart.html', context={'cart': cart, 'form': form})
-#
-#
-# class CartAdd(LoginRequiredMixin, View):
-#
-#     def post(self, request: HttpRequest, product_id):
-#         cart = Cart(request)
-#         product = get_object_or_404(Product, pk=product_id)
-#         cart.add(
-#                 product=product,
-#                 quantity=1,
-#                 update_quantity=False,
-#             )
-#         return redirect('shopapp:shop_page')
-#
-#
-# class CartDelete(LoginRequiredMixin, View):
-#     def get_success_url(self):
-#         return reverse_lazy(
-#             "shopapp:cart_detail",
-#         )
-#
-#     def post(self, request, *args, **kwargs):
-#         cart = Cart(request)
-#         product = get_object_or_404(Product, id=self.kwargs['product_id'])
-#         cart.remove(product)
-#         url = self.get_success_url()
-#         return HttpResponseRedirect(url)
-#
-#
-# class CartUpdate(LoginRequiredMixin, View):
-#
-#     def post(self, request, product_id):
-#         cart = Cart(request)
-#         product = get_object_or_404(Product, pk=product_id)
-#         form = CartAddProductForm(request.POST)
-#         if form.is_valid():
-#             cd = form.cleaned_data
-#             dif_count = product.products_count - cd['quantity']
-#             if dif_count >= 0:
-#                 cart.add(
-#                     product=product,
-#                     quantity=cd['quantity'],
-#                     update_quantity=cd['update'],
-#                 )
-#         return redirect('shopapp:cart_detail')
-#
-#         # return render(request, 'shopapp/cart.html', context={'cart': cart, 'form': form, 'message': f'Only {product.products_count} products left.'})

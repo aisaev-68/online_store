@@ -26,8 +26,6 @@ class OrderSerializer(serializers.ModelSerializer):
     """
     products = ProductSerializer(many=True)
 
-
-
     class Meta:
         model = Order
         fields = ('createdAt', 'deliveryType', 'paymentType',

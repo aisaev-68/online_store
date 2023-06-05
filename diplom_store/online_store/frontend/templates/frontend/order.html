@@ -23,6 +23,7 @@
     <div class="Section Section_column Section_columnRight Section_columnWide Order">
         <div class="wrap">
             <div class="Section-column">
+                {% if user.is_authenticated %}
                 <div class="Section-columnSection">
                     <header class="Section-header">
                         <strong class="Section-title">Прогресс заполнения
@@ -53,10 +54,10 @@
                         </ul>
                     </div>
                 </div>
-
+                {% endif %}
             </div>
             <div class="Section-content">
-
+                {% if user.is_authenticated %}
                 <form class="form" action="#" method="post" @submit.prevent="confirmOrder">
                     <div class="Order-block Order-block_OPEN" id="step1">
                         <header class="Section-header Section-header_sm">
@@ -66,19 +67,20 @@
                         <div class="row">
                             <div class="row-block">
                                 <div class="form-group">
+                                    {{ fullName }}
                                     <label class="form-label" for="name">ФИО</label>
-                                    <input class="form-input" v-model="order.fullName" id="name" name="name" type="text"
-                                           value="{{ user.username }}"/>
+                                    <input class="form-input" :v-model="fullName" id="name" name="name" type="text"
+                                           value="{{ user.fullName }}"/>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label" for="phone">Телефон</label>
-                                    <input class="form-input" v-model="order.phone" id="phone" name="phone" type="text"
-                                           value="+70000000000"/>
+                                    <input class="form-input" :v-model="order.phone" id="phone" name="phone" type="text"
+                                           value="{{ user.phone }}"/>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label" for="mail">E-mail</label>
-                                    <input class="form-input" v-model="order.email" id="mail" name="mail" type="text"
-                                           value="" data-validate="require"/>
+                                    <input class="form-input" :v-model="order.email" id="mail" name="mail" type="text"
+                                           value="{{ user.email }}" data-validate="require"/>
                                 </div>
                             </div>
                         </div>
@@ -93,21 +95,23 @@
                         <div class="form-group">
                             <div>
                                 <label class="toggle">
-                                    <input type="radio" v-model="order.deliveryType" name="delivery" value="ordinary"
+                                    <input type="radio" :v-model="order.deliveryType" name="delivery" value="ordinary"
                                            checked="checked"/><span class="toggle-box"></span><span class="toggle-text">Обычная доставка</span>
                                 </label>
                             </div>
                             <div>
                                 <label class="toggle">
-                                    <input type="radio" v-model="order.deliveryType" name="delivery"
-                                           value="express"/><span class="toggle-box"></span><span class="toggle-text">Экспресс доставка</span>
+                                    <input type="radio" :v-model="order.deliveryType" name="delivery"
+                                           value="express"/>
+                                    <span class="toggle-box"></span>
+                                    <span class="toggle-text">Экспресс доставка</span>
                                 </label>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="form-label" for="city">Город
                             </label>
-                            <input class="form-input" v-model="order.city" id="city" name="city" type="text"/>
+                            <input class="form-input" :v-model="order.city" id="city" name="city" type="text" value="{{ order.city }}"/>
                         </div>
                         <div class="form-group">
                             <label class="form-label" for="address">Адрес
@@ -238,26 +242,26 @@
                         </div>
                     </div>
                 </form>
-
-                <!--        <div class="row-block">-->
-                <!--          <form action="/auth/signin?next={{request.get_full_path}}" method="post">-->
-                <!--            {% csrf_token %}-->
-                <!--            <div class="form-group">-->
-                <!--              <label class="form-label" for="login">Логин</label>-->
-                <!--              <input class="form-input" id="login" name="login" type="text" placeholder="Login"/>-->
-                <!--            </div>-->
-                <!--            <div class="form-group">-->
-                <!--              <label class="form-label" for="password">Пароль</label>-->
-                <!--              <input class="form-input" id="password" name="password" type="password" placeholder="Password"/>-->
-                <!--            </div>-->
-                <!--            <div class="form-group">-->
-                <!--              <button class="btn btn_muted Order-btnReg" type="submit">Авторизация</button>-->
-                <!--            </div>-->
-                <!--            <div class="form-group"><a class="btn btn_muted Order-btnReg" href="/auth/signup">Регистрация</a>-->
-                <!--          </div>-->
-                <!--          </form>-->
-                <!--        </div>-->
-
+                {% else %}
+                <div class="row-block">
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label class="form-label" for="login">Логин</label>
+                        <input class="form-input" id="login" name="login" type="text" placeholder="Login"/>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="password">Пароль</label>
+                        <input class="form-input" id="password" name="password" type="password" placeholder="Password"/>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn_muted Order-btnReg" type="submit">Авторизация</button>
+                    </div>
+                    <div class="form-group"><a class="btn btn_muted Order-btnReg" href="">Регистрация</a>
+                    </div>
+                </form>
+                </div>
+                {% endif %}
             </div>
         </div>
     </div>

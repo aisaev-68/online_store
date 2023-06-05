@@ -1,8 +1,6 @@
 import os
-
 from decouple import config
 from django.urls import reverse_lazy
-
 from django.utils.translation import gettext_lazy as _
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -12,16 +10,13 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1', config('ALLOWED_HOSTS', default='loca
 USER_ADMIN = config('USER_ADMIN')
 EMAIL = config('EMAIL')
 PASSWORD = config('PASSWORD')
-# APPEND_SLASH = False
-
 CART_SESSION_ID = 'cart'
 
-FIXTURE_DIRS =['online_store/tests/fixtures/']
+FIXTURE_DIRS = ['online_store/tests/fixtures/']
 
 AUTH_USER_MODEL = 'account.User'
 
 CSRF_FAILURE_VIEW = 'online_store.views.error_403'
-
 
 SWAGGER_SETTINGS = {
     "DEFAULT_MODEL_RENDERING": "example"
@@ -85,17 +80,15 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'online_store.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR,  config('DB_NAME', default='db.sqlite3')),
+        'NAME': os.path.join(BASE_DIR, config('DB_NAME', default='db.sqlite3')),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -114,26 +107,14 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
+    'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.SessionAuthentication',
-    ),
-    # 'DEFAULT_PERMISSION_CLASSES': [
-    #     'rest_framework.permissions.AllowAny',
-    # ],
-    # 'DEFAULT_AUTHENTICATION_CLASSES': [
-    #     'rest_framework.authentication.TokenAuthentication',
-    # ],
-    # 'DEFAULT_PARSER_CLASSES': (
-    #     'rest_framework.parsers.FormParser',
-    #     'rest_framework.parsers.MultiPartParser'
-    # ),
+    ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 8
 }
-
-# AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.ModelBackend',]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
@@ -145,18 +126,18 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
+
 SHORT_DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-
-STATIC_URL = 'static/'
-#STATICFILES_DIRS = os.path.join(BASE_DIR, 'frontend')
+STATIC_URL = '/static/'
+# STATICFILES_DIRS = [os.path.join(BASE_DIR, 'frontend')]
 
 LOGOUT_REDIRECT_URL = '/'
 
-# media directory in the root directory
+# Media directory in the root directory
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
@@ -165,9 +146,7 @@ MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
-
 SESSION_COOKIE_AGE = 30 * 24 * 60 * 60
-
 
 PAYMENT_METHODS = [
     ('paypal', 'PayPal'),
