@@ -5,6 +5,8 @@ import locale
 from product.models import Product, Review, Sale, ProductImage, Rating, Seller, Manufacturer, Specification
 from tag.serializers import TagSerializer
 
+
+
 locale.setlocale(locale.LC_ALL, 'ru_RU.UTF-8')
 
 
@@ -55,6 +57,7 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = ('id', 'category', 'price', 'count', 'date', 'title', 'description', 'href', 'freeDelivery',
                   'images', 'tags', 'reviews', 'rating')
 
+
     def get_reviews(self, obj):
         return obj.reviews.count()
 
@@ -68,12 +71,15 @@ class ProductSerializer(serializers.ModelSerializer):
         return obj.href()
 
     def get_description(self, obj):
-        if len(obj.fullDescription) > 50:
-            return f'{obj.fullDescription[:50]}...'
-        return obj.fullDescription
+        if hasattr(obj, 'fullDescription'):
+            if len(obj.fullDescription) > 50:
+                return f'{obj.fullDescription[:50]}...'
+            return obj.fullDescription
+
 
     def get_tags(self, obj):
         return [tag.name for tag in obj.tags.all()]
+
 
 
 class SaleSerializer(serializers.ModelSerializer):

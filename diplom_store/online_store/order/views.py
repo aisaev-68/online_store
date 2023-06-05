@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.core.paginator import Paginator
 from django.shortcuts import render
 from django.views import View
@@ -11,15 +13,17 @@ from drf_yasg.utils import swagger_auto_schema
 
 from account.models import User
 from cart.cart import Cart
-from order.models import Order
-from order.serializers import OrderSerializer
+from order.models import Order, OrderProducts
+from order.serializers import OrderSerializer, OrderActiveSerializer
 
 from product.serializers import ProductSerializer
 
 
+
+
 class OrderView(APIView):
-    # permission_classes = (IsAuthenticated,)
-    # authentication_classes = (SessionAuthentication,)
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (SessionAuthentication,)
     serializer_class = OrderSerializer
 
     def get(self, request, *args, **kwargs):
@@ -33,70 +37,33 @@ class OrderView(APIView):
         responses={201: OrderSerializer}
     )
     def post(self, request):
-        products_data = request.data  # Получаем данные о продуктах из запроса
-        print("PRODUCTS", products_data)
-        serializer = self.serializer_class(data={"products": request.data})  # Создаем экземпляр сериализатора с полученными данными
-        #print(1111111, serializer.data)
-        if serializer.is_valid(raise_exception=True):
-            print(111, serializer.data)
-            # Действия с сериализованными данными
-        else:
-            print(2222, serializer.errors)
-        # if serializer.is_valid(raise_exception=True):
-        #     products = serializer.validated_data.get('products', [])  # Извлекаем данные о продуктах
-        #     print("PRODUCTS", products)
-        #     if not products:
-        #         raise ValidationError('No products provided.')
-
-        # Дополнительные проверки и обработка продуктов
-        # ...
-
-        # Создание заказа и сохранение данных
-        # order = Order.objects.create()
-        # order.products.set(products)
-        #
-        # # Очистка корзины в сессии
-        # request.session.pop('cart')
-
-        # Возвращаем успешный ответ с данными о заказе
-        response_data = {
-            "orderId": "123",
-            "createdAt": "2023-05-05 12:12",
-            "fullName": "Annoying Orange",
-            "email": "no-reply@mail.ru",
-            "phone": "88002000600",
-            "deliveryType": "free",
-            "paymentType": "online",
-            "totalCost": 567.8,
-            "status": "accepted",
-            "city": "Moscow",
-            "address": "red square 1",
-            "products": [
-                {
-                    "id": "123",
-                    "category": "55",
-                    "price": 500.67,
-                    "count": 12,
-                    "date": "Thu Feb 09 2023 21:39:52 GMT+0100 (Central European Standard Time)",
-                    "title": "video card",
-                    "description": "description of the product",
-                    "href": "/catalog/123",
-                    "freeDelivery": True,
-                    "images": [
-                        "string"
-                    ],
-                    "tags": [
-                        "string"
-                    ],
-                    "reviews": 5,
-                    "rating": 4.6
-                }
-            ]
+        print(request.data)
+        carts = Cart(request).cart # list(cart.keys() index
+        products_data = request.data  # Получаем данные товара из параметра запроса
+        order = Order.objects.create()
+        # product_ids = [product_data['id'] for product_data in products_data]
+        # products = Product.objects.filter(id__in=product_ids)
+        total_cost = 0
+        for key, value in carts.items():
+            OrderProducts.objects.create(order_id=order.id, product_id=key, count_in_order=value['quantity'])
+            total_cost += Decimal(value['quantity']) * Decimal(value['price'])
+        order.totalCost = total_cost
+        order.save()
+        context = {
+            "orderId": order.pk,
+            "createdAt": order.createdAt.strftime('%Y-%m-%d %H:%M'),
+            "fullName": request.user.fullName if not request.user.is_anonymous else "",
+            "email": order.user.email if request.user.is_anonymous else "",
+            "phone": order.user.phone if request.user.is_anonymous else "",
+            "deliveryType": order.deliveryType,
+            "paymentType": order.paymentType,
+            "totalCost": order.totalCost,
+            "status": order.status,
+            "city": order.city if order.city else "",
+            "address": order.address if order.address else "",
+            "products": products_data
         }
-        return Response(response_data, status=201)
-
-    # return Response(status=400)
-
+        return Response(context)
 
 class OrderByIdView(View):
     permission_classes = (IsAuthenticated,)
@@ -116,12 +83,27 @@ class OrderByIdView(View):
 class OrderActiveView(APIView):
 
     def get(self, request, *args, **kwargs):
-        order = Order.objects.all()
-        print("ORDER", order)
-        cart = Cart(request).cart
+        order = Order.objects.filter(status='В процессе').first()
+        print("ORDER_ACTIVE", Cart(request).cart)
+        serialize = OrderActiveSerializer(data=order)
+        if serialize.is_valid():
+            print("REQUEST_SESSION", serialize.data)
+        else:
+            print('ERROR')
+        # serializer = OrderSerializer(order)
 
-        if cart:
-            for product in order.products.all():
-                product.count = cart.get(str(product.pk)).get('count')
-        serializer = OrderSerializer(order)
-        return Response(serializer.data)
+        context = {
+            "orderId": order.pk,
+            "createdAt": order.createdAt.strftime('%Y-%m-%d %H:%M'),
+            "fullName": request.user.fullName if not request.user.is_anonymous else "",
+            "email": order.user.email if request.user.is_anonymous else "",
+            "phone": order.user.phone if request.user.is_anonymous else "",
+            "deliveryType": order.deliveryType,
+            "paymentType": order.paymentType,
+            "totalCost": order.totalCost,
+            "status": order.status,
+            "city": order.city if order.city else "",
+            "address": order.address if order.address else "",
+            "products": serialize.data
+        }
+        return Response(context)

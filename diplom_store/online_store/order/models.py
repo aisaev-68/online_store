@@ -13,12 +13,12 @@ class Order(models.Model):  # Заказы
         null=True
     )
     products = models.ManyToManyField(Product, verbose_name=_('товары в заказе'),
-                                      through='OrderProducts', related_name='order_orderss')
+                                      through='OrderProducts', related_name='order_orders')
 
     createdAt = models.DateField(auto_now_add=True, verbose_name=_('created order'))
     deliveryType = models.BooleanField(default=False, verbose_name=_('availability of free shipping'))
     paymentType = models.TextField(max_length=50, default='credit_card', verbose_name=_('payment method'))
-    status = models.TextField(max_length=50, default='pending_payment', verbose_name=_('payment state'))
+    status = models.TextField(max_length=50, default='В процессе', verbose_name=_('payment state'))
     city = models.TextField(max_length=100, default=_('not specified'), verbose_name=_('delivery city'))
     address = models.TextField(max_length=100, default=_('not specified'), verbose_name=_('delivery address'))
     totalCost = models.IntegerField(default=0, verbose_name=_('total order value'))
