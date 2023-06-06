@@ -2,6 +2,8 @@ import datetime
 
 from rest_framework import serializers
 import locale
+
+from catalog.models import Category
 from product.models import Product, Review, Sale, ProductImage, Rating, Seller, Manufacturer, Specification
 from tag.serializers import TagSerializer
 
@@ -20,10 +22,12 @@ class ReviewSerializer(serializers.ModelSerializer):
         # fields = ('author', 'email', 'text', 'date')
         fields = ('id',)
 
+
 class RatingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Rating
         fields = ('rating', 'count')
+
 
 class CurrentLastPageSerializer(serializers.Serializer):
     current_page = serializers.SerializerMethodField()
@@ -76,6 +80,31 @@ class ProductSerializer(serializers.ModelSerializer):
         return [tag.name for tag in obj.tags.all()]
 
 
+class ProductOrderSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField()
+    price = serializers.DecimalField(max_digits=10, decimal_places=2)
+    count = serializers.IntegerField()
+    date = serializers.DateTimeField()
+    title = serializers.CharField()
+    description = serializers.CharField()
+    href = serializers.CharField()
+    freeDelivery = serializers.BooleanField()
+    rating = serializers.DecimalField(decimal_places=1, max_digits=2, source='rating_info.rating')
+
+    class Meta:
+        model = Product
+        fields = ('id', 'category', 'price', 'count', 'date', 'title', 'description', 'href',
+                  'freeDelivery', 'images', 'tags', 'reviews', 'rating')
+
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['category'] = instance.category.pk
+        data['images'] = ProductImageSerializer(instance.images.all(), many=True).data
+        data['tags'] = [tag.name for tag in instance.tags.all()]
+        data['reviews'] = instance.reviews.count()
+        return data
+
 class SaleSerializer(serializers.ModelSerializer):
     """
     Сериализация товаров со скидками
@@ -86,6 +115,7 @@ class SaleSerializer(serializers.ModelSerializer):
 
     def get_price(self, obj):
         return obj.product.price
+
     def get_images(self, obj):
         product_images = obj.product.images.all()
         return [image.src() for image in product_images]

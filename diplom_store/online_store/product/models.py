@@ -52,8 +52,8 @@ class Product(models.Model):  # товар
         self.save()
 
     def rating_info(self):
-        rating_info, created = Rating.objects.get_or_create(product=self)
-        return rating_info
+        # rating_info, created = Rating.objects.get_or_create(product=self)
+        return float(self.rating_info.rating)
 
     def reviews_list(self):
         return list(self.reviews.all())
@@ -91,8 +91,8 @@ class Product(models.Model):  # товар
             return salePrice.salePrice
         return self.price
 
-    def id(self):
-        return f'{self.pk}'
+    # def id(self):
+    #     return f'{self.pk}'
 
     def __str__(self):
         return self.title
