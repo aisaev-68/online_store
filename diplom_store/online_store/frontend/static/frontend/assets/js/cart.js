@@ -11,12 +11,20 @@ var mix = {
           const headers = {
             'X-CSRFToken': csrfToken
           };
+          if (!this.isAuthenticated) {
+          //alert(response)
+            // Перенаправление на страницу входа для анонимного пользователя
+            location.assign('/login');
+            return;
+          }
 
           this.postData('/api/orders/', Object.values(this.basket), { headers })
             .then(data => {
+            //alert("aadd")
               this.order.id = data.id;
               this.order.products = data.products;
               this.basket = {};
+              this.isAuthenticated = true;
               location.assign('/order');
             })
             .catch(() => {
@@ -30,7 +38,7 @@ var mix = {
         const cookies = document.cookie.split(';');
         for (let i = 0; i < cookies.length; i++) {
           const cookie = cookies[i].trim();
-          // Does this cookie string begin with the name we want?
+          // Начинается ли эта строка cookie с имени, которое нам нужно
           if (cookie.substring(0, name.length + 1) === name + '=') {
             cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
             break;

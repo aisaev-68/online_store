@@ -104,13 +104,13 @@ class MyLoginView(View):
             if user is not None:
                 if user.is_active:
                     login(request, user)
-                    return redirect('/account')
+                    return redirect('account')
+                    # return redirect(request.get_full_path())
                 else:
                     messages.error(request, _('Disabled account.'))
-                    return redirect('login')
             else:
                 messages.error(request, _('Password or username does not match.'))
-                return redirect('login')
+        return redirect('login')
 
 
 class MyLogoutView(LogoutView):
