@@ -10,6 +10,8 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1', config('ALLOWED_HOSTS', default='loca
 USER_ADMIN = config('USER_ADMIN')
 EMAIL = config('EMAIL')
 PASSWORD = config('PASSWORD')
+ANONYMOUS_USER = config('ANONYMOUS_USER')
+ANONYMOUS_USER_PASSWORD = config('ANONYMOUS_USER_PASSWORD')
 CART_SESSION_ID = 'cart'
 
 FIXTURE_DIRS = ['online_store/tests/fixtures/']
