@@ -104,6 +104,7 @@ class MyLoginView(View):
             if user is not None:
                 if user.is_active:
                     login(request, user)
+                    request.session['is_authenticated'] = True
                     return redirect('account')
                     # return redirect(request.get_full_path())
                 else:

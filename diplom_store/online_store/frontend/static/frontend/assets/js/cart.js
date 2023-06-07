@@ -8,19 +8,20 @@ var mix = {
         },
         submitBasket() {
           const csrfToken = this.getCookie('csrftoken');
+          const authenticated = this.getCookie('is_authenticated');
+          alert(authenticated)
           const headers = {
             'X-CSRFToken': csrfToken
           };
-          if (!this.isAuthenticated) {
-          //alert(response)
+          if (!this.authenticated) {
+            alert('Пользователь не аутентифицирован');
             // Перенаправление на страницу входа для анонимного пользователя
             location.assign('/login');
             return;
           }
-
           this.postData('/api/orders/', Object.values(this.basket), { headers })
             .then(data => {
-            //alert("aadd")
+              alert('Запрос успешно выполнен');
               this.order.id = data.id;
               this.order.products = data.products;
               this.basket = {};
@@ -44,7 +45,8 @@ var mix = {
             break;
           }
         }
-      }
+      };
+      alert('aaaa');
       return cookieValue;
     },
     },
