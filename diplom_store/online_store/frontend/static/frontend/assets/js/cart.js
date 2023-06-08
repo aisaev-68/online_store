@@ -8,28 +8,34 @@ var mix = {
         },
         submitBasket() {
           const csrfToken = this.getCookie('csrftoken');
-          const authenticated = this.getCookie('is_authenticated');
-          alert(authenticated)
           const headers = {
             'X-CSRFToken': csrfToken
           };
-          if (!this.authenticated) {
-            alert('Пользователь не аутентифицирован');
-            // Перенаправление на страницу входа для анонимного пользователя
-            location.assign('/login');
-            return;
-          }
-          this.postData('/api/orders/', Object.values(this.basket), { headers })
+
+          fetch('/api/check-authentication/', { headers })
+            .then(response => response.json())
             .then(data => {
-              alert('Запрос успешно выполнен');
-              this.order.id = data.id;
-              this.order.products = data.products;
-              this.basket = {};
-              this.isAuthenticated = true;
-              location.assign('/order');
+              if (data.is_authenticated) {
+                // Пользователь аутентифицирован
+                this.postData('/api/orders/', Object.values(this.basket), { headers })
+                  .then(data => {
+                    alert('Запрос успешно выполнен');
+                    this.order.id = data.id;
+                    this.order.products = data.products;
+                    this.basket = {};
+                    location.assign('/order');
+                  })
+                  .catch(() => {
+                    console.warn('Ошибка при создании заказа');
+                  });
+              } else {
+                // Пользователь не аутентифицирован
+                alert('Пользователь не аутентифицирован');
+                location.assign('/login');
+              }
             })
             .catch(() => {
-              console.warn('Ошибка при создании заказа');
+              console.warn('Ошибка при проверке аутентификации пользователя');
             });
         },
       getCookie(name) {

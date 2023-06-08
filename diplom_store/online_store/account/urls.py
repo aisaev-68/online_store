@@ -3,7 +3,7 @@ from django.contrib.auth import views
 from django.views.generic import TemplateView
 
 
-from account.views import SettingsAPIView, AccountUser, RegisterView, MyLoginView, MyLogoutView, UserProfileView, UserAvatarView, UserPasswordChangeView, HistoryOrder
+from account.views import CheckAuthenticationAPI, SettingsAPIView, AccountUser, RegisterView, MyLoginView, MyLogoutView, UserProfileView, UserAvatarView, UserPasswordChangeView, HistoryOrder
 
 app_name = 'account'
 urlpatterns = [
@@ -13,6 +13,7 @@ urlpatterns = [
     path('api/profile/password/', UserPasswordChangeView.as_view(), name='user-password-change'),
     path('api/history-order/', HistoryOrder.as_view(), name='history_order'),
     path('api/settings/', SettingsAPIView.as_view(), name='settings'),
+    path('api/check-authentication/', CheckAuthenticationAPI.as_view(), name='check_authentication_api'),
     # path('register/', RegisterView.as_view(), name='register'),
     # path('login/', MyLoginView.as_view(), name='login'),
     # path('logout/', MyLogoutView.as_view(), name='logout'),

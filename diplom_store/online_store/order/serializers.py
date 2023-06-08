@@ -1,7 +1,7 @@
 import datetime
 
 from rest_framework import serializers
-from order.models import Order
+from order.models import Order, OrderProducts
 from product.serializers import ProductSerializer, ProductOrderSerializer
 
 class OrderSerializer(serializers.ModelSerializer):
@@ -28,19 +28,15 @@ class OrderProductSerializer(serializers.ModelSerializer):
     """
     Сериализация заказа
     """
-    products = ProductOrderSerializer(many=True)
+    # products = ProductOrderSerializer(many=True)
 
 
     class Meta:
         model = Order
-        fields = ('createdAt', 'deliveryType', 'paymentType',
-                  'totalCost', 'status', 'city', 'address', 'products')
+        fields = ('orderId', 'createdAt', 'fullName', 'email', 'deliveryType', 'paymentType',
+                  'totalCost', 'status', 'city', 'address')
 
     def to_representation(self, obj):
         data = super().to_representation(obj)
-        data["orderId"] = obj.id
         data["createdAt"] = obj.createdAt.strftime('%Y-%m-%d %H:%M')
-        data["fullName"] = obj.user.fullName
-        data["email"] = obj.user.email
-        data["phone"] = obj.user.phone
         return data

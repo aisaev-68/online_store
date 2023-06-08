@@ -38,9 +38,10 @@ class OrderView(APIView):
 
     def post(self, request):
         if request.user.is_authenticated:
+            order_products = []
             user = request.user
             products_data = request.data  # Получаем данные о продуктах из запроса
-
+            print("PRODUCTS_DATA", products_data)
             order = Order.objects.create(user=user)
             for product_data in products_data:
                 order_product = OrderProducts()
@@ -50,10 +51,29 @@ class OrderView(APIView):
                 # Задайте остальные поля
                 order_product.save()
 
-            serializer = OrderProductSerializer(instance=order)
-            print("SER", serializer.data)
+                # product_dict = {
+                #     'id': product_data['id'],
+                #     'category': product_data['category'],
+                #     'price': product_data['price'],
+                #     'count': product_data['count'],
+                #     'date': product_data['date'],
+                #     'title': product_data['title'],
+                #     'description': product_data['description'],
+                #     'href': product_data['href'],
+                #     'freeDelivery': product_data['freeDelivery'],
+                #     'images': [{'image': image} for image in product_data['images']],
+                #     'tags': product_data['tags'],
+                #     'reviews': product_data['reviews'],
+                #     'rating': product_data['rating']
+                # }
+                # order_products.append(product_dict)
 
-            return Response(serializer.data, status=201)
+
+            orders = OrderProductSerializer(instance=order).data
+            orders['products'] = products_data
+            print("SER", orders)
+
+            return Response(orders, status=201)
         else:
             # return Response({"detail": "Authentication required."}, status=401)
             return render(request, 'account/login.html', context={"form": LoginForm()})

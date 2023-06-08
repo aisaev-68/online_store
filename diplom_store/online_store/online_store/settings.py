@@ -150,20 +150,20 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 SESSION_COOKIE_AGE = 30 * 24 * 60 * 60
 
-PAYMENT_METHODS = [
+PAYMENT_METHODS = (
     ('paypal', 'PayPal'),
     ('credit_card', _('Credit Card')),
     # Другие методы оплаты
-]
+)
 
-SHIPPING_METHODS = [
+SHIPPING_METHODS = (
     ('standard', _('Standard Shipping')),
     ('express', _('Express Shipping')),
     # Другие методы доставки
-]
+)
 
-ORDER_STATUSES = [
+ORDER_STATUSES = (
     ('pending_payment', 'В процессе'),
     ('paid', 'Оплачено'),
     ('payment_error', 'Ошибка оплаты'),
-]
+)

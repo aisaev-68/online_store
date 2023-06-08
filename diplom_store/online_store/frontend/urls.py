@@ -9,7 +9,7 @@ urlpatterns = [
     path('', TemplateView.as_view(template_name="frontend/index.html")),
     path('about/', TemplateView.as_view(template_name="frontend/about.html")),
     path('account/', TemplateView.as_view(template_name="frontend/account.html"), name='account'),
-    path('cart/', TemplateView.as_view(template_name="frontend/cart.html")),
+    path('cart/', TemplateView.as_view(template_name="frontend/cart.html"), name='cart'),
     path('catalog/', TemplateView.as_view(template_name="frontend/catalog.html")),
     path('catalog/<int:pk>', TemplateView.as_view(template_name="frontend/catalog.html")),
     path('history-order/', TemplateView.as_view(template_name="frontend/historyorder.html")),

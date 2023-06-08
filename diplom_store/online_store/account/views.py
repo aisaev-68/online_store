@@ -14,6 +14,7 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from cart.cart import Cart
 from online_store import settings
 from account.forms import UserRegistrationForm, LoginForm
 from account.serializers import UserPasswordChangeSerializer, UserAvatarSerializer, UserSerializer
@@ -91,6 +92,7 @@ class MyLoginView(View):
     """
     redirect_authenticated_user = True
 
+
     def get(self, request):
         context = {"form": LoginForm()}
         return render(request, 'account/login.html', context=context)
@@ -105,6 +107,8 @@ class MyLoginView(View):
                 if user.is_active:
                     login(request, user)
                     request.session['is_authenticated'] = True
+                    if Cart(request).cart:
+                        return redirect('cart')
                     return redirect('account')
                     # return redirect(request.get_full_path())
                 else:
@@ -249,3 +253,10 @@ class SettingsAPIView(APIView):
             return Response(serializer.data)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CheckAuthenticationAPI(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        is_authenticated = request.user.is_authenticated
+        return Response({"is_authenticated": is_authenticated})
