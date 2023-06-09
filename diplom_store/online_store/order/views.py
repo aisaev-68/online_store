@@ -39,6 +39,7 @@ class OrderView(APIView):
     def post(self, request):
         if request.user.is_authenticated:
             order_products = []
+            total = 0
             user = request.user
             products_data = request.data  # Получаем данные о продуктах из запроса
             print("PRODUCTS_DATA", products_data)
@@ -47,33 +48,19 @@ class OrderView(APIView):
                 order_product = OrderProducts()
                 order_product.order = order
                 order_product.product_id = product_data['id']
-                order_product.count_in_order = product_data['count']
+                order_product.count_product = product_data['count']
+                total += product_data['count'] * product_data['price']
                 # Задайте остальные поля
                 order_product.save()
-
-                # product_dict = {
-                #     'id': product_data['id'],
-                #     'category': product_data['category'],
-                #     'price': product_data['price'],
-                #     'count': product_data['count'],
-                #     'date': product_data['date'],
-                #     'title': product_data['title'],
-                #     'description': product_data['description'],
-                #     'href': product_data['href'],
-                #     'freeDelivery': product_data['freeDelivery'],
-                #     'images': [{'image': image} for image in product_data['images']],
-                #     'tags': product_data['tags'],
-                #     'reviews': product_data['reviews'],
-                #     'rating': product_data['rating']
-                # }
-                # order_products.append(product_dict)
-
+            order.totalCost = total
+            order.user = request.user
+            order.save()
 
             orders = OrderProductSerializer(instance=order).data
-            orders['products'] = products_data
+            # orders['products'] = products_data
             print("SER", orders)
 
-            return Response(orders, status=201)
+            return Response([orders], status=201)
         else:
             # return Response({"detail": "Authentication required."}, status=401)
             return render(request, 'account/login.html', context={"form": LoginForm()})
@@ -99,8 +86,9 @@ class OrderByIdView(View):
 class OrderActiveView(APIView):
 
     def get(self, request, *args, **kwargs):
-        order = Order.objects.filter(status='В процессе').first()
-        print("ORDER", order)
+        order = Order.objects.filter(status='Order not paid').order_by('-createdAt').first()
+
         cart = Cart(request).cart
         serializer = OrderProductSerializer(order)
+        print("ORDER_ACTIVE", serializer.data)
         return Response(serializer.data)

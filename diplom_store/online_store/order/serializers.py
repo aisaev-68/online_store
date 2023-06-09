@@ -23,18 +23,27 @@ class OrderSerializer(serializers.ModelSerializer):
         data['createdAt'] = obj.createdAt.strftime('%Y-%m-%d %H:%M')
         return data
 
+class OrderProductsSerializer(serializers.ModelSerializer):
+    product = serializers.SerializerMethodField()
+
+    class Meta:
+        model = OrderProducts
+        fields = ('product',)
+
+    def get_product(self, instance):
+        product_serializer = ProductOrderSerializer(instance.product)
+        serialized_product = product_serializer.data
+        serialized_product['count'] = instance.count_product
+        print("NNNNNN", serialized_product)
+        return serialized_product
 
 class OrderProductSerializer(serializers.ModelSerializer):
-    """
-    Сериализация заказа
-    """
-    # products = ProductOrderSerializer(many=True)
-
+    products = OrderProductsSerializer(source='orderproducts_set.all', many=True)
 
     class Meta:
         model = Order
-        fields = ('orderId', 'createdAt', 'fullName', 'email', 'deliveryType', 'paymentType',
-                  'totalCost', 'status', 'city', 'address')
+        fields = ('orderId', 'createdAt', 'fullName', 'email', 'phone', 'deliveryType', 'paymentType',
+                  'totalCost', 'status', 'city', 'address', 'products')
 
     def to_representation(self, obj):
         data = super().to_representation(obj)

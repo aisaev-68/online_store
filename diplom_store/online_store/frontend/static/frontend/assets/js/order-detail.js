@@ -2,6 +2,7 @@ var mix = {
     methods: {
         getOrder(orderId) {
             this.getData('/api/orders/active').then(data => {
+            console.log('Получены данные активного заказа:', data);
                 this.orderId = data.orderId
                 this.createdAt = data.createdAt
                 this.fullName = data.fullName
@@ -19,7 +20,15 @@ var mix = {
                 }
 
             })
-            alert(this.city)
+             .catch(error => {
+              console.error('Ошибка при получении активного заказа:', error);
+              console.warn('Ошибка при получении активного заказа');
+            })
+            .finally(() => {
+              console.log('Завершена функция getOrder');
+
+              alert(this.city);
+            });
         },
         confirmOrder() {
             if (this.order) {
@@ -37,7 +46,7 @@ var mix = {
         }
     },
     mounted() {
-        //this.getOrder(pk);
+        //this.getOrder(orderId);
 
     },
     data() {

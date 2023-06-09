@@ -1,3 +1,4 @@
+from django.core.validators import RegexValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from online_store import settings
@@ -14,11 +15,13 @@ class Order(models.Model):  # Заказы
         null=True
     )
     products = models.ManyToManyField(Product, verbose_name=_('goods in order'),
-                                      through='OrderProducts', related_name='order_orders')
+                                      through='OrderProducts', related_name='order_products')
 
     createdAt = models.DateTimeField(auto_now_add=True, verbose_name=_('created order'))
     fullName = models.CharField(max_length=100, default='', verbose_name=_('full name'))
     email = models.EmailField(verbose_name='email')
+    phone = models.CharField(max_length=16,
+                             validators=[RegexValidator(regex=r"^\+?1?\d{8,15}$")], verbose_name=_('phone'))
     deliveryType = models.CharField(max_length=50, default='', choices=settings.SHIPPING_METHODS, verbose_name=_('availability of free shipping'))
     paymentType = models.CharField(max_length=50, choices=settings.PAYMENT_METHODS, default='', verbose_name=_('payment method'))
     status = models.TextField(max_length=50, choices=settings.ORDER_STATUSES, default='Order not paid', verbose_name=_('payment state'))

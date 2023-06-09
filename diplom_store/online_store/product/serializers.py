@@ -81,14 +81,10 @@ class ProductSerializer(serializers.ModelSerializer):
 
 
 class ProductOrderSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField()
-    price = serializers.DecimalField(max_digits=10, decimal_places=2)
-    count = serializers.IntegerField()
-    date = serializers.DateTimeField()
-    title = serializers.CharField()
-    description = serializers.CharField()
-    href = serializers.CharField()
-    freeDelivery = serializers.BooleanField()
+    category = serializers.PrimaryKeyRelatedField(read_only=True)
+    images = serializers.SerializerMethodField()
+    tags = serializers.SerializerMethodField()
+    reviews = serializers.SerializerMethodField()
     rating = serializers.DecimalField(decimal_places=1, max_digits=2, source='rating_info.rating')
 
     class Meta:
@@ -96,14 +92,16 @@ class ProductOrderSerializer(serializers.ModelSerializer):
         fields = ('id', 'category', 'price', 'count', 'date', 'title', 'description', 'href',
                   'freeDelivery', 'images', 'tags', 'reviews', 'rating')
 
+    def get_images(self, instance):
+        images = instance.images.all()
+        image_urls = [image.image.url for image in images]
+        return image_urls
 
-    def to_representation(self, instance):
-        data = super().to_representation(instance)
-        data['category'] = instance.category.pk
-        data['images'] = ProductImageSerializer(instance.images.all(), many=True).data
-        data['tags'] = [tag.name for tag in instance.tags.all()]
-        data['reviews'] = instance.reviews.count()
-        return data
+    def get_tags(self, instance):
+        return [tag.name for tag in instance.tags.all()]
+
+    def get_reviews(self, instance):
+        return instance.reviews.count()
 
 class SaleSerializer(serializers.ModelSerializer):
     """
