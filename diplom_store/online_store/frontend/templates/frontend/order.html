@@ -207,11 +207,10 @@
                             </div>
                             <div class="Cart Cart_order">
                                 <!-- Товар на оплату -->
-                                ${order}$
                                 <div v-for="product in order.products" class="Cart-product">
                                     <div class="Cart-block Cart-block_row">
                                         <div class="Cart-block Cart-block_pict">
-                                            <a class="Cart-pict" href="product.href">
+                                            <a class="Cart-pict" :href="product.product.href">
                                                 <img class="Cart-img"
                                                      :src="product.product.images && product.product.images.length ? product.product.images[0] : ''"
                                                      alt="product.product.title"/>
@@ -237,7 +236,8 @@
                             <div class="Cart-total">
                                 <div class="Cart-block Cart-block_total">
                                     <strong class="Cart-title">Итого:</strong>
-                                    <span class="Cart-price">${ order.products.reduce((acc, el) => {return acc += (el.price * el.count)}, 0) }$$</span>
+                                    <span class="Cart-price">${ order.totalCost }$$</span>
+<!--                                    <span class="Cart-price">${ order.products.reduce((acc, el) => {return acc += (el.price * el.count)}, 0) }$$</span>-->
                                 </div>
                                 <div class="Cart-block">
                                     <button class="btn btn_primary btn_lg" type="submit">Оплатить
