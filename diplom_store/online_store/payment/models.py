@@ -1,20 +1,23 @@
 from django.core.validators import MinValueValidator
+from django.utils.translation import gettext_lazy as _
 from django.db import models
 
 from online_store import settings
 
 
 class Payment(models.Model):
-    number = models.IntegerField(default=0, verbose_name='номер счета')
-    name = models.TextField(max_length=30, default='не указан')
-    month = models.DateField(auto_now_add=True)
-    year = models.DateField(auto_now_add=True)
-    code = models.IntegerField(default=0, verbose_name='код оплаты')
+    number = models.CharField(max_length=16, verbose_name=_('account number'))
+    name = models.CharField(max_length=150, verbose_name=_('name'))
+    month = models.CharField(max_length=2, verbose_name=_('month'))
+    year = models.CharField(max_length=4, verbose_name=_('year'))
+    code = models.CharField(max_length=3, verbose_name=_('payment code'))
 
     class Meta:
-        verbose_name = 'Оплата'
-        verbose_name_plural = 'Оплата'
+        verbose_name = _('Payment')
+        verbose_name_plural = _('Payments')
 
+    def __str__(self):
+        return self.number
 
 class PaymentSettings(models.Model):
     payment_methods = models.CharField(
@@ -39,5 +42,5 @@ class PaymentSettings(models.Model):
     # Дополнительные поля, связанные с настройками оплаты и доставки
 
     class Meta:
-        verbose_name_plural = 'Настройки оплаты и доставки'
+        verbose_name_plural = _('Payment and shipping settings')
 

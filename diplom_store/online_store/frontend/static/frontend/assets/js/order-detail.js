@@ -2,7 +2,7 @@ var mix = {
     methods: {
         getOrder(orderId) {
             this.getData('/api/orders/active').then(data => {
-            console.log('Получены данные активного заказа:', data);
+            //console.log('Получены данные активного заказа:', data);
                 this.orderId = data.orderId
                 this.createdAt = data.createdAt
                 this.fullName = data.fullName
@@ -21,32 +21,71 @@ var mix = {
 
             })
              .catch(error => {
-              console.error('Ошибка при получении активного заказа:', error);
+              //console.error('Ошибка при получении активного заказа:', error);
               console.warn('Ошибка при получении активного заказа');
             })
             .finally(() => {
-              console.log('Завершена функция getOrder');
+              //console.log('Завершена функция getOrder');
 
-              alert(this.city);
+              //alert(this.city);
             });
         },
+      getSettings() {
+      const csrfToken = this.getCookie('csrftoken');
+      this.getData("/api/settings/", {
+        headers: { 'X-CSRFToken': csrfToken }
+      })
+        .then(data => {
+          this.payment_methods = data.payment_methods;
+          this.shipping_methods = data.shipping_methods;
+          // Установка списков выбора для каждого поля
+          this.payment_methods_choices = data.payment_methods_choices;
+          this.shipping_methods_choices = data.shipping_methods_choices;
+        })
+        .catch(() => {
+          console.warn('Ошибка при получении настроек');
+        });
+        },
         confirmOrder() {
+            const csrfToken = this.getCookie('csrftoken');
             if (this.order) {
-                this.postData('/api/orders/' + this.order, {
-                   ...this.order
+
+                this.postData('/api/orders/' + this.order.orderId + '/', {
+                    ...this.order
+                }, {
+                    headers: {
+                        'X-CSRFToken': csrfToken
+                    }
                 })
-                    .then(() => {
-                        alert('Заказ подтвержден')
-                        location.replace('/payment')
-                    })
-                    .catch(() => {
-                        console.warn('Ошибка при подтверждения заказа')
-                    })
+                .then(() => {
+                    alert('Заказ подтвержден');
+                    location.replace('/payment');
+                })
+                .catch(() => {
+                    console.warn('Ошибка при подтверждении заказа');
+                });
             }
+        },
+        getCookie(name) {
+      // Получение значения куки по имени
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          // Does this cookie string begin with the name we want?
+          if (cookie.substring(0, name.length + 1) === name + '=') {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
         }
+      }
+      return cookieValue;
+    },
     },
     mounted() {
-        //this.getOrder(orderId);
+        this.getOrder(this.orderId);
+        this.getSettings();
 
     },
     data() {
@@ -64,6 +103,8 @@ var mix = {
             totalCost: null,
             products: [],
             paymentError: null,
+            payment_methods_choices: {},
+            shipping_methods_choices: {},
         }
     },
 }

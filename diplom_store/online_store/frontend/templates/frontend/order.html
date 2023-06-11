@@ -68,18 +68,18 @@
                             <div class="row-block">
                                 <div class="form-group">
                                     <label class="form-label" for="name">ФИО</label>
-                                    <input class="form-input" :v-model="fullName" id="name" name="name" type="text"
-                                           value="{{ user.fullName }}"/>
+                                    <input class="form-input" v-model="order.fullName" id="name" name="name" type="text"
+                                           value="{{ order.fullName }}"/>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label" for="phone">Телефон</label>
-                                    <input class="form-input" :v-model="order.phone" id="phone" name="phone" type="text"
-                                           value="{{ user.phone }}"/>
+                                    <input class="form-input" v-model="order.phone" id="phone" name="phone" type="text"
+                                           value="{{ order.phone }}"/>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label" for="mail">E-mail</label>
-                                    <input class="form-input" :v-model="order.email" id="mail" name="mail" type="text"
-                                           value="{{ user.email }}" data-validate="require"/>
+                                    <input class="form-input" v-model="order.email" id="mail" name="mail" type="text"
+                                           value="{{ order.email }}" data-validate="require"/>
                                 </div>
                             </div>
                         </div>
@@ -92,21 +92,29 @@
                             </h2>
                         </header>
                         <div class="form-group">
-                            <div>
+                            <div v-for="(value, key) in shipping_methods_choices" :value="key">
                                 <label class="toggle">
-                                    <input type="radio" v-model="order.deliveryType" name="delivery" value="ordinary"
-                                           checked="checked"/><span class="toggle-box"></span><span class="toggle-text">Обычная доставка</span>
-                                </label>
-                            </div>
-                            <div>
-
-                                <label class="toggle">
-                                    <input type="radio" v-model="order.deliveryType" name="delivery"
-                                           value="express"/>
+                                    <input type="radio" v-model="order.deliveryType" name="delivery" :value="value"
+                                           checked="checked"/>
+<!--                                    <input type="hidden" name="delivery" v-model="deliveryType" value="{{ order.deliveryType }}">-->
                                     <span class="toggle-box"></span>
-                                    <span class="toggle-text">Экспресс доставка</span>
+                                    <span class="toggle-text">${ value }$</span>
                                 </label>
                             </div>
+<!--                            <div>-->
+<!--                                <label class="toggle">-->
+<!--                                    <input type="radio" v-model="deliveryType" name="delivery" value="ordinary"-->
+<!--                                           checked="checked"/><span class="toggle-box"></span><span class="toggle-text">Обычная доставка</span>-->
+<!--                                </label>-->
+<!--                            </div>-->
+<!--                            <div>-->
+<!--                                <label class="toggle">-->
+<!--                                    <input type="radio" v-model="deliveryType" name="delivery"-->
+<!--                                           value="express"/>-->
+<!--                                    <span class="toggle-box"></span>-->
+<!--                                    <span class="toggle-text">Экспресс доставка</span>-->
+<!--                                </label>-->
+<!--                            </div>-->
                         </div>
                         <div class="form-group">
                             <label class="form-label" for="city">Город
@@ -129,21 +137,30 @@
                             </h2>
                         </header>
                         <div class="form-group">
-                            <div>
+                            <div v-for="(value, key) in payment_methods_choices" :value="key">
                                 <label class="toggle">
-                                    <input type="radio" v-model="order.paymentType" name="pay" value="online"
+                                    <input type="radio" v-model="order.paymentType" name="pay" :value="value"
                                            checked="checked"/>
+<!--                                    <input type="hidden" name="payment" v-model="paymentType" value="{{ order.paymentType }}">-->
                                     <span class="toggle-box"></span>
-                                    <span class="toggle-text">Онлайн картой</span>
+                                    <span class="toggle-text">${ value }$</span>
                                 </label>
                             </div>
-                            <div>
-                                <label class="toggle">
-                                    <input type="radio" v-model="order.paymentType" name="pay" value="someone"/><span
-                                        class="toggle-box"></span>
-                                    <span class="toggle-text">Онлайн со случайного чужого счета</span>
-                                </label>
-                            </div>
+<!--                            <div>-->
+<!--                                <label class="toggle">-->
+<!--                                    <input type="radio" v-model="paymentType" name="pay" value="{{ order.paymentType }}"-->
+<!--                                           checked="checked"/>-->
+<!--                                    <span class="toggle-box"></span>-->
+<!--                                    <span class="toggle-text">Онлайн картой</span>-->
+<!--                                </label>-->
+<!--                            </div>-->
+<!--                            <div>-->
+<!--                                <label class="toggle">-->
+<!--                                    <input type="radio" v-model="paymentType" name="pay" value="someone"/><span-->
+<!--                                        class="toggle-box"></span>-->
+<!--                                    <span class="toggle-text">Онлайн со случайного чужого счета</span>-->
+<!--                                </label>-->
+<!--                            </div>-->
                         </div>
                         <div class="Order-footer"><a class="btn btn_success Order-next" href="#step4">Дальше</a>
                         </div>
@@ -182,6 +199,7 @@
                                             <div class="Order-infoType">Тип доставки:
                                             </div>
                                             <div class="Order-infoContent">${ order.deliveryType }$
+<!--                                                ${ request.POST.payment }-->
                                             </div>
                                         </div>
                                         <div class="Order-info">
@@ -210,23 +228,23 @@
                                 <div v-for="product in order.products" class="Cart-product">
                                     <div class="Cart-block Cart-block_row">
                                         <div class="Cart-block Cart-block_pict">
-                                            <a class="Cart-pict" :href="product.product.href">
+                                            <a class="Cart-pict" :href="product.href">
                                                 <img class="Cart-img"
-                                                     :src="product.product.images && product.product.images.length ? product.product.images[0] : ''"
-                                                     alt="product.product.title"/>
+                                                     :src="product.images && product.images.length ? product.images[0] : ''"
+                                                     alt="product.title"/>
                                             </a>
                                         </div>
                                         <div class="Cart-block Cart-block_info">
-                                            <a class="Cart-title" href="#">${ product.product.title }$</a>
-                                            <div class="Cart-desc">${ product.product.description }$</div>
+                                            <a class="Cart-title" href="#">${ product.title }$</a>
+                                            <div class="Cart-desc">${ product.description }$</div>
                                         </div>
                                     </div>
                                     <div class="Cart-block Cart-block_price">
-                                        <div class="Cart-price">${ product.product.price }$$
+                                        <div class="Cart-price">${ product.price }$$
                                         </div>
                                     </div>
                                     <div class="Cart-block Cart-block_row">
-                                        <div class="Cart-block Cart-block_amount">${ product.product.count }$ шт.
+                                        <div class="Cart-block Cart-block_amount">${ product.count }$ шт.
                                         </div>
                                     </div>
                                 </div>

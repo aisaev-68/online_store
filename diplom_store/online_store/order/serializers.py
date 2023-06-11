@@ -24,18 +24,22 @@ class OrderSerializer(serializers.ModelSerializer):
         return data
 
 class OrderProductsSerializer(serializers.ModelSerializer):
-    product = serializers.SerializerMethodField()
+    products = serializers.SerializerMethodField()
 
     class Meta:
         model = OrderProducts
-        fields = ('product',)
+        fields = ('products',)
 
-    def get_product(self, instance):
+    def get_products(self, instance):
         product_serializer = ProductOrderSerializer(instance.product)
         serialized_product = product_serializer.data
         serialized_product['count'] = instance.count_product
-        print("NNNNNN", serialized_product)
+
         return serialized_product
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        return representation['products']
 
 class OrderProductSerializer(serializers.ModelSerializer):
     products = OrderProductsSerializer(source='orderproducts_set.all', many=True)

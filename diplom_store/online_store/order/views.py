@@ -1,6 +1,7 @@
 from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
+from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
 from django.views import View
 from rest_framework import viewsets
@@ -28,7 +29,7 @@ class OrderView(APIView):
     def get(self, request, *args, **kwargs):
         orders = Order.objects.all()
         serializer = self.serializer_class(orders, many=True)
-        print(3333, serializer.data)
+
         return Response(serializer.data)
 
     @swagger_auto_schema(
@@ -42,7 +43,7 @@ class OrderView(APIView):
             total = 0
             user = request.user
             products_data = request.data  # Получаем данные о продуктах из запроса
-            print("PRODUCTS_DATA", products_data)
+
             order = Order.objects.create(user=user)
             for product_data in products_data:
                 order_product = OrderProducts()
@@ -57,8 +58,6 @@ class OrderView(APIView):
             order.save()
 
             orders = OrderProductSerializer(instance=order).data
-            # orders['products'] = products_data
-            print("SER", orders)
 
             return Response([orders], status=201)
         else:
@@ -68,7 +67,7 @@ class OrderView(APIView):
 
 
 
-class OrderByIdView(View):
+class OrderByIdView(APIView):
     permission_classes = (IsAuthenticated,)
     authentication_classes = (SessionAuthentication,)
     serializer_class = OrderSerializer
@@ -79,14 +78,24 @@ class OrderByIdView(View):
         print('ORDER_ID', serializer.data)
         return Response(serializer.data)
 
-    def post(self, request, *args, **kwargs):
-        pass
+    def post(self, request, pk, *args, **kwargs):
+        order = Order.objects.get(pk=pk)
+        order.fullName = request.data.get('fullName')
+        order.phone = request.data.get('phone')
+        order.email = request.data.get('email')
+        order.delivery_type = request.data.get('deliveryType')
+        order.city = request.data.get('city')
+        order.address = request.data.get('address')
+        order.payment_type = request.data.get('paymentType')
+        order.save()
+
+        return Response(status=200)
 
 
 class OrderActiveView(APIView):
 
     def get(self, request, *args, **kwargs):
-        order = Order.objects.filter(status='Order not paid').order_by('-createdAt').first()
+        order = Order.objects.filter(status=_('In progress')).order_by('-createdAt').first()
 
         cart = Cart(request).cart
         serializer = OrderProductSerializer(order)

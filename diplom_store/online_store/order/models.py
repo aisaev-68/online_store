@@ -22,9 +22,9 @@ class Order(models.Model):  # Заказы
     email = models.EmailField(verbose_name='email')
     phone = models.CharField(max_length=16,
                              validators=[RegexValidator(regex=r"^\+?1?\d{8,15}$")], verbose_name=_('phone'))
-    deliveryType = models.CharField(max_length=50, default='', choices=settings.SHIPPING_METHODS, verbose_name=_('availability of free shipping'))
-    paymentType = models.CharField(max_length=50, choices=settings.PAYMENT_METHODS, default='', verbose_name=_('payment method'))
-    status = models.TextField(max_length=50, choices=settings.ORDER_STATUSES, default='Order not paid', verbose_name=_('payment state'))
+    deliveryType = models.CharField(max_length=50, default=_('Standard Shipping'), choices=settings.SHIPPING_METHODS, verbose_name=_('availability of free shipping'))
+    paymentType = models.CharField(max_length=50, choices=settings.PAYMENT_METHODS, default=_('Online card'), verbose_name=_('payment method'))
+    status = models.TextField(max_length=50, choices=settings.ORDER_STATUSES, default=_('In progress'), verbose_name=_('payment state'))
     city = models.CharField(max_length=50, default=_('not specified'), verbose_name=_('delivery city'))
     address = models.CharField(max_length=100, default=_('not specified'), verbose_name=_('delivery address'), blank=True)
     totalCost = models.IntegerField(default=0, verbose_name=_('total order value'), blank=True)

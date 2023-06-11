@@ -27,7 +27,6 @@ class CartAPIView(APIView):
     def get(self, request):
         cart = Cart(request)
         products_in_cart = [product for product in cart.cart.keys()]
-        print(111111, products_in_cart)
         products = Product.objects.filter(pk__in=products_in_cart)
         serializer = self.serializer_class(products, many=True, context=cart.cart)
         return Response(serializer.data)
@@ -61,21 +60,21 @@ class BasketAPIView(APIView):
             update_quantity=False,
         )
         serializer = self.serializer_class(product, context=cart.cart)
-        print(1234, serializer.data)
+
         return Response(data=serializer.data, status=201)
 
     def delete(self, request, *args, **kwargs):
         id = request.data.get('id')
         count = request.data.get('count', 1)
         update_quantity = request.data.get('remove')
-        print(3333, id, count, update_quantity)
+
         cart = Cart(request)
         product = get_object_or_404(Product, id=id)
         cart.remove(
             product=product,
             update_quantity=update_quantity
         )
-        print('context', cart.cart)
+
         if update_quantity:
             serializer = ProductSerializer(product)
         else:

@@ -160,6 +160,8 @@ var form = function(){
                     message = '',
                     error = false;
                 validate = validate?.split(' ');
+                console.log("Input blurred1:", validate[1]);
+                var fullName = validate[1]
                 validate?.forEach(function(v){
                     switch (v){
                         case 'require':
@@ -169,43 +171,78 @@ var form = function(){
                             }
                             break;
                         case 'pay':
-                            var val = $this.val().replaceAll(' ', '');
-                            if (val.length !== 16) {
+                            var val = $this.val().replace(/\s/g, '');
+                            if (val.length !== 8) {
                                 message += 'Некорректный номер карты.';
                                 error = true;
                             }
                             break;
-                            
+                       case 'month':
+                            var val = $this.val().replace(/\s/g, '');
+                            alert(val)
+                            if (val.length !== 2 || parseInt(val, 10) < 1 || parseInt(val, 10) > 12) {
+                              message += 'Некорректный номер месяца.';
+                              error = true;
+                            }
+                             break;
+                        case 'year':
+                            var val = $this.val().replace(/\s/g, '');
+                            if (val.length !== 4 || parseInt(val, 10) < 1800) {
+                                message += 'Некорректное значение года.';
+                                error = true;
+                            }
+                            break;
+                        case 'code':
+                            var val = $this.val().replace(/\s/g, '');
+                            if (val.length !== 3 || parseInt(val, 10) < 1 || parseInt(val, 10) > 999) {
+                                message += 'Некорректный код карты.';
+                                error = true;
+                            }
+                            break;
+                       case 'name':
+                            var val = $this.val().replace(/\s/g, '');
+                            if (val.length > 150) {
+                                message += 'Некорректный ФИО.';
+                                error = true;
+                            }
+                            break;
                     }
                     if (error) {
                         if ($this.hasClass('form-input')){
                             $this.addClass('form-input_error');
+
                         }
                         if ($this.hasClass('form-textarea')){
                             $this.addClass('form-textarea_error');
+
                         }
                         if (!$this.next('.form-error').length){
                             $this.after('<div class="form-error">'+message+'</div>');
+
                         }
                         $this.data('errorinput', true);
                     } else {
+
                         $this.next('.form-error').remove();
                         $this.removeClass('form-input_error');
                         $this.removeClass('form-textarea_error');
                         $this.data('errorinput', false);
                     }
                     message = '';
-                
+
                 });
+                console.log("Input blurred: ", $this.val());
+                console.log("Validation result: ", !error);
             });
             $form.on('submit', function(e){
                 var $this = $(this),
                     $validate = $this.find('[data-validate]');
-                
+
                 $validate.each(function(){
                     var $this = $(this);
                     $this.trigger('blur');
                     if ($this.data('errorinput')){
+
                         e.preventDefault();
                     }
                 });
@@ -213,11 +250,20 @@ var form = function(){
             $select.wrap('<div class="form-selectWrap"></div>');
             $('[data-mask]').each(function(){
                 var $this = $(this);
-                $this.mask($this.data('mask'), {placeholder:'x'});
+//                $this.mask($this.data('mask'), {placeholder:'X'});
+//                console.log("Mask applied: ", $this.data('mask'));
+            var mask = $this.data('mask');
+                if (typeof mask === 'string' && this.fullName !== "name") {
+                    $this.mask(mask, {placeholder:'X'});
+                    console.log("Mask applied: ", mask);
+                } else {
+                    console.log("Invalid data-mask value: ", mask);
+                }
             });
         }
     };
 };
+
 form().init();
 let modal = function(){
     let $trigger = $('.trigger'),
@@ -723,6 +769,7 @@ var Payment = function(){
                 var $this = $(this),
                     $bill = $this.closest('.Payment').find('.Payment-bill'),
                     billNumber = '';
+
                 e.preventDefault();
                 do {
                     billNumber = Math.random() + '';
