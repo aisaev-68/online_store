@@ -28,7 +28,8 @@
                        name="number"
                        type="text"
                        placeholder="9999 9999"
-                       data-mask="9999 9999"
+                       v-maska
+                       data-maska="#### ####"
                        v-model="number"
                        data-validate="require pay"/>
               </label>
@@ -40,10 +41,11 @@
                        id="month"
                        name="month"
                        type="text"
-                       data-mask=" 99 "
                        placeholder="12"
+                       v-maska
+                       data-maska="##"
                        v-model="month"
-                       data-validate="require month"
+                       data-validate="require"
                 />
               </label>
             </div>
@@ -54,8 +56,9 @@
                        id="year"
                        name="year"
                        type="text"
-                       data-mask=" 9999 "
-                       data-validate="require year"
+                       v-maska
+                       data-maska="####"
+                       data-validate="require"
                        placeholder="2023"
                        v-model="year"
                 />
@@ -68,24 +71,25 @@
                        id="code"
                        name="code"
                        type="text"
-                       data-mask=" 999 "
-                       data-validate="require code"
+                       v-maska
+                       data-maska="###"
+                       data-validate="require"
                        placeholder="000"
                        v-model="code"
                 />
               </label>
             </div>
             <div class="form-group">
-              <label for="name"  class="form-label">
+              <label for="name1"  class="form-label">
                 ФИО
                 <input class="form-input Payment-bill"
-                       id="name"
-                       name="name"
+                       id="name1"
+                       name="name1"
                        type="text"
-                       pattern="[A-Za-zА-Яа-яЁё\s]+"
-                       data-validate="require name"
                        placeholder="Сельдерей Ананасов"
                        v-model="name"
+                       required
+
                 >
               </label>
             </div>

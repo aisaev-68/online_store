@@ -59,7 +59,7 @@ var mix = {
                 })
                 .then(() => {
                     alert('Заказ подтвержден');
-                    location.replace('/payment');
+                    location.replace('/payment/' + this.orderId + '/');
                 })
                 .catch(() => {
                     console.warn('Ошибка при подтверждении заказа');

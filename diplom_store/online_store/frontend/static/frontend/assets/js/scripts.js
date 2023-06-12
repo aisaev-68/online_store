@@ -126,6 +126,12 @@ var form = function(){
     var $select = $('.form-select');
     return {
         init: function(){
+            //------------------------------------
+//            $("#number").mask('9999 9999', {'translation': {0: {pattern: /[0-9*]/}}});
+//            $("#month").mask('99', {'translation': {0: {pattern: /[0-9*]/}}});
+
+
+            //---------------------------------------
             $selectList.each(function(){
                 var $this = $(this),
                     $radio= $this.find('input[type="radio"]');
@@ -152,16 +158,21 @@ var form = function(){
                     $('.selectList').removeClass('selectList_OPEN');
                 }
             });
-            
+
+//            $input.on('input', (event) => {
+//                event.preventDefault()
+//                console.log(event)
+//            })
+
             // Валидация полей
             $input.on('blur', function(){
+            console.log("BLUR")
                 var $this = $(this),
                     validate = $this.data('validate'),
                     message = '',
                     error = false;
-                validate = validate?.split(' ');
-                console.log("Input blurred1:", validate[1]);
-                var fullName = validate[1]
+//                validate = validate?.split(' ');
+                validate = validate ? validate.split(' ') : null;
                 validate?.forEach(function(v){
                     switch (v){
                         case 'require':
@@ -171,58 +182,30 @@ var form = function(){
                             }
                             break;
                         case 'pay':
-                            var val = $this.val().replace(/\s/g, '');
+
+                            var val = $this.val().replaceAll(' ', '');
+//                            var $this = $(this);
+//                             console.log($this);
+//                            $this.mask($this.data('mask'), {placeholder:'x'});
                             if (val.length !== 8) {
                                 message += 'Некорректный номер карты.';
                                 error = true;
                             }
                             break;
-                       case 'month':
-                            var val = $this.val().replace(/\s/g, '');
-                            alert(val)
-                            if (val.length !== 2 || parseInt(val, 10) < 1 || parseInt(val, 10) > 12) {
-                              message += 'Некорректный номер месяца.';
-                              error = true;
-                            }
-                             break;
-                        case 'year':
-                            var val = $this.val().replace(/\s/g, '');
-                            if (val.length !== 4 || parseInt(val, 10) < 1800) {
-                                message += 'Некорректное значение года.';
-                                error = true;
-                            }
-                            break;
-                        case 'code':
-                            var val = $this.val().replace(/\s/g, '');
-                            if (val.length !== 3 || parseInt(val, 10) < 1 || parseInt(val, 10) > 999) {
-                                message += 'Некорректный код карты.';
-                                error = true;
-                            }
-                            break;
-                       case 'name':
-                            var val = $this.val().replace(/\s/g, '');
-                            if (val.length > 150) {
-                                message += 'Некорректный ФИО.';
-                                error = true;
-                            }
-                            break;
+
                     }
                     if (error) {
                         if ($this.hasClass('form-input')){
                             $this.addClass('form-input_error');
-
                         }
                         if ($this.hasClass('form-textarea')){
                             $this.addClass('form-textarea_error');
-
                         }
                         if (!$this.next('.form-error').length){
                             $this.after('<div class="form-error">'+message+'</div>');
-
                         }
                         $this.data('errorinput', true);
                     } else {
-
                         $this.next('.form-error').remove();
                         $this.removeClass('form-input_error');
                         $this.removeClass('form-textarea_error');
@@ -230,41 +213,36 @@ var form = function(){
                     }
                     message = '';
 
+                    });
                 });
-                console.log("Input blurred: ", $this.val());
-                console.log("Validation result: ", !error);
-            });
-            $form.on('submit', function(e){
-                var $this = $(this),
-                    $validate = $this.find('[data-validate]');
+                $form.on('submit', function(e){
+                    var $this = $(this),
+                        $validate = $this.find('[data-validate]');
 
-                $validate.each(function(){
-                    var $this = $(this);
-                    $this.trigger('blur');
-                    if ($this.data('errorinput')){
-
-                        e.preventDefault();
-                    }
+                    $validate.each(function(){
+                        console.log("validate")
+                        var $this = $(this);
+                        $this.trigger('blur');
+                        if ($this.data('errorinput')){
+                            e.preventDefault();
+                        }
+                    });
                 });
-            });
-            $select.wrap('<div class="form-selectWrap"></div>');
-            $('[data-mask]').each(function(){
-                var $this = $(this);
-//                $this.mask($this.data('mask'), {placeholder:'X'});
-//                console.log("Mask applied: ", $this.data('mask'));
-            var mask = $this.data('mask');
-                if (typeof mask === 'string' && this.fullName !== "name") {
-                    $this.mask(mask, {placeholder:'X'});
-                    console.log("Mask applied: ", mask);
-                } else {
-                    console.log("Invalid data-mask value: ", mask);
-                }
-            });
-        }
+                $select.wrap('<div class="form-selectWrap"></div>');
+
+
+
+//                $('[data-mask]').each(function(){
+//                    var $this = $(this);
+//
+//                    $this.mask($this.data('mask'), {placeholder:'x'});
+//
+//                });
+            }
+        };
     };
-};
 
-form().init();
+//form().init();
 let modal = function(){
     let $trigger = $('.trigger'),
         $body = $('body'),

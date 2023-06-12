@@ -15,7 +15,7 @@ urlpatterns = [
     path('history-order/', TemplateView.as_view(template_name="frontend/historyorder.html")),
     path('order-detail/<int:pk>', TemplateView.as_view(template_name="frontend/oneorder.html"), name="oneorder"),
     path('order/', TemplateView.as_view(template_name="frontend/order.html")),
-    path('payment/', TemplateView.as_view(template_name="frontend/payment.html")),
+    path('payment/<int:id>/', TemplateView.as_view(template_name="frontend/payment.html")),
     path('payment-someone/', TemplateView.as_view(template_name="frontend/paymentsomeone.html")),
     path('product/<int:pk>', TemplateView.as_view(template_name="frontend/product.html")),
     path('profile/', TemplateView.as_view(template_name="frontend/profile.html")),
