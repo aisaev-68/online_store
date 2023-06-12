@@ -16,14 +16,14 @@ class PaymentAPIView(APIView):
     """
     Оплата заказа
     """
-    # permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated,)
     authentication_classes = (SessionAuthentication,)
     serializer_class = PaymentSerializer
 
-    def post(self, orderId, request):
+    def post(self, request, pk, *args, **kwargs):
         print("PAYMENT", request.data)
-        order = Order.objects.filter(orderId=orderId).order_by('-createdAt').first()
-        number_of_cart = int(request.data.get('number'))
+        order = Order.objects.filter(orderId=pk).order_by('-createdAt').first()
+        number_of_cart = int("".join(request.data.get('number').split()))
         name = request.data.get('name')
         month = request.data.get('month')
         year = request.data.get('year')

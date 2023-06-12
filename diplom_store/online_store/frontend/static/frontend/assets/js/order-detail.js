@@ -58,8 +58,12 @@ var mix = {
                     }
                 })
                 .then(() => {
-                    alert('Заказ подтвержден');
-                    location.replace('/payment/' + this.orderId + '/');
+                    //alert(this.paymentType);
+                    if (this.paymentType === "Online card") {
+                    location.assign('/payment/' + this.orderId + '/');
+                    } else {
+                    location.assign('/payment-someone/')
+                    };
                 })
                 .catch(() => {
                     console.warn('Ошибка при подтверждении заказа');

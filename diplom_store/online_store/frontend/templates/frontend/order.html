@@ -68,18 +68,18 @@
                             <div class="row-block">
                                 <div class="form-group">
                                     <label class="form-label" for="name">ФИО</label>
-                                    <input class="form-input" v-model="order.fullName" id="name" name="name" type="text"
-                                           value="{{ order.fullName }}"/>
+                                    <input class="form-input" v-model="fullName" id="name" name="name" type="text"
+                                           value="{{ fullName }}"/>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label" for="phone">Телефон</label>
-                                    <input class="form-input" v-model="order.phone" id="phone" name="phone" type="text"
-                                           value="{{ order.phone }}"/>
+                                    <input class="form-input" v-model="phone" id="phone" name="phone" type="text"
+                                           value="{{ phone }}"/>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label" for="mail">E-mail</label>
-                                    <input class="form-input" v-model="order.email" id="mail" name="mail" type="text"
-                                           value="{{ order.email }}" data-validate="require"/>
+                                    <input class="form-input" v-model="email" id="mail" name="mail" type="text"
+                                           value="{{ email }}" data-validate="require"/>
                                 </div>
                             </div>
                         </div>
@@ -94,7 +94,7 @@
                         <div class="form-group">
                             <div v-for="(value, key) in shipping_methods_choices" :value="key">
                                 <label class="toggle">
-                                    <input type="radio" v-model="order.deliveryType" name="delivery" :value="value"
+                                    <input type="radio" v-model="deliveryType" name="delivery" :value="value"
                                            checked="checked"/>
 <!--                                    <input type="hidden" name="delivery" v-model="deliveryType" value="{{ order.deliveryType }}">-->
                                     <span class="toggle-box"></span>
@@ -119,13 +119,13 @@
                         <div class="form-group">
                             <label class="form-label" for="city">Город
                             </label>
-                            <input class="form-input" v-model="order.city" id="city" name="city" type="text"
+                            <input class="form-input" v-model="city" id="city" name="city" type="text"
                                    value="{{ order.city }}"/>
                         </div>
                         <div class="form-group">
                             <label class="form-label" for="address">Адрес
                             </label>
-                            <textarea class="form-textarea" v-model="order.address" name="address"
+                            <textarea class="form-textarea" v-model="address" name="address"
                                       id="address"></textarea>
                         </div>
                         <div class="Order-footer"><a class="btn btn_success Order-next" href="#step3">Дальше</a>
@@ -139,7 +139,7 @@
                         <div class="form-group">
                             <div v-for="(value, key) in payment_methods_choices" :value="key">
                                 <label class="toggle">
-                                    <input type="radio" v-model="order.paymentType" name="pay" :value="value"
+                                    <input type="radio" v-model="paymentType" name="pay" :value="value"
                                            checked="checked"/>
 <!--                                    <input type="hidden" name="payment" v-model="paymentType" value="{{ order.paymentType }}">-->
                                     <span class="toggle-box"></span>
@@ -178,19 +178,19 @@
                                         <div class="Order-info">
                                             <div class="Order-infoType">ФИО:
                                             </div>
-                                            <div class="Order-infoContent">${ order.fullName }$
+                                            <div class="Order-infoContent">${ fullName }$
                                             </div>
                                         </div>
                                         <div class="Order-info">
                                             <div class="Order-infoType">Телефон:
                                             </div>
-                                            <div class="Order-infoContent">${ order.phone }$
+                                            <div class="Order-infoContent">${ phone }$
                                             </div>
                                         </div>
                                         <div class="Order-info">
                                             <div class="Order-infoType">E-mail:
                                             </div>
-                                            <div class="Order-infoContent">${ order.email }$
+                                            <div class="Order-infoContent">${ email }$
                                             </div>
                                         </div>
                                     </div>
@@ -198,26 +198,26 @@
                                         <div class="Order-info Order-info_delivery">
                                             <div class="Order-infoType">Тип доставки:
                                             </div>
-                                            <div class="Order-infoContent">${ order.deliveryType }$
+                                            <div class="Order-infoContent">${ deliveryType }$
 <!--                                                ${ request.POST.payment }-->
                                             </div>
                                         </div>
                                         <div class="Order-info">
                                             <div class="Order-infoType">Город:
                                             </div>
-                                            <div class="Order-infoContent">${ order.city }$
+                                            <div class="Order-infoContent">${ city }$
                                             </div>
                                         </div>
                                         <div class="Order-info">
                                             <div class="Order-infoType">Адрес:
                                             </div>
-                                            <div class="Order-infoContent">${ order.address }$
+                                            <div class="Order-infoContent">${ address }$
                                             </div>
                                         </div>
                                         <div class="Order-info Order-info_pay">
                                             <div class="Order-infoType">Оплата:
                                             </div>
-                                            <div class="Order-infoContent">${ order.paymentType }$
+                                            <div class="Order-infoContent">${ paymentType }$
                                             </div>
                                         </div>
                                     </div>

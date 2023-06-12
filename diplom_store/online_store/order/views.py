@@ -80,16 +80,21 @@ class OrderByIdView(APIView):
 
     def post(self, request, pk, *args, **kwargs):
         order = Order.objects.get(pk=pk)
+        payment_type = request.data.get('paymentType')
+        print("payment_type", payment_type)
         order.fullName = request.data.get('fullName')
         order.phone = request.data.get('phone')
         order.email = request.data.get('email')
         order.delivery_type = request.data.get('deliveryType')
         order.city = request.data.get('city')
         order.address = request.data.get('address')
-        order.payment_type = request.data.get('paymentType')
+        order.payment_type = payment_type
         order.save()
-
         return Response(status=200)
+        # if payment_type == _("Online card"):
+        #     return Response(status=200)
+        # else:
+        #     return redirect("payment-someone")
 
 
 class OrderActiveView(APIView):
