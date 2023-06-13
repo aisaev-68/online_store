@@ -4,6 +4,8 @@ from django.utils.translation import gettext_lazy as _
 from online_store import settings
 from product.models import Product
 
+from payment.models import Payment
+
 
 class Order(models.Model):  # Заказы
     orderId = models.AutoField(primary_key=True, unique=True, verbose_name=_('order number'))
@@ -24,10 +26,11 @@ class Order(models.Model):  # Заказы
                              validators=[RegexValidator(regex=r"^\+?1?\d{8,15}$")], verbose_name=_('phone'))
     deliveryType = models.CharField(max_length=50, choices=settings.SHIPPING_METHODS, verbose_name=_('availability of free shipping'))
     paymentType = models.CharField(max_length=50, choices=settings.PAYMENT_METHODS, verbose_name=_('payment method'))
-    status = models.TextField(max_length=50, choices=settings.ORDER_STATUSES, verbose_name=_('payment state'))
+    status = models.TextField(max_length=50, choices=settings.ORDER_STATUSES, default='In progress', verbose_name=_('payment state'))
     city = models.CharField(max_length=50, default=_('not specified'), verbose_name=_('delivery city'))
     address = models.CharField(max_length=100, default=_('not specified'), verbose_name=_('delivery address'), blank=True)
     totalCost = models.IntegerField(default=0, verbose_name=_('total order value'), blank=True)
+    payment = models.OneToOneField(Payment, on_delete=models.CASCADE, verbose_name=_('payment'))
 
     class Meta:
         verbose_name = _('order')

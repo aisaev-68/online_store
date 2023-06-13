@@ -161,7 +161,11 @@ SHIPPING_METHODS = (
 )
 
 ORDER_STATUSES = (
-    ('pending_payment', _('In progress')),
+    ('pending_payment', 'In progress'),
     ('paid', _('Paid')),
     ('payment_error', _('Payment error')),
 )
+
+EXPRESS_SHIPPING_COST = 500
+STANDARD_SHIPPING_COST = 200
+MIN_AMOUNT_FREE_SHIPPING = 2000

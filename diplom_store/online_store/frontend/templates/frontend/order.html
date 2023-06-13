@@ -69,17 +69,17 @@
                                 <div class="form-group">
                                     <label class="form-label" for="name">ФИО</label>
                                     <input class="form-input" v-model="fullName" id="name" name="name" type="text"
-                                           value="{{ fullName }}"/>
+                                          value="{{ user.fullName }}"/>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label" for="phone">Телефон</label>
                                     <input class="form-input" v-model="phone" id="phone" name="phone" type="text"
-                                           value="{{ phone }}"/>
+                                           value="{{ user.phone }}"/>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label" for="mail">E-mail</label>
                                     <input class="form-input" v-model="email" id="mail" name="mail" type="text"
-                                           value="{{ email }}" data-validate="require"/>
+                                           data-validate="require" value="{{ user.email }}"/>
                                 </div>
                             </div>
                         </div>
@@ -120,13 +120,13 @@
                             <label class="form-label" for="city">Город
                             </label>
                             <input class="form-input" v-model="city" id="city" name="city" type="text"
-                                   value="{{ order.city }}"/>
+                                   />
                         </div>
                         <div class="form-group">
                             <label class="form-label" for="address">Адрес
                             </label>
                             <textarea class="form-textarea" v-model="address" name="address"
-                                      id="address"></textarea>
+                                      id="address" ></textarea>
                         </div>
                         <div class="Order-footer"><a class="btn btn_success Order-next" href="#step3">Дальше</a>
                         </div>

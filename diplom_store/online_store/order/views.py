@@ -67,7 +67,7 @@ class OrderView(APIView):
 
 
 
-class OrderByIdView(APIView):
+class ConfirmOrderAPIView(APIView):
     permission_classes = (IsAuthenticated,)
     authentication_classes = (SessionAuthentication,)
     serializer_class = OrderSerializer
@@ -80,27 +80,23 @@ class OrderByIdView(APIView):
 
     def post(self, request, pk, *args, **kwargs):
         order = Order.objects.get(pk=pk)
-        payment_type = request.data.get('paymentType')
-        print("payment_type", payment_type)
+        print("payment_type", request.data)
         order.fullName = request.data.get('fullName')
         order.phone = request.data.get('phone')
         order.email = request.data.get('email')
-        order.delivery_type = request.data.get('deliveryType')
+        order.deliveryType = request.data.get('deliveryType')
         order.city = request.data.get('city')
         order.address = request.data.get('address')
-        order.payment_type = payment_type
+        order.paymentType = request.data.get('paymentType')
         order.save()
         return Response(status=200)
-        # if payment_type == _("Online card"):
-        #     return Response(status=200)
-        # else:
-        #     return redirect("payment-someone")
 
 
-class OrderActiveView(APIView):
+
+class OrderActiveAPIView(APIView):
 
     def get(self, request, *args, **kwargs):
-        order = Order.objects.filter(status=_('In progress')).order_by('-createdAt').first()
+        order = Order.objects.filter(status='In progress').order_by('-createdAt').first()
 
         cart = Cart(request).cart
         serializer = OrderProductSerializer(order)

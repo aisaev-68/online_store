@@ -33,7 +33,16 @@ class PaymentAPIView(APIView):
             order.status = settings.ORDER_STATUSES[1]
         else:
             order.status = settings.ORDER_STATUSES[2]
+
+
+        if order.deliveryType == 'Standard Shipping' and order.totalCost < 2000:
+            order.totalCost += 200
+        elif order.deliveryType == 'Express Shipping':
+            order.totalCost += 500
+
+        payment = Payment.objects.create(number=str(number_of_cart), name=name, month=month, year=year, code=code)
+        order.payment = payment
         order.save()
-        Payment.objects.create(number=str(number_of_cart), name=name, month=month, year=year, code=code)
+
         return Response(status=200)
 

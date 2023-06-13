@@ -39,7 +39,12 @@ class PaymentSettings(models.Model):
         default=settings.REST_FRAMEWORK['PAGE_SIZE'],
         validators=[MinValueValidator(0)]
     )
-    # Дополнительные поля, связанные с настройками оплаты и доставки
+    express = models.DecimalField(decimal_places=2, max_digits=4, default=settings.EXPRESS_SHIPPING_COST, verbose_name=_('express price'))
+    standard = models.DecimalField(decimal_places=2, max_digits=4, default=settings.STANDARD_SHIPPING_COST,
+                                  verbose_name=_('standard price'))
+    amount_free = models.DecimalField(decimal_places=2, max_digits=4, default=settings.MIN_AMOUNT_FREE_SHIPPING,
+                                  verbose_name=_('minimum amount free shipping'))
+
 
     class Meta:
         verbose_name_plural = _('Payment and shipping settings')

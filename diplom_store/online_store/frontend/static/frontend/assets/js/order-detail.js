@@ -49,20 +49,32 @@ var mix = {
         confirmOrder() {
             const csrfToken = this.getCookie('csrftoken');
             if (this.order) {
-
-                this.postData('/api/orders/' + this.order.orderId + '/', {
-                    ...this.order
-                }, {
+            const formData = {
+              orderId: this.order.orderId,
+              createdAt: this.order.createdAt,
+              fullName: this.fullName,
+              phone: this.phone,
+              email: this.email,
+              deliveryType: this.deliveryType,
+              city: this.city,
+              address: this.address,
+              paymentType: this.paymentType,
+              totalCost: this.order.totalCost,
+              status: this.order.status,
+              products: this.order.products
+            };
+            this.postData('/api/orders/' + this.order.orderId + '/',  formData, {
                     headers: {
                         'X-CSRFToken': csrfToken
                     }
                 })
                 .then(() => {
-                    //alert(this.paymentType);
+                    alert(this.fullName);
+
                     if (this.paymentType === "Online card") {
-                    location.assign('/payment/' + this.orderId + '/');
-                    } else {
-                    location.assign('/payment-someone/')
+                    location.replace('/payment/' + this.orderId + '/');
+                                        } else {
+                    location.replace('/payment-someone/')
                     };
                 })
                 .catch(() => {
