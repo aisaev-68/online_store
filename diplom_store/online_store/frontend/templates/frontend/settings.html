@@ -32,11 +32,23 @@
                         <div class="row-block">
                             <form action="" @submit.prevent="changeSettings">
                                 <div class="form-group">
-                                    <label class="form-label" for="page_size">Page size</label>
-                                    <input class="form-input" id="page_size" name="page_size" v-model="page_size" style="padding: 10px 0px 10px 25px;"/>
+                                    <label class="form-label" for="page_size">{% trans 'Page size' %}</label>
+                                    <input class="form-input" id="page_size" name="page_size" v-model="page_size" value="page_size" style="padding: 10px 0px 10px 25px;"/>
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label" for="payment_methods">Payment methods</label>
+                                    <label class="form-label" for="express">{% trans 'Express shipping cost' %}</label>
+                                    <input class="form-input" id="express" name="express" v-model="express" style="padding: 10px 0px 10px 25px;"/>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="standard">{% trans 'Standard shipping cost' %}</label>
+                                    <input class="form-input" id="standard" name="standard" v-model="standard" style="padding: 10px 0px 10px 25px;"/>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="amount_free">{% trans 'Minimal amount free shipping' %}</label>
+                                    <input class="form-input" id="amount_free" name="amount_free" v-model="amount_free" style="padding: 10px 0px 10px 25px;"/>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="payment_methods">{% trans 'Payment methods' %}</label>
                                     <select class="setting_select" id="payment_methods" name="payment_methods"
                                             v-model="payment_methods">
                                         <option class="setting_select" v-for="(value, key) in payment_methods_choices" :value="key">
@@ -46,7 +58,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label class="form-label" for="shipping_methods">Shipping methods</label>
+                                    <label class="form-label" for="shipping_methods">{% trans 'Shipping methods' %}</label>
                                     <select class="setting_select" id="shipping_methods" name="shipping_methods"
                                             v-model="shipping_methods">
                                         <option class="setting_select" v-for="(value, key) in shipping_methods_choices" :value="key">

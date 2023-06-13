@@ -14,4 +14,4 @@ class PaymentSerializer(serializers.ModelSerializer):
 class PaymentSettingsSerializer(serializers.ModelSerializer):
     class Meta:
         model = PaymentSettings
-        fields = ('payment_methods', 'shipping_methods', 'order_status', 'page_size')
+        fields = ('payment_methods', 'shipping_methods', 'order_status', 'page_size', 'express', 'standard', 'amount_free')

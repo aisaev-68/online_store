@@ -7,6 +7,9 @@ var mix = {
       })
         .then(data => {
           this.page_size = data.page_size;
+          this.express = data.express;
+          this.standard = data.standard;
+          this.amount_free = data.amount_free;
           this.payment_methods = data.payment_methods;
           this.shipping_methods = data.shipping_methods;
           this.order_status = data.order_status;
@@ -25,6 +28,9 @@ var mix = {
       const csrfToken = this.getCookie('csrftoken');
       const requestData = {
         page_size: this.page_size,
+        express: this.express,
+        standard: this.standard,
+        amount_free: this.amount_free,
         payment_methods: this.payment_methods,
         shipping_methods: this.shipping_methods,
         order_status: this.order_status,
@@ -80,9 +86,15 @@ var mix = {
     this.getSettings();
     //this.changeSettings();
   },
+//  created() {
+//    this.getSettings();
+//  },
   data() {
     return {
       page_size: "",
+      express: "",
+      standard: "",
+      amount_free: "",
       payment_methods: "",
       shipping_methods: "",
       order_status: "",

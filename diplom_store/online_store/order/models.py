@@ -24,11 +24,14 @@ class Order(models.Model):  # Заказы
     email = models.EmailField(verbose_name='email')
     phone = models.CharField(max_length=16,
                              validators=[RegexValidator(regex=r"^\+?1?\d{8,15}$")], verbose_name=_('phone'))
-    deliveryType = models.CharField(max_length=50, choices=settings.SHIPPING_METHODS, verbose_name=_('availability of free shipping'))
+    deliveryType = models.CharField(max_length=50, choices=settings.SHIPPING_METHODS,
+                                    verbose_name=_('availability of free shipping'))
     paymentType = models.CharField(max_length=50, choices=settings.PAYMENT_METHODS, verbose_name=_('payment method'))
-    status = models.TextField(max_length=50, choices=settings.ORDER_STATUSES, default='In progress', verbose_name=_('payment state'))
+    status = models.TextField(max_length=50, choices=settings.ORDER_STATUSES, default='In progress',
+                              verbose_name=_('payment state'))
     city = models.CharField(max_length=50, default=_('not specified'), verbose_name=_('delivery city'))
-    address = models.CharField(max_length=100, default=_('not specified'), verbose_name=_('delivery address'), blank=True)
+    address = models.CharField(max_length=100, default=_('not specified'), verbose_name=_('delivery address'),
+                               blank=True)
     totalCost = models.IntegerField(default=0, verbose_name=_('total order value'), blank=True)
     payment = models.OneToOneField(Payment, on_delete=models.CASCADE, verbose_name=_('payment'))
 
@@ -44,6 +47,7 @@ class OrderProducts(models.Model):
     """
     Модель Продукты в заказе
     """
+
     class Meta:
         """
         Метакласс для определения названий в единственном и множественном числе

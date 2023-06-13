@@ -229,14 +229,36 @@ class SettingsAPIView(APIView):
     )
     def get(self, request):
         payment_settings = PaymentSettings.objects.first()
+        print(111, payment_settings)
         serializer = self.serializer_class(payment_settings)
         settings_data = serializer.data
+        print(222, settings_data)
 
         # Добавляем возможные выборы для полей
+        if not settings_data.get('page_size'):
+            settings_data['page_size'] = settings.REST_FRAMEWORK['PAGE_SIZE']
+        else:
+            settings_data['page_size'] = payment_settings.page_size
+
+        if not settings_data.get('express'):
+            settings_data['express'] = settings.EXPRESS_SHIPPING_COST
+        else:
+            settings_data['express'] = payment_settings.express
+
+        if not settings_data.get('standard'):
+            settings_data['standard'] = settings.STANDARD_SHIPPING_COST
+        else:
+            settings_data['standard'] = payment_settings.standard
+
+        if not settings_data.get('amount_free'):
+            settings_data['amount_free'] = settings.MIN_AMOUNT_FREE_SHIPPING
+        else:
+            settings_data['amount_free'] = payment_settings.min_amount
+
         settings_data['payment_methods_choices'] = dict(settings.PAYMENT_METHODS)
         settings_data['shipping_methods_choices'] = dict(settings.SHIPPING_METHODS)
         settings_data['order_status_choices'] = dict(settings.ORDER_STATUSES)
-
+        print(11111, settings_data)
         return Response(settings_data)
 
     @swagger_auto_schema(

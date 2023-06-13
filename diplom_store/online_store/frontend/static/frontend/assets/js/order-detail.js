@@ -36,6 +36,10 @@ var mix = {
         headers: { 'X-CSRFToken': csrfToken }
       })
         .then(data => {
+          this.page_size = data.page_size;
+          this.express = data.express;
+          this.standard = data.standard;
+          this.amount_free = data.amount_free;
           this.payment_methods = data.payment_methods;
           this.shipping_methods = data.shipping_methods;
           // Установка списков выбора для каждого поля
