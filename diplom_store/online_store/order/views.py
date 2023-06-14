@@ -98,7 +98,7 @@ class ConfirmOrderAPIView(APIView):
         order.totalCost = request.data.get('totalCost')
 
         # Добавить стоимость доставки экспресс-доставки
-        if order.deliveryType == settings.SHIPPING_METHODS[1][1]:
+        if order.deliveryType == settings.SHIPPING_METHODS[0][0]:
             order.totalCost += payment_settings.express
         else:
             # Добавить стоимость обычной доставки
