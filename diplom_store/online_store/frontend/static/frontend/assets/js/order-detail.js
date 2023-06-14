@@ -86,6 +86,20 @@ var mix = {
                 });
             }
         },
+        updateTotalCost() {
+        const values = Object.values(this.shipping_methods_choices);
+        const shippingMethod = values[1];
+          if (this.deliveryType === shippingMethod) {
+            this.totalCost = this.order.totalCost + this.express;
+          } else {
+            if (this.order.totalCost < this.amount_free) {
+                this.totalCost = this.order.totalCost + this.standard;
+            } else {
+                this.totalCost = this.order.totalCost;
+            }
+          }
+
+        },
         getCookie(name) {
       // Получение значения куки по имени
       let cookieValue = null;

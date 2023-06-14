@@ -21,6 +21,10 @@ from order.serializers import OrderSerializer, OrderProductSerializer
 
 from product.serializers import ProductSerializer, ProductOrderSerializer
 
+from online_store import settings
+
+from payment.models import PaymentSettings
+
 
 class OrderView(APIView):
     authentication_classes = (SessionAuthentication,)
@@ -53,6 +57,9 @@ class OrderView(APIView):
                 total += product_data['count'] * product_data['price']
                 # Задайте остальные поля
                 order_product.save()
+            order.fullName = user.fullName
+            order.phone = user.phone
+            order.email = user.email
             order.totalCost = total
             order.user = request.user
             order.save()
@@ -79,8 +86,8 @@ class ConfirmOrderAPIView(APIView):
         return Response(serializer.data)
 
     def post(self, request, pk, *args, **kwargs):
+        payment_settings = PaymentSettings.objects.first()
         order = Order.objects.get(pk=pk)
-        print("payment_type", request.data)
         order.fullName = request.data.get('fullName')
         order.phone = request.data.get('phone')
         order.email = request.data.get('email')
@@ -88,7 +95,18 @@ class ConfirmOrderAPIView(APIView):
         order.city = request.data.get('city')
         order.address = request.data.get('address')
         order.paymentType = request.data.get('paymentType')
+        order.totalCost = request.data.get('totalCost')
+
+        # Добавить стоимость доставки экспресс-доставки
+        if order.deliveryType == settings.SHIPPING_METHODS[1][1]:
+            order.totalCost += payment_settings.express
+        else:
+            # Добавить стоимость обычной доставки
+            if order.totalCost < payment_settings.amount_free:
+                order.totalCost += payment_settings.standard
+
         order.save()
+        print("ORDER SUCCESS",  OrderProductSerializer(order).data)
         return Response(status=200)
 
 

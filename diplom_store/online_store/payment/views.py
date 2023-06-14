@@ -30,9 +30,9 @@ class PaymentAPIView(APIView):
         code = request.data.get('code')
         print(222, settings.ORDER_STATUSES[1])
         if number_of_cart % 2 == 0 and number_of_cart % 10 != 0:
-            order.status = settings.ORDER_STATUSES[1]
+            order.status = settings.ORDER_STATUSES[1][1]
         else:
-            order.status = settings.ORDER_STATUSES[2]
+            order.status = settings.ORDER_STATUSES[2][1]
 
 
         if order.deliveryType == 'Standard Shipping' and order.totalCost < 2000:

@@ -30,6 +30,7 @@
                 <div class="Profile">
                     <div class="row">
                         <div class="row-block">
+                            {{settings.page_size}}
                             <form action="" @submit.prevent="changeSettings">
                                 <div class="form-group">
                                     <label class="form-label" for="page_size">{% trans 'Page size' %}</label>

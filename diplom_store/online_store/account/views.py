@@ -253,7 +253,22 @@ class SettingsAPIView(APIView):
         if not settings_data.get('amount_free'):
             settings_data['amount_free'] = settings.MIN_AMOUNT_FREE_SHIPPING
         else:
-            settings_data['amount_free'] = payment_settings.min_amount
+            settings_data['amount_free'] = payment_settings.amount_free
+
+        if not settings_data.get('payment_methods'):
+            settings_data['payment_methods'] = settings.PAYMENT_METHODS[0][0]
+        else:
+            settings_data['payment_methods'] = payment_settings.payment_methods
+
+        if not settings_data.get('shipping_methods'):
+            settings_data['shipping_methods'] = settings.SHIPPING_METHODS[0][0]
+        else:
+            settings_data['shipping_methods'] = payment_settings.shipping_methods
+
+        if not settings_data.get('order_status'):
+            settings_data['order_status'] = settings.ORDER_STATUSES[0][0]
+        else:
+            settings_data['order_status'] = payment_settings.order_status
 
         settings_data['payment_methods_choices'] = dict(settings.PAYMENT_METHODS)
         settings_data['shipping_methods_choices'] = dict(settings.SHIPPING_METHODS)

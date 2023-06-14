@@ -1,6 +1,7 @@
 
 from django.contrib import admin
 from django import forms
+from django.db import models
 
 from online_store import settings
 from order.models import Order
@@ -16,39 +17,45 @@ class OrderAdminForm(forms.ModelForm):
     class Meta:
         model = Order
         fields = '__all__'
+        widgets = {
+            'deliveryType': forms.Select(choices=settings.SHIPPING_METHODS),
+            'paymentType': forms.Select(choices=settings.PAYMENT_METHODS),
+            'status': forms.Select(choices=settings.ORDER_STATUSES),
+        }
 
-    status = forms.ChoiceField(choices=settings.ORDER_STATUSES)
-    paymentType = forms.ChoiceField(choices=settings.PAYMENT_METHODS)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        instance = kwargs.get('instance')
+        if instance:
+            self.initial['deliveryType'] = instance.deliveryType
+            self.initial['paymentType'] = instance.paymentType
+            self.initial['status'] = instance.status
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    form = OrderAdminForm
-    inlines = [
-        ProductItemInline,
-    ]
-    list_display = ('user',
-                    'createdAt',
-                    'deliveryType',
-                    'paymentType',
-                    'status',
-                    'city',
-                    'address',
-                    'totalCost')
-    list_filter = ('createdAt', 'deliveryType', 'paymentType', 'status', 'city')
-    search_fields = ('user__username', 'products__title', 'city', 'address')
-    date_hierarchy = 'createdAt'
-    ordering = ('-createdAt',)
-    # fieldsets = (
-    #     (_('Информация о покупателе'), {
-    #         'classes': ('collapse', 'wide'),
-    #         'fields': ('user', 'fullname', 'email', 'phone'),
-    #     }),
-    #     (_('Информация о заказе'), {
-    #         'classes': ('collapse', 'wide'),
-    #         'fields': ('status', 'city', 'address')
-    #     }),
-    #     (_('Оплата и доставка'), {
-    #         'classes': ('collapse', 'wide'),
-    #         'fields': ('totalCost', 'deliveryCost', 'freeDelivery', 'deliveryType', 'paymentType')
-    #     }),
-    # )
+    list_display = ('orderId', 'fullName', 'deliveryType', 'status')
+    fieldsets = (
+        ('General', {
+            'fields': ('user', 'fullName', 'deliveryType', 'status')
+        }),
+        ('Contact Information', {
+            'fields': ('email', 'phone')
+        }),
+        ('Delivery Details', {
+            'fields': ('city', 'address')
+        }),
+        ('Payment', {
+            'fields': ('paymentType', 'totalCost', 'payment')
+        }),
+    )
+
+
+
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        if db_field.name == 'deliveryType':
+            kwargs['choices'] = settings.SHIPPING_METHODS
+        elif db_field.name == 'paymentType':
+            kwargs['choices'] = settings.PAYMENT_METHODS
+        elif db_field.name == 'status':
+            kwargs['choices'] = settings.ORDER_STATUSES
+        return super().formfield_for_dbfield(db_field, **kwargs)
