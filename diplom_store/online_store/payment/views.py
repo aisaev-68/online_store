@@ -7,9 +7,10 @@ from rest_framework.response import Response
 from online_store import settings
 from order.models import Order
 
-from payment.models import Payment
+from payment.models import Payment, PaymentSettings
 
 from payment.serializers import PaymentSerializer
+
 
 
 class PaymentAPIView(APIView):
@@ -30,15 +31,15 @@ class PaymentAPIView(APIView):
         code = request.data.get('code')
         print(222, settings.ORDER_STATUSES[1])
         if number_of_cart % 2 == 0 and number_of_cart % 10 != 0:
-            order.status = settings.ORDER_STATUSES[1][1]
+            order.status = settings.ORDER_STATUSES[1][0]
         else:
-            order.status = settings.ORDER_STATUSES[2][1]
+            order.status = settings.ORDER_STATUSES[2][0]
 
-
-        if order.deliveryType == 'Standard Shipping' and order.totalCost < 2000:
-            order.totalCost += 200
-        elif order.deliveryType == 'Express Shipping':
-            order.totalCost += 500
+        payment_settings = PaymentSettings.objects.first()
+        if order.deliveryType == settings.SHIPPING_METHODS[0][0] and order.totalCost < payment_settings.amount_free:
+            order.totalCost += payment_settings.standard
+        elif order.deliveryType == settings.SHIPPING_METHODS[1][0]:
+            order.totalCost += payment_settings.express
 
         payment = Payment.objects.create(number=str(number_of_cart), name=name, month=month, year=year, code=code)
         order.payment = payment

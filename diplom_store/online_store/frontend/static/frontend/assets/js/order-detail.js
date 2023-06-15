@@ -52,6 +52,8 @@ var mix = {
         },
         confirmOrder() {
             const csrfToken = this.getCookie('csrftoken');
+            const keys = Object.keys(this.payment_methods_choices);
+            const paymentMethod = keys[1];
             if (this.order) {
             const formData = {
               orderId: this.order.orderId,
@@ -75,7 +77,7 @@ var mix = {
                 .then(() => {
                     alert(this.fullName);
 
-                    if (this.paymentType === "Online card") {
+                    if (this.paymentType === paymentMethod) {
                     location.replace('/payment/' + this.orderId + '/');
                                         } else {
                     location.replace('/payment-someone/')
@@ -87,8 +89,8 @@ var mix = {
             }
         },
         updateTotalCost() {
-        const values = Object.values(this.shipping_methods_choices);
-        const shippingMethod = values[1];
+        const keys = Object.keys(this.shipping_methods_choices);
+        const shippingMethod = keys[1];
           if (this.deliveryType === shippingMethod) {
             this.totalCost = this.order.totalCost + this.express;
           } else {
