@@ -228,7 +228,6 @@ class SettingsAPIView(APIView):
     )
     def get(self, request):
         payment_settings = PaymentSettings.objects.first()
-        print(111, payment_settings)
         serializer = self.serializer_class(payment_settings)
         settings_data = serializer.data
         print(222, settings_data)

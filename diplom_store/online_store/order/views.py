@@ -116,7 +116,7 @@ class OrderActiveAPIView(APIView):
 
     def get(self, request, *args, **kwargs):
         print(44444, self.request, self.kwargs, args, kwargs, request.data)
-        order = Order.objects.filter(status='pending_payment').first()
+        order = Order.objects.filter(status='In progress').first()
 
         cart = Cart(request).cart
         serializer = OrderProductSerializer(order)
