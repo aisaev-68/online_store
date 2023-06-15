@@ -3,12 +3,12 @@ var mix = {
         getHistoryOrder() {
             this.getData("/api/orders")
               .then(data => {
-                this.orders = data.orders
+                this.orders = data
               }).catch(() => {
                 this.orders = []
                 console.warn('Ошибка при получении списка заказов')
             })
-            alert(this.orders)
+            //alert(this.orders)
         }
     },
     mounted() {

@@ -226,7 +226,7 @@
                             </div>
                             <div class="Cart Cart_order">
                                 <!-- Товар на оплату -->
-                                <div v-for="product in order.products" class="Cart-product">
+                                <div v-for="product in products" class="Cart-product">
                                     <div class="Cart-block Cart-block_row">
                                         <div class="Cart-block Cart-block_pict">
                                             <a class="Cart-pict" :href="product.href">
@@ -254,11 +254,6 @@
 
                             <div class="Cart-total">
                                 <div class="Cart-block Cart-block_total">
-                                    <strong class="Cart-title">Итого:</strong>
-                                    <span class="Cart-price">${ order.totalCost }$$</span>
-<!--                                    <span class="Cart-price">${ order.products.reduce((acc, el) => {return acc += (el.price * el.count)}, 0) }$$</span>-->
-                                </div>
-                                <div class="Cart-block Cart-block_total">
                                     <strong class="Cart-title">Итого с доставкой:</strong>
                                     <span class="Cart-price">${ totalCost }$$</span>
 <!--                                    <span class="Cart-price">${ order.products.reduce((acc, el) => {return acc += (el.price * el.count)}, 0) }$$</span>-->
@@ -279,5 +274,5 @@
 {% endblock %}
 
 {% block mixins %}
-<script src="{% static 'frontend/assets/js/order-detail.js' %}"></script>
+<script src="{% static 'frontend/assets/js/order-active.js' %}"></script>
 {% endblock %}

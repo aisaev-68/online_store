@@ -4,6 +4,18 @@ from rest_framework import serializers
 from order.models import Order, OrderProducts
 from product.serializers import ProductSerializer, ProductOrderSerializer
 
+
+
+class OrderForAvatarSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Order
+        fields = ('orderId', 'createdAt', 'deliveryType', 'paymentType',
+                  'totalCost', 'status')
+    def to_representation(self, obj):
+        data = super().to_representation(obj)
+        data["createdAt"] = obj.createdAt.strftime('%Y-%m-%d %H:%M')
+        return data
 class OrderSerializer(serializers.ModelSerializer):
     """
     Сериализация заказа

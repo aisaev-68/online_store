@@ -26,12 +26,13 @@
         </div>
         <div class="Section-content">
           <div class="Orders">
+
             <div v-for="order in orders" class="Order Order_anons">
               <div class="Order-personal">
                 <div class="row">
                   <div class="row-block">
-                    <a class="Order-title" :href="`/order-detail/${order.pk}`">
-                      Заказ&#32;<span class="Order-numberOrder">№${order.id}$</span>&#32;от&#32;<span class="Order-dateOrder">${order.createdAt}$</span></a>
+                    <a class="Order-title" :href="`/order-detail/${order.orderId}`">
+                      Заказ&#32;<span class="Order-numberOrder">№${order.orderId}$</span>&#32;от&#32;<span class="Order-dateOrder">${order.createdAt}$</span></a>
                   </div>
                   <div class="row-block">
                     <div class="Order-info Order-info_delivery">

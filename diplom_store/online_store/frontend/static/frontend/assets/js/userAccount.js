@@ -6,7 +6,7 @@ var mix = {
         this.lastname = data.last_name;
         this.surname = data.surname;
         this.avatar = data.avatar;
-        this.orders = data.orders;
+        this.order = data.order;
       });
     },
   },
@@ -20,7 +20,7 @@ var mix = {
       firstname: "",
       surname: "",
       avatar: {},
-      orders: [],
+      order: "",
     };
   },
   computed: {

@@ -27,13 +27,14 @@ from payment.models import PaymentSettings
 
 
 class OrderView(APIView):
+    permission_classes = (IsAuthenticated,)
     authentication_classes = (SessionAuthentication,)
-    serializer_class = OrderSerializer
+    serializer_class = OrderProductSerializer
 
     def get(self, request, *args, **kwargs):
         orders = Order.objects.all()
         serializer = self.serializer_class(orders, many=True)
-
+        print("HISTORY ORDERS", serializer.data)
         return Response(serializer.data)
 
     @swagger_auto_schema(
@@ -77,9 +78,9 @@ class OrderView(APIView):
 class ConfirmOrderAPIView(APIView):
     permission_classes = (IsAuthenticated,)
     authentication_classes = (SessionAuthentication,)
-    serializer_class = OrderSerializer
+    serializer_class = OrderProductSerializer
 
-    def get(self, pk, request, *args, **kwargs):
+    def get(self, request, pk, *args, **kwargs):
         order = Order.objects.get(pk=pk)
         serializer = self.serializer_class(order)
         print('ORDER_ID', serializer.data)
@@ -114,7 +115,8 @@ class ConfirmOrderAPIView(APIView):
 class OrderActiveAPIView(APIView):
 
     def get(self, request, *args, **kwargs):
-        order = Order.objects.filter(status='In progress').order_by('-createdAt').first()
+        print(44444, self.request, self.kwargs, args, kwargs, request.data)
+        order = Order.objects.filter(status='pending_payment').first()
 
         cart = Cart(request).cart
         serializer = OrderProductSerializer(order)

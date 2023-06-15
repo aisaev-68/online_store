@@ -4,7 +4,7 @@ from rest_framework import serializers
 from django.contrib.auth.hashers import make_password
 from drf_yasg import openapi
 from account.models import User
-from order.serializers import OrderSerializer
+from order.serializers import OrderSerializer, OrderProductSerializer, OrderForAvatarSerializer
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -29,18 +29,8 @@ class UserAvatarSerializer(serializers.ModelSerializer):
 
     def to_representation(self, obj):
         data = super().to_representation(obj)
-        orders = obj.orders.order_by('-createdAt')
-        data['orders'] = OrderSerializer(orders, many=True).data
-        print('GGGG', data)
-        # data['orders'] = [{
-        #     "orderId": str(order.id),
-        #     "createdAt": order.createdAt.strftime("%Y-%m-%d %H:%M"),
-        #     "deliveryType": "free" if order.deliveryType else "not free",
-        #     "paymentType": order.paymentType,
-        #     "totalCost": float(order.totalCost),
-        #     "status": order.status,
-        #     "products":  order.products.all()
-        # }]
+        order = obj.orders.order_by('-createdAt').first()
+        data['order'] = OrderForAvatarSerializer(order).data
         return data
 
     def validate_avatar(self, avatar):
