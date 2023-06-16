@@ -27,7 +27,7 @@ class Order(models.Model):  # Заказы
     deliveryType = models.CharField(max_length=50, choices=settings.SHIPPING_METHODS,
                                     verbose_name=_('availability of free shipping'))
     paymentType = models.CharField(max_length=50, choices=settings.PAYMENT_METHODS, verbose_name=_('payment method'))
-    status = models.TextField(max_length=50, choices=settings.ORDER_STATUSES, default='In progress',
+    status = models.TextField(max_length=50, choices=settings.ORDER_STATUSES, default='pending_payment',
                               verbose_name=_('payment state'))
     city = models.CharField(max_length=50, default=_('not specified'), verbose_name=_('delivery city'))
     address = models.CharField(max_length=100, default=_('not specified'), verbose_name=_('delivery address'),

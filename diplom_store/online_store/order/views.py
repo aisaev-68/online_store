@@ -6,6 +6,7 @@ from django.urls import reverse
 from django.views import View
 from rest_framework import viewsets
 from rest_framework.authentication import SessionAuthentication
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -31,11 +32,36 @@ class OrderView(APIView):
     authentication_classes = (SessionAuthentication,)
     serializer_class = OrderProductSerializer
 
+    def pagination_queryset(self):
+
+        paginator = PageNumberPagination()
+        payment_settings = PaymentSettings.objects.first()
+        limit = payment_settings.page_size
+
+        paginator.page_size = limit
+        queryset = Order.objects.all()
+        len_orders = len(queryset)
+
+        paginated_queryset = paginator.paginate_queryset(queryset, self.request)
+        serializer = self.serializer_class(paginated_queryset, many=True)
+        current_page = int(self.request.GET.get('page', 1))
+        if len_orders % limit == 0:
+            last_page = len_orders // limit
+        else:
+            last_page = len_orders // limit + 1
+
+        return {
+            'pagination': serializer.data,
+            'currentPage': current_page,
+            'lastPage': last_page,
+        }
     def get(self, request, *args, **kwargs):
-        orders = Order.objects.all()
-        serializer = self.serializer_class(orders, many=True)
-        print("HISTORY ORDERS", serializer.data)
-        return Response(serializer.data)
+        # queryset = Order.objects.all()
+        data = self.pagination_queryset()
+        # paginated_queryset = data['pagination']
+        # serializer = self.serializer_class(paginated_queryset, many=True)
+        print("HISTORY ORDERS", data)
+        return Response(data)
 
     @swagger_auto_schema(
         request_body=ProductSerializer,
@@ -116,7 +142,7 @@ class OrderActiveAPIView(APIView):
 
     def get(self, request, *args, **kwargs):
         print(44444, self.request, self.kwargs, args, kwargs, request.data)
-        order = Order.objects.filter(status='In progress').first()
+        order = Order.objects.filter(status='pending_payment').first()
 
         cart = Cart(request).cart
         serializer = OrderProductSerializer(order)

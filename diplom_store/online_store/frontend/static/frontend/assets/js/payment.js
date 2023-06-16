@@ -1,7 +1,39 @@
 var mix = {
-
-
   methods: {
+    getOrder() {
+    alert(location.pathname.replace('/payment/', '').replace('/', ''))
+      this.id = location.pathname.startsWith('/payment/')
+        ? Number(location.pathname.replace('/payment/', '').replace('/', ''))
+        : null;
+
+      this.getData('/api/orders/' + this.id + '/')
+        .then(data => {
+          this.orderId = data.orderId;
+          this.createdAt = data.createdAt;
+          this.fullName = data.fullName;
+          this.phone = data.phone;
+          this.email = data.email;
+          this.deliveryType = data.deliveryType;
+          this.city = data.city;
+          this.address = data.address;
+          this.paymentType = data.paymentType;
+          this.status = data.status;
+          this.totalCost = data.totalCost;
+          this.products = data.products;
+          if (typeof data.paymentError !== 'undefined') {
+            this.paymentError = data.paymentError;
+          }
+        })
+        .catch(error => {
+          console.warn('Ошибка при получении активного заказа');
+        })
+        .finally(() => {
+          // console.log('Завершена функция getOrder');
+          // alert(this.city);
+        });
+    },
+
+
     submitPayment() {
       const orderId = location.pathname.startsWith('/payment/')
         ? Number(location.pathname.replace('/payment/', '').replace('/', ''))
@@ -52,6 +84,9 @@ var mix = {
       return cookieValue;
     }
   },
+   mounted() {
+        this.getOrder();
+   },
   data() {
     return {
       number: '',
