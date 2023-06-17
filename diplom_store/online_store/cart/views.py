@@ -47,6 +47,7 @@ class BasketAPIView(APIView):
         products_in_cart = [product for product in cart.cart.keys()]
         products = Product.objects.filter(pk__in=products_in_cart)
         serializer = self.serializer_class(products, many=True, context=cart.cart)
+        print("BASKET_GET", serializer.data)
         return Response(data=serializer.data, status=200)
 
     def post(self, request, *args, **kwargs):
@@ -60,20 +61,24 @@ class BasketAPIView(APIView):
             update_quantity=False,
         )
         serializer = self.serializer_class(product, context=cart.cart)
-
+        print("BASKET_POST", serializer.data)
         return Response(data=serializer.data, status=201)
 
     def delete(self, request, *args, **kwargs):
         id = request.data.get('id')
         count = request.data.get('count', 1)
         update_quantity = request.data.get('remove')
-
+        print("UPDATE_QUANTITY", update_quantity)
         cart = Cart(request)
         product = get_object_or_404(Product, id=id)
         cart.remove(
             product=product,
             update_quantity=update_quantity
         )
+        print("CART", cart.cart)
+        if not cart.cart:
+            # serializer = ProductSerializer(product)
+            return Response(status=201)
 
         if update_quantity:
             serializer = ProductSerializer(product)

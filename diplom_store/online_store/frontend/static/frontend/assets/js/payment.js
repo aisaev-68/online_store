@@ -1,7 +1,7 @@
 var mix = {
   methods: {
     getOrder() {
-    alert(location.pathname.replace('/payment/', '').replace('/', ''))
+    //alert(location.pathname.replace('/payment/', '').replace('/', ''))
       this.id = location.pathname.startsWith('/payment/')
         ? Number(location.pathname.replace('/payment/', '').replace('/', ''))
         : null;
@@ -55,13 +55,13 @@ var mix = {
         }
       })
         .then(() => {
-          alert('Успешная оплата');
+          //alert('Успешная оплата');
           this.number = '';
           this.name = '';
           this.year = '';
           this.month = '';
           this.code = '';
-          location.assign('/');
+          location.assign('/progress-payment/' +  this.orderId + '/');
         })
         .catch(() => {
           console.warn('Ошибка при оплате');

@@ -6,7 +6,7 @@ from account.views import RegisterView, MyLoginView, MyLogoutView
 
 name = 'frontend'
 urlpatterns = [
-    path('', TemplateView.as_view(template_name="frontend/index.html")),
+    path('', TemplateView.as_view(template_name="frontend/index.html"), name='index'),
     path('about/', TemplateView.as_view(template_name="frontend/about.html")),
     path('account/', TemplateView.as_view(template_name="frontend/account.html"), name='account'),
     path('cart/', TemplateView.as_view(template_name="frontend/cart.html"), name='cart'),
@@ -19,7 +19,7 @@ urlpatterns = [
     path('payment-someone/', TemplateView.as_view(template_name="frontend/paymentsomeone.html"), name="payment-someone"),
     path('product/<int:pk>', TemplateView.as_view(template_name="frontend/product.html")),
     path('profile/', TemplateView.as_view(template_name="frontend/profile.html")),
-    path('progress-payment/', TemplateView.as_view(template_name="frontend/progressPayment.html"), name="progress-payment"),
+    path('progress-payment/<int:pk>/', TemplateView.as_view(template_name="frontend/progressPayment.html"), name="progress-payment"),
     path('sale/', TemplateView.as_view(template_name="frontend/sale.html")),
     path('settings/', TemplateView.as_view(template_name="frontend/settings.html")),
     path('register/', RegisterView.as_view(), name='register'),

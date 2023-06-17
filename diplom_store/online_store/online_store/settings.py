@@ -151,19 +151,19 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 SESSION_COOKIE_AGE = 30 * 24 * 60 * 60
 
 PAYMENT_METHODS = (
-    ('online_card_random', "Online from a random someone else's account"),
-    ('online_card', 'Online card'),
+    (1, "Online from a random someone else's account"),
+    (2, 'Online card'),
 )
 
 SHIPPING_METHODS = (
-    ('standard', 'Standard Shipping'),
-    ('express', 'Express Shipping'),
+    (1, 'Standard Shipping'),
+    (2, 'Express Shipping'),
 )
 
 ORDER_STATUSES = (
-    ('pending_payment', 'In progress'),
-    ('paid', 'Paid'),
-    ('payment_error', 'Payment error'),
+    (1, 'Paid'),
+    (2, 'Payment error'),
+    (3, 'Process'),
 )
 
 EXPRESS_SHIPPING_COST = 500.00

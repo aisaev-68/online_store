@@ -1,21 +1,14 @@
-from django.core.paginator import Paginator
-from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.utils.translation import gettext_lazy as _
-from django.urls import reverse
-from django.views import View
-from rest_framework import viewsets
+
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.contrib.auth.decorators import login_required
 from rest_framework.permissions import IsAuthenticated
 from drf_yasg.utils import swagger_auto_schema
 
 from account.forms import LoginForm
-from account.models import User
 from cart.cart import Cart
 from order.models import Order, OrderProducts
 from order.serializers import OrderSerializer, OrderProductSerializer
@@ -55,19 +48,15 @@ class OrderView(APIView):
             'currentPage': current_page,
             'lastPage': last_page,
         }
+
     def get(self, request, *args, **kwargs):
-        # queryset = Order.objects.all()
         data = self.pagination_queryset()
-        # paginated_queryset = data['pagination']
-        # serializer = self.serializer_class(paginated_queryset, many=True)
-        print("HISTORY ORDERS", data)
         return Response(data)
 
     @swagger_auto_schema(
         request_body=ProductSerializer,
         responses={201: OrderProductSerializer}
     )
-
     def post(self, request):
         if request.user.is_authenticated:
             order_products = []
@@ -91,14 +80,14 @@ class OrderView(APIView):
             order.user = request.user
             order.save()
 
+            Cart(request).clear()
+
             orders = OrderProductSerializer(instance=order).data
 
             return Response([orders], status=201)
         else:
             # return Response({"detail": "Authentication required."}, status=401)
             return render(request, 'account/login.html', context={"form": LoginForm()})
-
-
 
 
 class ConfirmOrderAPIView(APIView):
@@ -109,7 +98,6 @@ class ConfirmOrderAPIView(APIView):
     def get(self, request, pk, *args, **kwargs):
         order = Order.objects.get(pk=pk)
         serializer = self.serializer_class(order)
-        print('ORDER_ID', serializer.data)
         return Response(serializer.data)
 
     def post(self, request, pk, *args, **kwargs):
@@ -125,7 +113,7 @@ class ConfirmOrderAPIView(APIView):
         order.totalCost = request.data.get('totalCost')
 
         # Добавить стоимость доставки экспресс-доставки
-        if order.deliveryType == settings.SHIPPING_METHODS[0][0]:
+        if order.deliveryType == settings.SHIPPING_METHODS[0][1]:
             order.totalCost += payment_settings.express
         else:
             # Добавить стоимость обычной доставки
@@ -133,18 +121,13 @@ class ConfirmOrderAPIView(APIView):
                 order.totalCost += payment_settings.standard
 
         order.save()
-        print("ORDER SUCCESS",  OrderProductSerializer(order).data)
-        return Response(status=200)
 
+        return Response(status=200)
 
 
 class OrderActiveAPIView(APIView):
 
     def get(self, request, *args, **kwargs):
-        print(44444, self.request, self.kwargs, args, kwargs, request.data)
-        order = Order.objects.filter(status='pending_payment').first()
-
-        cart = Cart(request).cart
+        order = Order.objects.filter(status="").first()
         serializer = OrderProductSerializer(order)
-        print("ORDER_ACTIVE", serializer.data)
         return Response(serializer.data)

@@ -95,7 +95,7 @@
                         <div class="form-group">
                             <div v-for="(value, key) in shipping_methods_choices" :value="key">
                                 <label class="toggle">
-                                    <input type="radio" v-model="deliveryType" name="delivery" :value="key" @change="updateTotalCost"
+                                    <input type="radio" v-model="deliveryType" name="delivery" :value="value" @change="updateTotalCost"
                                            checked="checked"/>
 <!--                                    <input type="hidden" name="delivery" v-model="deliveryType" value="{{ order.deliveryType }}">-->
                                     <span class="toggle-box"></span>
@@ -140,7 +140,7 @@
                         <div class="form-group">
                             <div v-for="(value, key) in payment_methods_choices" :value="key">
                                 <label class="toggle">
-                                    <input type="radio" v-model="paymentType" name="pay" :value="key"
+                                    <input type="radio" v-model="paymentType" name="pay" :value="value"
                                            checked="checked"/>
 <!--                                    <input type="hidden" name="payment" v-model="paymentType" value="{{ order.paymentType }}">-->
                                     <span class="toggle-box"></span>

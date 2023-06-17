@@ -24,17 +24,17 @@ class PaymentSettings(models.Model):
     payment_methods = models.CharField(
         max_length=100,
         choices=settings.PAYMENT_METHODS,
-        default=settings.PAYMENT_METHODS[0][0]
+        default=settings.PAYMENT_METHODS[0][1]
     )
     shipping_methods = models.CharField(
         max_length=100,
         choices=settings.SHIPPING_METHODS,
-        default=settings.SHIPPING_METHODS[0][0]
+        default=settings.SHIPPING_METHODS[0][1]
     )
     order_status = models.CharField(
         max_length=100,
         choices=settings.ORDER_STATUSES,
-        default=settings.ORDER_STATUSES[0][0]
+        default=settings.ORDER_STATUSES[2][0]
     )
     page_size = models.IntegerField(
         default=settings.REST_FRAMEWORK['PAGE_SIZE'],

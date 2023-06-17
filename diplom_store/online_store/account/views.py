@@ -34,14 +34,15 @@ class AccountUser(APIView):
     authentication_classes = (SessionAuthentication,)
     serializer_class = UserAvatarSerializer
 
-    @swagger_auto_schema(
-        responses={200: UserAvatarSerializer},
-        operation_description=_("Get user full name and avatar"),
-    )
+    # @swagger_auto_schema(
+    #     responses={200: UserAvatarSerializer},
+    #     operation_description=_("Get user full name and avatar"),
+    # )
     def get(self, request, *args, **kwargs):
+        print("ACCOUNT", request)
         user = self.request.user
         serializer = self.serializer_class(user)
-        return Response(serializer.data)
+        return Response(serializer.data, status=200)
 
 
 class RegisterView(View):
@@ -105,7 +106,7 @@ class MyLoginView(View):
             if user is not None:
                 if user.is_active:
                     login(request, user)
-                    request.session['is_authenticated'] = True
+                    # request.session['is_authenticated'] = True
                     if Cart(request).cart:
                         return redirect('cart')
                     return redirect('account')

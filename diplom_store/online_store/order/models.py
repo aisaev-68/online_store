@@ -1,5 +1,6 @@
 from django.core.validators import RegexValidator
 from django.db import models
+from django.db.models import F
 from django.utils.translation import gettext_lazy as _
 from online_store import settings
 from product.models import Product
@@ -24,11 +25,9 @@ class Order(models.Model):  # Заказы
     email = models.EmailField(verbose_name='email')
     phone = models.CharField(max_length=16,
                              validators=[RegexValidator(regex=r"^\+?1?\d{8,15}$")], verbose_name=_('phone'))
-    deliveryType = models.CharField(max_length=50, choices=settings.SHIPPING_METHODS,
-                                    verbose_name=_('availability of free shipping'))
-    paymentType = models.CharField(max_length=50, choices=settings.PAYMENT_METHODS, verbose_name=_('payment method'))
-    status = models.TextField(max_length=50, choices=settings.ORDER_STATUSES, default='pending_payment',
-                              verbose_name=_('payment state'))
+    deliveryType = models.CharField(max_length=50, verbose_name=_('availability of free shipping'))
+    paymentType = models.CharField(max_length=50, verbose_name=_('payment method'))
+    status = models.TextField(max_length=50, verbose_name=_('payment state'))
     city = models.CharField(max_length=50, default=_('not specified'), verbose_name=_('delivery city'))
     address = models.CharField(max_length=100, default=_('not specified'), verbose_name=_('delivery address'),
                                blank=True)
@@ -59,6 +58,13 @@ class OrderProducts(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, verbose_name=_('order'))
     product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name=_('product'))
     count_product = models.PositiveIntegerField(default=0, verbose_name=_('quantity of goods in the order'))
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        # Уменьшение количества продукта при создании заказа
+        self.product.count = F('count') - self.count_product
+        self.product.save()
+
 
     def __str__(self):
         """
