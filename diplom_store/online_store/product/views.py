@@ -156,7 +156,7 @@ class ProductDetailView(APIView):
         product = Product.objects.get(pk=pk)
         serializer = ProductSerializer(product, many=False)
         print("PRODUCT", serializer.data)
-        return Response(serializer.data)
+        return Response(serializer.data, status=200)
 
 
 class ProductReviewView(APIView):
