@@ -56,8 +56,8 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ('id', 'category', 'price', 'count', 'date', 'title', 'description', 'href', 'freeDelivery',
-                  'images', 'tags', 'reviews', 'rating')
+        fields = ('id', 'category', 'price', 'count', 'date', 'title', 'description', 'fullDescription', 'href', 'freeDelivery',
+                  'images', 'tags', 'attributes', 'reviews', 'rating')
 
     def get_reviews(self, obj):
         return obj.reviews.count()

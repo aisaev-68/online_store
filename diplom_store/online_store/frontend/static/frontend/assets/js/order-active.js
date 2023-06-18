@@ -1,8 +1,7 @@
 var mix = {
   methods: {
-    getOrder(orderId) {
-    //alert(orderId);
-      this.getData('/api/orders/active')
+    getOrder() {
+      this.getData('/api/orders/active/')
         .then(data => {
           this.orderId = data.orderId;
           this.createdAt = data.createdAt;
@@ -76,7 +75,7 @@ var mix = {
             //alert(this.fullName);
 
             if (this.paymentType === paymentMethod) {
-              location.replace('/payment/' + this.orderId + '/');
+              location.replace('/payment/');
             } else {
               location.replace('/payment-someone/');
             }
@@ -118,7 +117,7 @@ var mix = {
     }
   },
   mounted() {
-    this.getOrder(this.orderId);
+    this.getOrder();
     this.getSettings();
   },
   data() {

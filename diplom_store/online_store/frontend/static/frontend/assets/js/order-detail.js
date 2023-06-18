@@ -1,6 +1,6 @@
 var mix = {
   methods: {
-    getOrder() {
+    getOrderDetail() {
       this.id = location.pathname.startsWith('/order-detail/')
         ? Number(location.pathname.replace('/order-detail/', ''))
         : null;
@@ -32,6 +32,7 @@ var mix = {
         });
     },
 
+
     getCookie(name) {
       let cookieValue = null;
       if (document.cookie && document.cookie !== '') {
@@ -48,7 +49,7 @@ var mix = {
     }
   },
   mounted() {
-    this.getOrder();
+    this.getOrderDetail();
   },
   data() {
     return {
@@ -65,6 +66,8 @@ var mix = {
       totalCost: null,
       products: [],
       paymentError: null,
+      payment_methods_choices: {},
+      shipping_methods_choices: {}
     };
   }
 };

@@ -1,15 +1,9 @@
 var mix = {
   methods: {
     checkPaymentStatus() {
-      const orderId = location.pathname.startsWith('/progress-payment/')
-        ? Number(location.pathname.replace('/progress-payment/', '').replace('/', ''))
-        : null;
-       // alert("PROGRESS")
-      //alert(orderId);
-
-      this.getData('/api/payment/' + orderId + '/')
-        .then(data => {
-          this.status = data.status;
+//      this.getData('/api/payment/')
+//        .then(data => {
+//          this.status = data.status;
           //alert("STATUS");
          // alert(this.status);
          setTimeout(() => {
@@ -22,12 +16,12 @@ var mix = {
 //          } else {
 //            setTimeout(this.checkPaymentStatus, 100);
 //          }
-        })
-        .catch((error) => {
-          console.warn('Ошибка при проверке статуса оплаты', error);
-          //this.$router.push('/payment-error');
-        });
-    }
+        }
+//        .catch((error) => {
+//          console.warn('Ошибка при проверке статуса оплаты', error);
+//          //this.$router.push('/payment-error');
+//        });
+//    }
   },
   mounted() {
     this.checkPaymentStatus();

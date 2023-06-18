@@ -63,7 +63,7 @@ class Product(models.Model):  # товар
         Получение ссылки для продукта
         :return: ссылка на детальную информацию о продукте
         """
-        return f'/catalog/{self.pk}'
+        return f'/product/{self.pk}/'
 
     def description(self):
         """

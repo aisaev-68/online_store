@@ -1,5 +1,5 @@
 from datetime import datetime
-
+from rest_framework.authentication import SessionAuthentication
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render
 from django.views import View
@@ -147,39 +147,31 @@ class BannerView(APIView):
         pass
 
 
-class ProductDetailView(viewsets.ViewSet):
+class ProductDetailView(APIView):
     """
     Представление для получения детальной страницы продукта
     """
 
-    def retrieve(self, request, pk):
+    def get(self, request, pk):
         product = Product.objects.get(pk=pk)
         serializer = ProductSerializer(product, many=False)
+        print("PRODUCT", serializer.data)
         return Response(serializer.data)
 
 
-class ProductReviewView(CreateModelMixin, GenericAPIView):
+class ProductReviewView(APIView):
     """
     Представление для создания отзывов о продукте
     """
     serializer_class = ReviewSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (SessionAuthentication,)
 
-    def post(self, request, *args, **kwargs):
-        self.create()
-        return self.create(request, *args, **kwargs)
-
-    def create(self, request, *args, **kwargs):
-        pk = kwargs['pk']
-        request.data['product'] = pk
-        request.data['date'] = datetime.now()
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        reviews = Review.objects.filter(product=pk)
-        serializer = self.serializer_class(reviews, many=True)
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+    def post(self, request, pk, *args, **kwargs):
+        data = request.data
+        review = Review.objects.create(authotr='', email='', text='', data=datetime.now(), product=pk)
+        serializer = self.serializer_class(review)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class ManufacturerListAPIView(APIView):

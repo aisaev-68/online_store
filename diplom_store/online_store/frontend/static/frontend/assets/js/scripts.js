@@ -740,38 +740,83 @@ var Account = function(){
     };
 };
 Account().init();
-var Payment = function(){
+var Payment = function() {
+    function generateRandomName() {
+        var names = ['John', 'Jane', 'Alex', 'Emily', 'Michael', 'Emma', 'David', 'Olivia', 'Daniel', 'Sophia'];
+        var surnames = ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Miller', 'Davis', 'Garcia', 'Rodriguez', 'Wilson'];
+
+        var randomName = names[Math.floor(Math.random() * names.length)];
+        var randomSurname = surnames[Math.floor(Math.random() * surnames.length)];
+
+        return randomSurname + ' ' + randomName;
+    }
+
     return {
-        init: function(){
-            $('.Payment-generate').on('click', function(e){
+        init: function() {
+            var self = this;
+
+            $('.Payment-generate').on('click', function(e) {
+                e.preventDefault();
+
                 var $this = $(this),
                     $bill = $this.closest('.Payment').find('.Payment-bill'),
-                    billNumber = '';
+                    $month = $this.closest('.Payment').find('.Payment-month'),
+                    $year = $this.closest('.Payment').find('.Payment-year'),
+                    $code = $this.closest('.Payment').find('.Payment-card-code'),
+                    $name = $this.closest('.Payment').find('.Payment-name');
 
-                e.preventDefault();
+                // Generate random bill number
+                var billNumber = '';
                 do {
                     billNumber = Math.random() + '';
                     billNumber = billNumber.slice(-9, -1);
-                } while(parseFloat(billNumber)%2!==0);
+                } while (parseFloat(billNumber) % 2 !== 0);
                 billNumber = billNumber.slice(0, 4) + ' ' + billNumber.slice(4, 8);
                 $bill.val(billNumber);
+                self.number = billNumber;
+                $bill.add($month).add($year).add($code).add($name).trigger('input');
+                // Generate random month
+                var currentMonth = new Date().getMonth() + 1; // Get current month (1-12)
+                var randomMonth = Math.floor(Math.random() * (12 - currentMonth + 1)) + currentMonth;
+                $month.val(randomMonth < 10 ? '0' + randomMonth : randomMonth);
+                self.month = randomMonth;
+
+                // Generate random year
+                var currentYear = new Date().getFullYear(); // Get current year
+                var randomYear = Math.floor(Math.random() * (2030 - currentYear + 1)) + currentYear;
+                $year.val(randomYear);
+                self.year = randomYear;
+
+                // Generate random card code (CVV)
+                var randomCode = Math.floor(Math.random() * 900) + 100;
+                $code.val(randomCode);
+                self.code = randomCode;
+
+                // Generate random name
+                var randomName = generateRandomName();
+                $name.val(randomName);
+                self.name = randomName;
             });
-            $('.Payment-pay .btn').on('click', function(e){
+
+
+            $('.Payment-pay .btn').on('click', function(e) {
                 var $this = $(this),
                     $validate = $this.closest('.form').find('[data-validate]');
-    
-                $validate.each(function(){
+
+                $validate.each(function() {
                     var $this = $(this);
                     $this.trigger('blur');
-                    if ($this.data('errorinput')){
+                    if ($this.data('errorinput')) {
                         e.preventDefault();
                     }
                 });
             });
+
         }
     };
 };
-Payment().init();
+
+//Payment().init();
 var Tabs = function(){
     var $tabs = $('.Tabs');
     var $tabsLink = $('.Tabs-link');

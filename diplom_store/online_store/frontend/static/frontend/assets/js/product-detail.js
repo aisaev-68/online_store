@@ -12,9 +12,9 @@ var mix = {
         },
         getProduct() {
             const productId = location.pathname.startsWith('/product/')
-            ? Number(location.pathname.replace('/product/', ''))
+            ? Number(location.pathname.replace('/product/', '').replace('/', ''))
             : null
-            this.getData(`/api/products/${productId}`).then(data => {
+            this.getData(`/api/product/${productId}/`).then(data => {
                 this.product = {
                     ...this.product,
                     ...data
@@ -25,7 +25,7 @@ var mix = {
             })
         },
         submitReview () {
-            this.postData('/api/product'+ this.product.id+'/review', {
+            this.postData('/api/product/'+ this.product.id+'/review/', {
                 author: this.review.author,
                 email: this.review.email,
                 text: this.review.text,

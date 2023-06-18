@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.utils.translation import gettext_lazy as _
-
+from django.shortcuts import get_object_or_404
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
@@ -20,7 +20,7 @@ from online_store import settings
 from payment.models import PaymentSettings
 
 
-class OrderView(APIView):
+class OrderHistoryAPiView(APIView):
     permission_classes = (IsAuthenticated,)
     authentication_classes = (SessionAuthentication,)
     serializer_class = OrderProductSerializer
@@ -51,7 +51,7 @@ class OrderView(APIView):
 
     def get(self, request, *args, **kwargs):
         data = self.pagination_queryset()
-        return Response(data)
+        return Response(data, status=200)
 
     @swagger_auto_schema(
         request_body=ProductSerializer,
@@ -90,15 +90,15 @@ class OrderView(APIView):
             return render(request, 'account/login.html', context={"form": LoginForm()})
 
 
-class ConfirmOrderAPIView(APIView):
+class OrderAPIView(APIView):
     permission_classes = (IsAuthenticated,)
     authentication_classes = (SessionAuthentication,)
     serializer_class = OrderProductSerializer
 
     def get(self, request, pk, *args, **kwargs):
-        order = Order.objects.get(pk=pk)
+        order = Order.objects.get(user=request.user, orderId=pk)
         serializer = self.serializer_class(order)
-        return Response(serializer.data)
+        return Response(serializer.data, status=200)
 
     def post(self, request, pk, *args, **kwargs):
         payment_settings = PaymentSettings.objects.first()
@@ -122,12 +122,20 @@ class ConfirmOrderAPIView(APIView):
 
         order.save()
 
-        return Response(status=200)
+        serializer = self.serializer_class(order)
+        return Response(serializer.data, status=201)
 
 
 class OrderActiveAPIView(APIView):
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (SessionAuthentication,)
+    serializer_class = OrderProductSerializer
 
     def get(self, request, *args, **kwargs):
-        order = Order.objects.filter(status="").first()
-        serializer = OrderProductSerializer(order)
-        return Response(serializer.data)
+        order = Order.objects.get(user=request.user, status="")
+        serializer = self.serializer_class(order)
+        print("ORDER_SER", serializer.data)
+        return Response(serializer.data, status=200)
+
+
+

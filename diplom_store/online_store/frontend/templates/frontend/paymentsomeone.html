@@ -2,37 +2,105 @@
 {% load static %}
 
 {% block content %}
-  <div class="Middle Middle_top">
+<div class="Middle Middle_top">
     <div class="Middle-top">
-      <div class="wrap">
-        <div class="Middle-header">
-          <h1 class="Middle-title">Оплата
-          </h1>
-          <ul class="breadcrumbs Middle-breadcrumbs">
-            <li class="breadcrumbs-item"><a href="index.html">home</a>
-            </li>
-            <li class="breadcrumbs-item breadcrumbs-item_current"><span>Оплата</span>
-            </li>
-          </ul>
+        <div class="wrap">
+            <div class="Middle-header">
+                <h1 class="Middle-title">Оплата
+                </h1>
+                <ul class="breadcrumbs Middle-breadcrumbs">
+                    <li class="breadcrumbs-item"><a href="index.html">home</a>
+                    </li>
+                    <li class="breadcrumbs-item breadcrumbs-item_current"><span>Оплата</span>
+                    </li>
+                </ul>
+            </div>
         </div>
-      </div>
     </div>
     <div class="Section">
-      <div class="wrap">
-        <form class="form Payment" action="#" method="post">
-          <div class="Payment-card">
-            <div class="form-group">
-              <label class="form-label">Номер счета
-              </label>
-              <input class="form-input Payment-bill" id="numero1" name="numero1" type="text" placeholder="9999 9999" data-mask="9999 9999" data-validate="require pay"/>
-            </div>
-            <div class="form-group"><a class="btn btn_success Payment-generate" href="#">Сгенирировать случайный счет</a>
-            </div>
-          </div>
-          <div class="Payment-pay"><a class="btn btn_primary" href="{% url 'progress-payment' %}">Оплатить</a>
-          </div>
-        </form>
-      </div>
+        <div class="wrap">
+            <form class="form Payment" action="/progress-payment/" @submit.prevent="submitPayment">
+                <div class="Payment-card">
+                    <div class="form-group">
+                        <label class="form-label">Номер счета
+                        </label>
+                        <input class="form-input Payment-bill"
+                               id="number"
+                               name="number"
+                               type="text"
+                               v-maska
+                               data-maska="#### ####"
+                               data-validate="require pay"
+                               v-model="number"/>
+                    </div>
+                    <div class="form-group ">
+                        <label for="month" class="form-label">
+                            Месяц
+                            <input class="form-input Payment-bill Payment-month"
+                                   id="month"
+                                   name="month"
+                                   type="text"
+                                   v-maska
+                                   data-maska="##"
+                                   data-validate="require"
+                                   v-model="month"
+                            />
+                        </label>
+                    </div>
+                    <div class="form-group ">
+                        <label for="year" class="form-label">
+                            Год
+                            <input class="form-input Payment-bill Payment-year"
+                                   id="year"
+                                   name="year"
+                                   type="text"
+                                   v-maska
+                                   data-maska="####"
+                                   data-validate="require"
+                                   v-model="year"
+                            />
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label for="code" class="form-label">
+                            CVV
+                            <input class="form-input Payment-bill Payment-card-code"
+                                   id="code"
+                                   name="code"
+                                   type="text"
+                                   v-maska
+                                   data-maska="###"
+                                   data-validate="require"
+                                   v-model="code"
+                            />
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label for="name1" class="form-label">
+                            ФИО
+                            <input class="form-input Payment-bill Payment-name"
+                                   id="name1"
+                                   name="name1"
+                                   type="text"
+                                   v-model="name"
+                                   required
+                            >
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <a class="btn btn_success" href="#" @click="generateRandomData">
+                        Сгенирировать случайный счет
+                    </a>
+                </div>
+                <div class="Payment-pay">
+                    <button class="btn btn_primary" type="submit">Оплатить</button>
+                </div>
+            </form>
+        </div>
     </div>
-  </div>
+</div>
+{% endblock %}
+{% block mixins %}
+<script src="{% static 'frontend/assets/js/payment.js' %}"></script>
 {% endblock %}
