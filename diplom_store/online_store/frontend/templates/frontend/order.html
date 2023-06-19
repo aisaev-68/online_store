@@ -93,29 +93,15 @@
                             </h2>
                         </header>
                         <div class="form-group">
-                            <div v-for="(value, key) in shipping_methods_choices" :value="key">
+                            <div v-for="(value, key, index) in shipping_methods_choices" :value="key">
                                 <label class="toggle">
                                     <input type="radio" v-model="deliveryType" name="delivery" :value="value" @change="updateTotalCost"
-                                           checked="checked"/>
-<!--                                    <input type="hidden" name="delivery" v-model="deliveryType" value="{{ order.deliveryType }}">-->
+                                            :checked="index === 0"/>
                                     <span class="toggle-box"></span>
                                     <span class="toggle-text">${ value }$</span>
                                 </label>
                             </div>
-<!--                            <div>-->
-<!--                                <label class="toggle">-->
-<!--                                    <input type="radio" v-model="deliveryType" name="delivery" value="ordinary"-->
-<!--                                           checked="checked"/><span class="toggle-box"></span><span class="toggle-text">Обычная доставка</span>-->
-<!--                                </label>-->
-<!--                            </div>-->
-<!--                            <div>-->
-<!--                                <label class="toggle">-->
-<!--                                    <input type="radio" v-model="deliveryType" name="delivery"-->
-<!--                                           value="express"/>-->
-<!--                                    <span class="toggle-box"></span>-->
-<!--                                    <span class="toggle-text">Экспресс доставка</span>-->
-<!--                                </label>-->
-<!--                            </div>-->
+
                         </div>
                         <div class="form-group">
                             <label class="form-label" for="city">Город
@@ -138,30 +124,15 @@
                             </h2>
                         </header>
                         <div class="form-group">
-                            <div v-for="(value, key) in payment_methods_choices" :value="key">
+                            <div v-for="(value, key, index) in payment_methods_choices" :value="key">
                                 <label class="toggle">
                                     <input type="radio" v-model="paymentType" name="pay" :value="value"
-                                           checked="checked"/>
+                                            :checked="index === 0"/>
 <!--                                    <input type="hidden" name="payment" v-model="paymentType" value="{{ order.paymentType }}">-->
                                     <span class="toggle-box"></span>
                                     <span class="toggle-text">${ value }$</span>
                                 </label>
                             </div>
-<!--                            <div>-->
-<!--                                <label class="toggle">-->
-<!--                                    <input type="radio" v-model="paymentType" name="pay" value="{{ order.paymentType }}"-->
-<!--                                           checked="checked"/>-->
-<!--                                    <span class="toggle-box"></span>-->
-<!--                                    <span class="toggle-text">Онлайн картой</span>-->
-<!--                                </label>-->
-<!--                            </div>-->
-<!--                            <div>-->
-<!--                                <label class="toggle">-->
-<!--                                    <input type="radio" v-model="paymentType" name="pay" value="someone"/><span-->
-<!--                                        class="toggle-box"></span>-->
-<!--                                    <span class="toggle-text">Онлайн со случайного чужого счета</span>-->
-<!--                                </label>-->
-<!--                            </div>-->
                         </div>
                         <div class="Order-footer"><a class="btn btn_success Order-next" href="#step4">Дальше</a>
                         </div>
