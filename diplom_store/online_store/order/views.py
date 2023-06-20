@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from django.utils.translation import gettext_lazy as _
 from django.shortcuts import get_object_or_404
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
@@ -21,7 +23,7 @@ from payment.models import PaymentSettings
 
 
 class OrderHistoryAPiView(APIView):
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
     authentication_classes = (SessionAuthentication,)
     serializer_class = OrderProductSerializer
 
@@ -87,8 +89,8 @@ class OrderHistoryAPiView(APIView):
             return Response([orders], status=201)
         else:
             # return Response({"detail": "Authentication required."}, status=401)
-            return render(request, 'account/login.html', context={"form": LoginForm()})
-
+            # return render(request, 'account/login.html', context={"form": LoginForm()})
+            return HttpResponseRedirect(reverse('login'))
 
 class OrderAPIView(APIView):
     permission_classes = (IsAuthenticated,)

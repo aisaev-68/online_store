@@ -4,6 +4,9 @@ from django.urls import reverse_lazy
 from django.views import View
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
+from django.urls import reverse
+from rest_framework.decorators import permission_classes
+from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
 from rest_framework.authentication import SessionAuthentication
 
@@ -57,28 +60,31 @@ class BasketAPIView(APIView):
         product = get_object_or_404(Product, pk=id)
         cart.add(
             product=product,
-            quantity=count,
-            update_quantity=False,
         )
         serializer = self.serializer_class(product, context=cart.cart)
         print("BASKET_POST", serializer.data)
         return Response(data=serializer.data, status=201)
 
+    # @permission_classes([AllowAny])
     def delete(self, request, *args, **kwargs):
+        print("DATA", request.data)
         id = request.data.get('id')
-        count = request.data.get('count', 1)
-        update_quantity = request.data.get('remove')
-        print("UPDATE_QUANTITY", update_quantity)
+        count = request.data.get('count')
+        update_quantity = False
+        if count == 1:
+            update_quantity = True
+        # update_quantity = request.data.get('remove')
+        # print("UPDATE_QUANTITY", update_quantity)
         cart = Cart(request)
         product = get_object_or_404(Product, id=id)
         cart.remove(
             product=product,
-            update_quantity=update_quantity
+            update_quantity=update_quantity,
         )
         print("CART", cart.cart)
         if not cart.cart:
             # serializer = ProductSerializer(product)
-            return Response(status=201)
+            return HttpResponseRedirect(reverse('index'))
 
         if update_quantity:
             serializer = ProductSerializer(product)

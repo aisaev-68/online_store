@@ -292,7 +292,7 @@ class SettingsAPIView(APIView):
 
 
 class CheckAuthenticationAPI(APIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     def get(self, request):
         is_authenticated = request.user.is_authenticated
         return Response({"is_authenticated": is_authenticated})
