@@ -20,6 +20,7 @@ scrapy-user-agents = "^0.1.1"
 django-filter = "^23.2"
 django-cors-headers = "^4.0.0"
 mimesis = "^10.1.0"
+coreapi = "^2.3.3"
 
 
 [build-system]

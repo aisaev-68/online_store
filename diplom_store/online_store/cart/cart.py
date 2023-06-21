@@ -58,7 +58,7 @@ class Cart(object):
         # Отметить сеанс как "измененный", чтобы убедиться, что он сохранен
         self.session.modified = True
 
-    def remove(self, product, update_quantity):
+    def remove(self, product, update_quantity, quantity=1):
         """
         Удаление товара из корзины.
         """
@@ -67,18 +67,20 @@ class Cart(object):
 
         if product_id in self.cart:
             if not update_quantity: # False
-                print("ВХОД ДЛЯ УДАЛЕНИЯ")
-                if self.cart[product_id]['quantity'] > 1:
+                print("ВХОД ДЛЯ УДАЛЕНИЯ", quantity)
+                if self.cart[product_id]['quantity'] > quantity:
                     print("УСЛОВИЕ БОЛЬШЕ 1")
-                    self.cart[product_id]['quantity'] -= 1
+                    self.cart[product_id]['quantity'] -= quantity
                     self.save()
                 else:
-                    print("ПОЛНОЕ УДАЛЕНИЕ ПРОДУКТА1", self.cart, product_id, self.cart[product_id])
+                    print("ПОЛНОЕ УДАЛЕНИЕ ПРОДУКТА1", quantity, self.cart, product_id, self.cart[product_id])
                     del self.cart[product_id]
             else:
-                print("ПОЛНОЕ УДАЛЕНИЕ ПРОДУКТА")
+                print("ПОЛНОЕ УДАЛЕНИЕ ПРОДУКТА", self.cart.items())
                 del self.cart[product_id]
                 self.save()
+                print("ПОЛНОЕ УДАЛЕНИЕ ПРОДУКТА", self.cart.items())
+
 
     def get_total_price(self):
         """
