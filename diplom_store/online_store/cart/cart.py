@@ -73,6 +73,7 @@ class Cart(object):
                     self.cart[product_id]['quantity'] -= 1
                     self.save()
                 else:
+                    print("ПОЛНОЕ УДАЛЕНИЕ ПРОДУКТА1", self.cart, product_id, self.cart[product_id])
                     del self.cart[product_id]
             else:
                 print("ПОЛНОЕ УДАЛЕНИЕ ПРОДУКТА")

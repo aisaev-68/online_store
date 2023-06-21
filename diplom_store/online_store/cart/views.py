@@ -68,28 +68,32 @@ class BasketAPIView(APIView):
     # @permission_classes([AllowAny])
     def delete(self, request, *args, **kwargs):
         # print("DATA", request.data)
+        cart = Cart(request)
         id = request.data.get('id')
         count = request.data.get('count')
         update_quantity = False
-        print("COUNT_DELETE_VIEW", count)
-        if count is None:
+        print("COUNT_DELETE_VIEW", id, cart.cart[str(id)])
+        if cart.cart[str(id)].get('quantity') == 1:
             update_quantity = True
         # update_quantity = request.data.get('remove')
         # print("UPDATE_QUANTITY", update_quantity)
-        cart = Cart(request)
+
         product = get_object_or_404(Product, id=id)
         cart.remove(
             product=product,
             update_quantity=update_quantity,
         )
-        print("CART", cart.cart)
-        if not cart.cart:
-            # serializer = ProductSerializer(product)
-            return HttpResponseRedirect(reverse('index'))
+        print("CART", cart.cart, update_quantity)
+
 
         if update_quantity:
             serializer = ProductSerializer(product)
         else:
             serializer = self.serializer_class(product, context=cart.cart)
+
+        # if not cart.cart:
+        #     # serializer = ProductSerializer(product)
+        #     return HttpResponseRedirect(reverse('index'))
+
         return Response(data=serializer.data, status=201)
 
