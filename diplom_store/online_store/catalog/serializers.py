@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from drf_yasg.utils import swagger_serializer_method
 from catalog.models import Category
+from product.models import Product
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -37,9 +38,6 @@ class SubcategorySerializer(serializers.ModelSerializer):
         }
 
 
-
-
-
 class BannersSerializer(serializers.ModelSerializer):
     """
     Сериализация баннеров для главной страницы (категорий товаров)
@@ -48,7 +46,7 @@ class BannersSerializer(serializers.ModelSerializer):
     images = serializers.StringRelatedField(many=True)
 
     class Meta:
-        model = Category
+        model = Product
         fields = ['title', 'href', 'price', 'images']
 
 

@@ -16,7 +16,7 @@ from catalog.models import Category
 from catalog.serializers import CategorySerializer
 
 from product.models import Product, Sale
-from product.serializers import ProductSerializer, SaleSerializer
+from product.serializers import ProductSerializer, SaleSerializer, ProductOrderSerializer
 
 from catalog.examples import example
 
@@ -265,9 +265,9 @@ class BannersView(APIView):
     def get(self, request, *args, **kwargs):
         products = Product.objects.filter(banner=True).prefetch_related('images').order_by('id')[:4]
 
-        for product in products:
-            product.categoryName = product.category
-        serializer = ProductSerializer(products, many=True)
-
+        # for product in products:
+        #     product.categoryName = product.category
+        serializer = ProductOrderSerializer(products, many=True)
+        print("BANNER", serializer.data)
         return Response(serializer.data)
 
