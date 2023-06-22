@@ -1,14 +1,8 @@
-from django.http import HttpResponseRedirect
-from django.shortcuts import render, redirect
-from django.urls import reverse_lazy
-from django.views import View
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
+from rest_framework.request import Request
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
-from django.urls import reverse
-from rest_framework.decorators import permission_classes
-from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
 from rest_framework.authentication import SessionAuthentication
 
@@ -16,28 +10,29 @@ from cart.cart import Cart
 from cart.serializers import BasketSerializer
 from product.models import Product
 
-from product.serializers import ProductSerializer
-
 
 class CartAPIView(APIView):
     """
     Получение продуктов из корзины и их сериализация
-    :param cart: корзина продуктов
-    :return: сериализованные данные
     """
-
     # permission_classes = (IsAuthenticated,)
     # authentication_classes = (SessionAuthentication,)
     serializer_class = BasketSerializer
-    def get(self, request):
+
+    def get(self, request: Request) -> Response:
+        """
+        Получение продуктов из корзины
+
+        Входные переменные:
+            - request: объект запроса
+        Возвращаемые значения:
+            - response: объект ответа с сериализованными данными продуктов из корзины
+        """
         cart = Cart(request)
         products_in_cart = [product for product in cart.cart.keys()]
         products = Product.objects.filter(pk__in=products_in_cart)
         serializer = self.serializer_class(products, many=True, context=cart.cart)
         return Response(serializer.data)
-
-
-
 
 
 class BasketAPIView(APIView):
@@ -74,7 +69,15 @@ class BasketAPIView(APIView):
         #     ),
         # }
     )
-    def post(self, request, *args, **kwargs):
+    def post(self, request: Request, *args, **kwargs) -> Response:
+        """
+        Добавление продукта в корзину
+
+        Входные переменные:
+            - request: объект запроса
+        Возвращаемые значения:
+            - response: объект ответа с данными добавленного продукта
+        """
         id = request.data.get('id')
         count = request.data.get('count')
         cart = Cart(request)
@@ -106,14 +109,21 @@ class BasketAPIView(APIView):
         #     ),
         # }
     )
-    def delete(self, request, *args, **kwargs):
-        # print("DATA", request.data)
+    def delete(self, request: Request, *args, **kwargs) -> Response:
+        """
+        Удаление продукта из корзины
+
+        Входные переменные:
+            - request: объект запроса
+        Возвращаемые значения:
+            - response: объект ответа с данными удаленного продукта или пустой массив
+        """
+
         cart = Cart(request)
         id = request.data.get('id')
         count = request.data.get('count')
         update_quantity = False
-        print("COUNT_DELETE_VIEW", id, cart.cart[str(id)])
-        #cart.cart[str(id)].get('quantity') == 1 or
+
         if cart.cart[str(id)].get('quantity') == count:
             update_quantity = True
 
@@ -123,17 +133,9 @@ class BasketAPIView(APIView):
             quantity=count,
             update_quantity=update_quantity,
         )
-        print("CART", cart.cart, update_quantity)
-
 
         if update_quantity:
             return Response(data=[], status=201)
         else:
             serializer = self.serializer_class(product, context=cart.cart)
             return Response(data=[serializer.data], status=201)
-
-        # if cart.cart:
-        #     return HttpResponseRedirect(reverse('index'))
-        print("ser_data", serializer.data)
-
-
