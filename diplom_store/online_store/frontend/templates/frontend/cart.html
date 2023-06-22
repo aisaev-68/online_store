@@ -24,7 +24,7 @@
 
             {% csrf_token %}
                 <!-- Данные по товару в корзине -->
-                ${is_authenticated}$
+
                 <div v-for="product in Object.values(basket)" class="Cart-product">
                     <div class="Cart-block Cart-block_row">
                         <div class="Cart-block Cart-block_pict">
@@ -56,7 +56,7 @@
                             </div>
                         </div>
                         <div class="Cart-block Cart-block_delete">
-                            <button class="Cart-delete" @click="removeFromBasket(product)">
+                            <button type="button" class="Cart-delete" @click="removeFromBasket(product, product.count)">
                                 <img src="/static/frontend/assets/img/icons/card/delete.svg"
                                      alt="delete.svg"/>
                             </button>
@@ -70,6 +70,7 @@
                         <span class="Cart-price">${ basketCount.price }$$</span>
                     </div>
                 </div>
+
                 <div class="Cart-block" v-if="basketCount.count">
                      <button type="submit" class="btn btn_success btn_lg">Оформить заказ</button>
                 </div>

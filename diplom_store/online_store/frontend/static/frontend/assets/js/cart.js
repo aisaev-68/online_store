@@ -53,7 +53,8 @@ var mix = {
             });
         },
         submitBasket(is_authenticated) {
-        if (!is_authenticated) {
+        if (!is_authenticated && this.basketCount) {
+        alert("AAAAAAAAAAAAA")
              //location.replace('/login/');
              window.location.href = '/login/';
              return;
