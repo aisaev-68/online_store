@@ -32,7 +32,7 @@ class Order(models.Model):  # Заказы
     address = models.CharField(max_length=100, default=_('not specified'), verbose_name=_('delivery address'),
                                blank=True)
     totalCost = models.IntegerField(default=0, verbose_name=_('total order value'), blank=True)
-    payment = models.OneToOneField(Payment, on_delete=models.CASCADE, verbose_name=_('payment'), null=True)
+    payment = models.OneToOneField(Payment, on_delete=models.CASCADE, related_name='order', verbose_name=_('payment'), null=True)
 
     class Meta:
         verbose_name = _('order')

@@ -1,19 +1,49 @@
 from django.utils.translation import gettext_lazy as _
 from django.contrib import admin
+from django.db.models import Avg, Count
 from django.utils.html import format_html
 from product.models import Product, ProductImage, Rating, Review, Sale, Manufacturer, Seller, Specification
 
 
+class ProductImageInline(admin.TabularInline):
+    model = ProductImage
+
+class RatingInline(admin.TabularInline):
+    model = Rating
+
+
+class ReviewInline(admin.TabularInline):
+    model = Review
+
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['id', 'title', 'category', 'price', 'count', 'date', 'available']
-    list_filter = ['category', 'available']
-    search_fields = ['title']
+    list_display = ('id', 'title', 'category', 'price', 'count', 'date', 'available', 'rating_info', 'reviews_list')
+    list_filter = ('category', 'available')
+    search_fields = ('title',)
+    inlines = [ProductImageInline, RatingInline, ReviewInline]
 
-@admin.register(ProductImage)
-class ProductImageAdmin(admin.ModelAdmin):
-    list_display = ['id', 'image', 'product']
-    list_filter = ['product']
+
+
+    fieldsets = (
+        ('Основная информация', {
+            'fields': ('title', 'category', 'price', 'count', 'available')
+        }),
+        ('Дополнительная информация', {
+            'fields': ('fullDescription', 'freeDelivery', 'limited', 'banner', 'brand', 'seller', 'attributes', 'tags')
+        }),
+
+    )
+    # def get_queryset(self, request):
+    #     queryset = super().get_queryset(request)
+    #     queryset = queryset.annotate(rating=Avg('rating_info'), reviews=Count('reviews'))
+    #     return queryset
+
+
+
+# @admin.register(ProductImage)
+# class ProductImageAdmin(admin.ModelAdmin):
+#     list_display = ['id', 'image', 'product']
+#     list_filter = ['product']
 
 
 @admin.register(Seller)

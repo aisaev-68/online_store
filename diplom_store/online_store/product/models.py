@@ -132,6 +132,9 @@ class Rating(models.Model):
         verbose_name = _('rating')
         verbose_name_plural = _('ratings')
 
+    def __str__(self):
+        return str(self.rating)
+
 
 class Review(models.Model):  # отзыв
     author = models.CharField(max_length=128, verbose_name=_('author'))
