@@ -9,8 +9,6 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from drf_yasg.utils import swagger_auto_schema
-
-from account.forms import LoginForm
 from cart.cart import Cart
 from order.models import Order, OrderProducts
 from order.serializers import OrderSerializer, OrderProductSerializer
@@ -23,7 +21,7 @@ from payment.models import PaymentSettings
 
 
 class OrderHistoryAPiView(APIView):
-    # permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated,)
     authentication_classes = (SessionAuthentication,)
     serializer_class = OrderProductSerializer
 
@@ -73,8 +71,7 @@ class OrderHistoryAPiView(APIView):
                 order_product.product_id = product_data['id']
                 order_product.count_product = product_data['count']
                 total += product_data['count'] * product_data['price']
-                # Задайте остальные поля
-                order_product.save()
+                # order_product.save()
             order.fullName = user.fullName
             order.phone = user.phone
             order.email = user.email

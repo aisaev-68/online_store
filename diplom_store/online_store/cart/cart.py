@@ -67,19 +67,16 @@ class Cart(object):
 
         if product_id in self.cart:
             if not update_quantity: # False
-                print("ВХОД ДЛЯ УДАЛЕНИЯ", quantity)
+
                 if self.cart[product_id]['quantity'] > quantity:
-                    print("УСЛОВИЕ БОЛЬШЕ 1")
                     self.cart[product_id]['quantity'] -= quantity
                     self.save()
                 else:
-                    print("ПОЛНОЕ УДАЛЕНИЕ ПРОДУКТА1", quantity, self.cart, product_id, self.cart[product_id])
                     del self.cart[product_id]
             else:
-                print("ПОЛНОЕ УДАЛЕНИЕ ПРОДУКТА", self.cart.items())
                 del self.cart[product_id]
                 self.save()
-                print("ПОЛНОЕ УДАЛЕНИЕ ПРОДУКТА", self.cart.items())
+
 
 
     def get_total_price(self):

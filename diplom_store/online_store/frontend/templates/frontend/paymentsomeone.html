@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block content %}
+{% if user.is_authenticated %}
 <div class="Middle Middle_top">
     <div class="Middle-top">
         <div class="wrap">
@@ -100,6 +101,9 @@
         </div>
     </div>
 </div>
+{% else %}
+{% include 'includes/no-authorized.html' %}
+{% endif %}
 {% endblock %}
 {% block mixins %}
 <script src="{% static 'frontend/assets/js/payment.js' %}"></script>

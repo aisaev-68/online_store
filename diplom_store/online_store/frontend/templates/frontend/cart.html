@@ -21,7 +21,7 @@
     <div class="Section">
         <div class="wrap">
             <form class="form Cart" action="/api/order/" method="post" @submit.prevent="submitBasket(is_authenticated)">
-
+            ${user}$
             {% csrf_token %}
                 <!-- Данные по товару в корзине -->
 

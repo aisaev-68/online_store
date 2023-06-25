@@ -13,16 +13,13 @@ from payment.models import Payment
 
 from order.models import OrderProducts
 
-@admin.register(Payment)
-class PaymentAdmin(admin.ModelAdmin):
-    list_display = ('number', 'name', 'month', 'year')
-    search_fields = ('number', 'name')
+
 
 
 class PaymentInline(admin.StackedInline):
-    model = Order
+    model = Payment
     can_delete = False
-    fields = ('payment_number', 'payment_name', 'payment_month', 'payment_year', 'payment_code')
+    fields = ('number', 'name', 'month', 'year', 'code')
 
 
 class OrderProductsInline(admin.TabularInline):
@@ -66,23 +63,4 @@ class OrderAdmin(admin.ModelAdmin):
         super().save_model(request, obj, form, change)
 
 
-    def payment_number(self, obj):
-        return obj.payment.number
 
-    def payment_name(self, obj):
-        return obj.payment.name
-
-    def payment_month(self, obj):
-        return obj.payment.month
-
-    def payment_year(self, obj):
-        return obj.payment.year
-
-    def payment_code(self, obj):
-        return obj.payment.code
-    #
-    payment_number.short_description = 'Payment Number'
-    payment_name.short_description = 'Payment Name'
-    payment_month.short_description = 'Payment Month'
-    payment_year.short_description = 'Payment Year'
-    payment_code.short_description = 'Payment Code'

@@ -3,6 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from django.db import models
 
 from online_store import settings
+from order.models import Order
 
 
 class Payment(models.Model):
@@ -11,6 +12,8 @@ class Payment(models.Model):
     month = models.CharField(max_length=2, verbose_name=_('month'))
     year = models.CharField(max_length=4, verbose_name=_('year'))
     code = models.CharField(max_length=3, verbose_name=_('payment code'))
+    order = models.OneToOneField(Order, on_delete=models.CASCADE, related_name='order', verbose_name=_('order'), null=True)
+
 
     class Meta:
         verbose_name = _('Payment')

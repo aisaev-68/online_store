@@ -1,5 +1,9 @@
 from django.shortcuts import render
 
+
+def error_401(request):
+    return render(request, 'frontend/error.html', {'path': request.path, 'error_text': 'Пользователь не авторизован'}, status=401)
+
 def error_403(request, reason=''):
     return render(request, 'frontend/error.html', {'path': request.path, 'error_text': 'Доступ к запрошенному ресурсу запрещен'})
 
