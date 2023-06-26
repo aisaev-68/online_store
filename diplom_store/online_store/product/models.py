@@ -162,15 +162,15 @@ class Review(models.Model):  # отзыв
 
 
 class Sale(models.Model):
-    product = models.ForeignKey('Product', on_delete=models.CASCADE, related_name='sales', verbose_name='товар')
-    count = models.IntegerField(default=0, verbose_name='количество товара по скидке')
-    salePrice = models.IntegerField(default=0, verbose_name='цена распродажи')
+    product = models.ForeignKey('Product', on_delete=models.CASCADE, related_name='sales', verbose_name=_('product'))
+    count = models.IntegerField(default=0, verbose_name=_('quantity of goods at a discount'))
+    salePrice = models.IntegerField(default=0, verbose_name=_('sale price'))
     dateFrom = models.DateField()
     dateTo = models.DateField()
 
     class Meta:
-        verbose_name = 'Распродажа'
-        verbose_name_plural = 'Распродажа'
+        verbose_name = _('sale')
+        verbose_name_plural = _('sales')
 
     def price(self):
         """

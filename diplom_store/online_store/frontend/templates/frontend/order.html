@@ -12,7 +12,7 @@
                 </h1>
                 <ul class="breadcrumbs Middle-breadcrumbs">
                     <li class="breadcrumbs-item">
-                        <a href="index.html">home</a>
+                        <a href="/">home</a>
                     </li>
                     <li class="breadcrumbs-item breadcrumbs-item_current">
                         <span>Оформление заказа</span>
@@ -24,7 +24,7 @@
     <div class="Section Section_column Section_columnRight Section_columnWide Order">
         <div class="wrap">
             <div class="Section-column">
-                {% if user.is_authenticated %}
+
                 <div class="Section-columnSection">
                     <header class="Section-header">
                         <strong class="Section-title">Прогресс заполнения
@@ -55,10 +55,10 @@
                         </ul>
                     </div>
                 </div>
-                {% endif %}
+
             </div>
             <div class="Section-content">
-                {% if user.is_authenticated %}
+
                 <form class="form" action="#" method="post" @submit.prevent="confirmOrder">
                     <div class="Order-block Order-block_OPEN" id="step1">
                         <header class="Section-header Section-header_sm">
@@ -129,7 +129,6 @@
                                 <label class="toggle">
                                     <input type="radio" v-model="paymentType" name="pay" :value="value"
                                             :checked="index === 0"/>
-<!--                                    <input type="hidden" name="payment" v-model="paymentType" value="{{ order.paymentType }}">-->
                                     <span class="toggle-box"></span>
                                     <span class="toggle-text">${ value }$</span>
                                 </label>
@@ -172,7 +171,6 @@
                                             <div class="Order-infoType">Тип доставки:
                                             </div>
                                             <div class="Order-infoContent">${ deliveryType }$
-<!--                                                ${ request.POST.payment }-->
                                             </div>
                                         </div>
                                         <div class="Order-info">
@@ -228,7 +226,6 @@
                                 <div class="Cart-block Cart-block_total">
                                     <strong class="Cart-title">Итого с доставкой:</strong>
                                     <span class="Cart-price">${ totalCost }$$</span>
-<!--                                    <span class="Cart-price">${ order.products.reduce((acc, el) => {return acc += (el.price * el.count)}, 0) }$$</span>-->
                                 </div>
                                 <div class="Cart-block">
                                     <button class="btn btn_primary btn_lg" type="submit">Оплатить
@@ -238,7 +235,7 @@
                         </div>
                     </div>
                 </form>
-                {% endif %}
+
             </div>
         </div>
     </div>

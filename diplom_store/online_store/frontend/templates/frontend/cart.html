@@ -21,7 +21,7 @@
     <div class="Section">
         <div class="wrap">
             <form class="form Cart" action="/api/order/" method="post" @submit.prevent="submitBasket(is_authenticated)">
-            ${user}$
+
             {% csrf_token %}
                 <!-- Данные по товару в корзине -->
 
@@ -64,7 +64,7 @@
                     </div>
                 </div>
                 <!-- Данные по товару в корзине -->
-                <div class="Cart-total">
+                <div v-if="basketCount.count" class="Cart-total">
                     <div class="Cart-block Cart-block_total">
                         <strong class="Cart-title">Итого:</strong>
                         <span class="Cart-price">${ basketCount.price }$$</span>
@@ -75,6 +75,9 @@
                      <button type="submit" class="btn btn_success btn_lg">Оформить заказ</button>
                 </div>
             </form>
+            <div v-if="!basketCount.count" class="Cart-block Cart-block_info">
+                <p class="Cart-title">{% trans 'Cart is empty' %}</p>
+             </div>
         </div>
     </div>
 </div>

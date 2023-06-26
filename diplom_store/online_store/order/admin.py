@@ -1,13 +1,8 @@
 
 from django.contrib import admin
 from django.utils import timezone
-from django import forms
-from django.db import models
 
-from online_store import settings
 from order.models import Order
-
-from product.models import Product
 
 from payment.models import Payment
 

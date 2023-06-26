@@ -2,7 +2,7 @@ var mix = {
     methods: {
         getSales() {
             this.getData("/api/sales").then(data => {
-                this.salesCards = data.salesCards
+                this.salesCards = data
             })
         },
     },
