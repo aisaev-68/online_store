@@ -121,21 +121,6 @@ class ProductImage(models.Model):
         return f'/{self.image}'
 
 
-
-
-# class Rating(models.Model):
-#     product = models.OneToOneField(Product, on_delete=models.CASCADE, related_name='rating_info')
-#     rating = models.DecimalField(decimal_places=1, max_digits=2, verbose_name=_('rating'))
-#     count = models.PositiveIntegerField(default=0, verbose_name=_('count'))
-#
-#     class Meta:
-#         verbose_name = _('rating')
-#         verbose_name_plural = _('ratings')
-#
-#     def __str__(self):
-#         return str(self.rating)
-
-
 class Review(models.Model):  # отзыв
     rate = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(5)], verbose_name=_('rate'))
     author = models.CharField(max_length=128, verbose_name=_('author'))
@@ -154,12 +139,6 @@ class Review(models.Model):  # отзыв
             return f'{self.text[:50]}...'
         return self.text
 
-    # def save(self, *args, **kwargs):
-    #     super().save(*args, **kwargs)
-    #     rating_info, created = Rating.objects.get_or_create(product=self.product)
-    #     rating_info.count = self.product.reviews.count()
-    #     rating_info.rating = self.product.reviews.aggregate(models.Avg('rating'))['rating__avg']
-    #     rating_info.save()
 
 
 class Sale(models.Model):
@@ -208,6 +187,10 @@ class Sale(models.Model):
 class Manufacturer(models.Model):
     name = models.CharField(max_length=150, verbose_name=_('name'))
 
+    class Meta:
+        verbose_name = _('manufacturer')
+        verbose_name_plural = _('manufacturers')
+
     def __str__(self):
         return self.name
 
@@ -217,6 +200,10 @@ class Seller(models.Model):
     city = models.TextField(max_length=100, verbose_name=_('city'))
     address = models.TextField(max_length=100, verbose_name=_('address'))
 
+    class Meta:
+        verbose_name = _('seller')
+        verbose_name_plural = _('sellers')
+
     def __str__(self):
         return self.name
 
@@ -225,6 +212,10 @@ class Seller(models.Model):
 class Specification(models.Model):
     attributes = models.JSONField(default=dict, blank=True, verbose_name=_('attributes'))
     category = models.OneToOneField(Category, on_delete=models.CASCADE, related_name='specifications', verbose_name=_('category'))
+
+    class Meta:
+        verbose_name = _('specification')
+        verbose_name_plural = _('specifications')
 
     def __str__(self):
         return str(self.attributes)
