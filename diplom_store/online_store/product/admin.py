@@ -2,14 +2,14 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib import admin
 from django.db.models import Avg, Count
 from django.utils.html import format_html
-from product.models import Product, ProductImage, Rating, Review, Sale, Manufacturer, Seller, Specification
+from product.models import Product, ProductImage, Review, Sale, Manufacturer, Seller, Specification
 
 
 class ProductImageInline(admin.TabularInline):
     model = ProductImage
 
-class RatingInline(admin.TabularInline):
-    model = Rating
+# class RatingInline(admin.TabularInline):
+#     model = Rating
 
 
 class ReviewInline(admin.TabularInline):
@@ -20,7 +20,7 @@ class ProductAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'category', 'price', 'count', 'date', 'available', 'rating_info', 'reviews_list')
     list_filter = ('category', 'available')
     search_fields = ('title',)
-    inlines = [ProductImageInline, RatingInline, ReviewInline]
+    inlines = [ProductImageInline, ReviewInline]
 
 
 
@@ -57,13 +57,13 @@ class ManufacturerAdmin(admin.ModelAdmin):
     list_display = ['pk', 'name']
     list_filter = ['name',]
 
-@admin.register(Rating)
-class RatingAdmin(admin.ModelAdmin):
-    list_display = ['id', 'product', 'rating', 'count']
+# @admin.register(Rating)
+# class RatingAdmin(admin.ModelAdmin):
+#     list_display = ['id', 'product', 'rating', 'count']
 
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
-    list_display = ['id', 'author', 'product', 'date']
+    list_display = ['id', 'author', 'product', 'date', 'rate']
 
 @admin.register(Sale)
 class SaleAdmin(admin.ModelAdmin):

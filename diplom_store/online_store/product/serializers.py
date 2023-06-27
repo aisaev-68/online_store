@@ -4,7 +4,7 @@ from rest_framework import serializers
 import locale
 
 from catalog.models import Category
-from product.models import Product, Review, Sale, ProductImage, Rating, Seller, Manufacturer, Specification
+from product.models import Product, Review, Sale, ProductImage, Seller, Manufacturer, Specification
 from tag.serializers import TagSerializer
 
 locale.setlocale(locale.LC_ALL, 'ru_RU.UTF-8')
@@ -17,16 +17,52 @@ class ProductImageSerializer(serializers.ModelSerializer):
 
 
 class ReviewSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField()
+
     class Meta:
         model = Review
-        # fields = ('author', 'email', 'text', 'date')
-        fields = ('id',)
+        fields = ('author', 'email', 'text', 'date', 'rate')
 
+    def to_representation(self, obj):
+        data = super().to_representation(obj)
+        data["date"] = obj.date.strftime('%Y-%m-%d %H:%M')
+        return data
 
-class RatingSerializer(serializers.ModelSerializer):
+class ProductReviewsSerializer(serializers.ModelSerializer):
+    images = serializers.SerializerMethodField()
+    rating = serializers.SerializerMethodField()
+    # reviews = serializers.SerializerMethodField()
+    reviews = ReviewSerializer(many=True)
+    description = serializers.SerializerMethodField()
+    href = serializers.SerializerMethodField()
+    tags = serializers.SerializerMethodField()
+    specifications = serializers.SerializerMethodField()
+
     class Meta:
-        model = Rating
-        fields = ('rating', 'count')
+        model = Product
+        fields = ('id', 'category', 'price', 'count', 'date', 'title', 'description', 'fullDescription', 'href', 'freeDelivery',
+                  'images', 'tags', 'specifications', 'reviews', 'rating')
+
+    def get_specifications(self, obj):
+        return obj.attributes
+
+    def get_rating(self, obj):
+        return obj.rating_info()
+
+    def get_images(self, obj):
+        return ['/media/' + str(image.image) for image in obj.images.all()]
+
+    def get_href(self, obj):
+        return obj.href()
+
+    def get_description(self, obj):
+        if len(obj.fullDescription) > 50:
+            return f'{obj.fullDescription[:50]}...'
+        return obj.fullDescription
+
+    def get_tags(self, obj):
+        return [tag.name for tag in obj.tags.all()]
+
 
 
 class CurrentLastPageSerializer(serializers.Serializer):
@@ -48,7 +84,7 @@ class CurrentLastPageSerializer(serializers.Serializer):
 
 class ProductSerializer(serializers.ModelSerializer):
     images = serializers.SerializerMethodField()
-    rating = serializers.DecimalField(decimal_places=1, max_digits=2, source='rating_info.rating')
+    rating = serializers.SerializerMethodField()
     reviews = serializers.SerializerMethodField()
     description = serializers.SerializerMethodField()
     href = serializers.SerializerMethodField()
@@ -62,8 +98,8 @@ class ProductSerializer(serializers.ModelSerializer):
     def get_reviews(self, obj):
         return obj.reviews.count()
 
-    def get_count(self, obj):
-        return obj.rating_info.count
+    def get_rating(self, obj):
+        return obj.rating_info()
 
     def get_images(self, obj):
         return ['/media/' + str(image.image) for image in obj.images.all()]

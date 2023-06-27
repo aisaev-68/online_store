@@ -1,11 +1,14 @@
 from datetime import datetime
-from django.db.models import F, FloatField, Count, Q
+from django.db.models import F, FloatField, Count, Q, Avg
 from django.core.paginator import Paginator
 from django.shortcuts import render
 from django.views import View
 from django.utils.decorators import method_decorator
 from rest_framework.response import Response
-from django.http import JsonResponse
+from rest_framework.request import Request
+from rest_framework import viewsets, status
+from django.db.models import F, FloatField
+from django.db.models.functions import Cast
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from rest_framework.views import APIView
@@ -17,8 +20,6 @@ from catalog.serializers import CategorySerializer
 
 from product.models import Product, Sale
 from product.serializers import ProductSerializer, SaleSerializer, ProductOrderSerializer
-
-from catalog.examples import example
 
 
 def add_catalog_params(func):
@@ -80,10 +81,10 @@ class CategoryView(APIView):
         responses={200: CategorySerializer(many=True)},
         operation_description="get catalog menu",
     )
-    def get(self, request, *args, **kwargs):
+    def get(self, request: Request, *args, **kwargs) -> Response:
         categories = Category.objects.filter(parent=None)
         serializer = CategorySerializer(categories, many=True)
-        return Response(data=serializer.data, status=200)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
 
 
 
@@ -163,7 +164,7 @@ class CatalogView(APIView):
         }
 
     @add_catalog_params
-    def get(self, request, pk=None):
+    def get(self, request: Request, pk: int = None) -> Response:
         print('CATEGORY11', request)
         if pk is not None:
             queryset = self.filter_queryset(Product.objects.filter(category_id=pk).all())
@@ -180,7 +181,7 @@ class CatalogView(APIView):
             'lastPage': data['lastPage'],
         }
 
-        return Response(response_data)
+        return Response(response_data, status=status.HTTP_200_OK)
 
 
 class CatalogByIdView(CatalogView):
@@ -189,10 +190,8 @@ class CatalogByIdView(CatalogView):
     """
 
     @add_catalog_params
-    def get(self, request, pk: int):
+    def get(self, request: Request, pk: int) -> Response:
         super().get(request)
-
-        print(7777, self.request)
         if id is not None:
             queryset = Product.objects.filter(category_id=pk).all()
             data = self.pagination_queryset(queryset)
@@ -204,7 +203,7 @@ class CatalogByIdView(CatalogView):
                 'currentPage': data['currentPage'],
                 'lastPage': data['lastPage'],
             }
-            return Response(response_data)
+            return Response(response_data, status=status.HTTP_200_OK)
 
 
 class ProductPopularView(APIView):
@@ -212,15 +211,16 @@ class ProductPopularView(APIView):
     Представление для получения популярных продуктов
     """
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request: Request, *args, **kwargs) -> Response:
         products = Product.objects.annotate(
-            sort_index=(1 / F('price')) + F('rating_info__rating'),
+            sort_index=(1 / F('price')) + Avg('reviews__rate', filter=Q(reviews__isnull=False)),
         ).order_by('sort_index', '-count')[:8]
+        # print(777777777777777777777, products)
         for product in products:
             product.categoryName = product.category
         serializer = ProductSerializer(products, many=True)
 
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class ProductLimitedView(APIView):
@@ -228,14 +228,14 @@ class ProductLimitedView(APIView):
     Представление для получения лимитированных продуктов
     """
 
-    def get(self, request):
+    def get(self, request: Request) -> Response:
         products = Product.objects.filter(limited=False).prefetch_related('images').order_by('id')[:16]
 
         for product in products:
             product.categoryName = product.category
         serializer = ProductSerializer(products, many=True)
 
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class SalesView(APIView):
@@ -243,7 +243,7 @@ class SalesView(APIView):
     Представление для получения товаров со скидками.
     """
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request: Request, *args, **kwargs) -> Response:
         count_products_on_page = 8  # Определяем количество продуктов на странице
         products = (Sale.objects.filter(Q(dateFrom__gte=datetime.today()) | Q(dateTo__gte=datetime.today())).
                     select_related('product').filter(product__active=True))
@@ -254,7 +254,7 @@ class SalesView(APIView):
         else:
             lastPage = len(products) // count_products_on_page + 1
         serializer = SaleSerializer(current_page, many=True)
-        return Response({'salesCards': serializer.data, 'currentPage': request.GET.get('page'), 'lastPage': lastPage})
+        return Response({'salesCards': serializer.data, 'currentPage': request.GET.get('page'), 'lastPage': lastPage}, status=status.HTTP_200_OK)
 
 
 class BannersView(APIView):
@@ -262,12 +262,9 @@ class BannersView(APIView):
     Представление для получения баннеров главной страницы.
     """
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request: Request, *args, **kwargs) -> Response:
         products = Product.objects.filter(banner=True).prefetch_related('images').order_by('id')[:4]
-
-        # for product in products:
-        #     product.categoryName = product.category
         serializer = ProductOrderSerializer(products, many=True)
         print("BANNER", serializer.data)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 

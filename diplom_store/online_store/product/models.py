@@ -1,5 +1,6 @@
 from django.utils.translation import gettext_lazy as _
 from django.db import models
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 from catalog.models import Category
@@ -52,8 +53,7 @@ class Product(models.Model):  # товар
         self.save()
 
     def rating_info(self):
-        # rating_info, created = Rating.objects.get_or_create(product=self)
-        return float(self.rating_info.rating)
+        return self.reviews.aggregate(avg_rating=models.Avg('rate')).get('avg_rating')
 
     def reviews_list(self):
         return list(self.reviews.all())
@@ -123,20 +123,21 @@ class ProductImage(models.Model):
 
 
 
-class Rating(models.Model):
-    product = models.OneToOneField(Product, on_delete=models.CASCADE, related_name='rating_info')
-    rating = models.DecimalField(decimal_places=1, max_digits=2, verbose_name=_('rating'))
-    count = models.PositiveIntegerField(default=0, verbose_name=_('count'))
-
-    class Meta:
-        verbose_name = _('rating')
-        verbose_name_plural = _('ratings')
-
-    def __str__(self):
-        return str(self.rating)
+# class Rating(models.Model):
+#     product = models.OneToOneField(Product, on_delete=models.CASCADE, related_name='rating_info')
+#     rating = models.DecimalField(decimal_places=1, max_digits=2, verbose_name=_('rating'))
+#     count = models.PositiveIntegerField(default=0, verbose_name=_('count'))
+#
+#     class Meta:
+#         verbose_name = _('rating')
+#         verbose_name_plural = _('ratings')
+#
+#     def __str__(self):
+#         return str(self.rating)
 
 
 class Review(models.Model):  # отзыв
+    rate = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(5)], verbose_name=_('rate'))
     author = models.CharField(max_length=128, verbose_name=_('author'))
     email = models.EmailField(max_length=254)
     text = models.TextField(verbose_name=_('Text'))
@@ -153,12 +154,12 @@ class Review(models.Model):  # отзыв
             return f'{self.text[:50]}...'
         return self.text
 
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        rating_info, created = Rating.objects.get_or_create(product=self.product)
-        rating_info.count = self.product.reviews.count()
-        rating_info.rating = self.product.reviews.aggregate(models.Avg('rating'))['rating__avg']
-        rating_info.save()
+    # def save(self, *args, **kwargs):
+    #     super().save(*args, **kwargs)
+    #     rating_info, created = Rating.objects.get_or_create(product=self.product)
+    #     rating_info.count = self.product.reviews.count()
+    #     rating_info.rating = self.product.reviews.aggregate(models.Avg('rating'))['rating__avg']
+    #     rating_info.save()
 
 
 class Sale(models.Model):

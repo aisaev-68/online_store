@@ -3,6 +3,8 @@ import os
 import random
 import uuid
 from pathlib import Path, PurePath
+from mimesis import Text, Person, Numeric
+from mimesis.locales import Locale
 import itertools
 from django.contrib.auth.models import User
 from django.core.management import BaseCommand
@@ -12,7 +14,7 @@ import json
 from django.utils.timezone import now
 
 from catalog.models import Category
-from product.models import ProductImage, Product, Rating, Manufacturer, Seller, Specification
+from product.models import ProductImage, Product, Manufacturer, Review, Seller, Specification
 from tag.models import Tag
 
 new_dir_file = now().date().strftime("%Y/%m/%d")
@@ -29,6 +31,9 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
 
         self.stdout.write("Create products")
+        person = Person(locale=Locale.RU)
+        text = Text(locale=Locale.RU)
+        number = Numeric()
 
 
         with open(str(Path(__file__).parent.joinpath('json_data-planshet.json'))) as json_file:
@@ -110,12 +115,7 @@ class Command(BaseCommand):
 
                 product.tags.add(tag_list[0], tag_list[1])
 
-                if value.get('rating'):
-                    rating = value.get('rating')['star']
-                    count = value.get('rating')['count']
-                    if rating is None:
-                        rating, count = [0.0, 0]
-                    Rating.objects.create(product=product, rating=rating, count=count)
+                Review.objects.create(author=person.full_name(), email=person.email(), text=text.text(), rate=number.integer_number(start=0, end=5), product=product)
 
                 self.stdout.write(self.style.SUCCESS(f"Product {product} created"))
 
