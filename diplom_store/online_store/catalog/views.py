@@ -1,5 +1,5 @@
 from datetime import datetime
-from django.db.models import F, FloatField, Count, Q, Avg
+from django.db.models import F, FloatField, Count, Q, Avg, DecimalField
 from django.core.paginator import Paginator
 from django.shortcuts import render
 from django.views import View
@@ -213,9 +213,9 @@ class ProductPopularView(APIView):
 
     def get(self, request: Request, *args, **kwargs) -> Response:
         products = Product.objects.annotate(
-            sort_index=(1 / F('price')) + Avg('reviews__rate', filter=Q(reviews__isnull=False)),
+            sort_index=Cast((1 / F('price')), output_field=FloatField()) + Avg('reviews__rate', filter=Q(reviews__isnull=False)),
         ).order_by('sort_index', '-count')[:8]
-        # print(777777777777777777777, products)
+
         for product in products:
             product.categoryName = product.category
         serializer = ProductSerializer(products, many=True)
