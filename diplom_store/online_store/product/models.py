@@ -48,7 +48,7 @@ class Product(models.Model):  # товар
         self.count -= quantity_sold
 
         if self.count == 0:
-            self.in_stock = False
+            self.available = False
 
         self.save()
 
