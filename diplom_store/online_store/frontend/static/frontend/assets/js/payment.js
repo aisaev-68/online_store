@@ -1,7 +1,9 @@
 var mix = {
   methods: {
     getOrder() {
-    alert("AAAAAAAAA");
+//    const str = location.pathname;
+//
+//        this.id = parseInt(str.match(/\/\w+\/(\d+)$/)[1]);
      this.id = location.pathname.startsWith('/payment/')
         ? Number(location.pathname.replace('/payment/', '').replace('/',''))
         : null;

@@ -17,6 +17,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import AllowAny
 from catalog.models import Category
 from catalog.serializers import CategorySerializer
+from payment.models import PaymentSettings
 
 from product.models import Product, Sale
 from product.serializers import ProductSerializer, SaleSerializer, ProductOrderSerializer
@@ -71,7 +72,7 @@ def add_catalog_params(func):
 
 
 
-class CategoryView(APIView):
+class CategoryAPIView(APIView):
     """
     Представление для получения категорий товаров.
     """
@@ -90,12 +91,12 @@ class CategoryView(APIView):
 
 
 
-class CatalogView(APIView):
+class CatalogAPIView(APIView):
     permission_classes = (AllowAny,)
 
     def filter_queryset(self, queryset):
         # Извлечение параметров запроса
-        # print(555, self.request.query_params)
+        print(555, self.request.query_params)
         category = self.request.query_params.get('category')
         sort = self.request.query_params.get('sort')
         sort_type = self.request.query_params.get('sortType')
@@ -147,7 +148,8 @@ class CatalogView(APIView):
     def pagination_queryset(self, queryset):
         len_products = len(queryset)
         paginator = PageNumberPagination()
-        limit = int(self.request.GET.get('limit', 8))
+        settings = PaymentSettings.objects.first()
+        limit = settings.page_size
 
         paginator.page_size = limit
         paginated_queryset = paginator.paginate_queryset(queryset, self.request)
@@ -165,15 +167,15 @@ class CatalogView(APIView):
 
     @add_catalog_params
     def get(self, request: Request, pk: int = None) -> Response:
-        print('CATEGORY11', request)
+
         if pk is not None:
-            queryset = self.filter_queryset(Product.objects.filter(category_id=pk).all())
+            queryset = self.filter_queryset(Product.objects.filter(category_id=pk).order_by('-date').all())
         else:
-            queryset = self.filter_queryset(Product.objects.all())
+            queryset = self.filter_queryset(Product.objects.order_by('-date').all())
+
         data = self.pagination_queryset(queryset)
         paginated_queryset = data['pagination']
         serialized_data = ProductSerializer(paginated_queryset, many=True).data
-        # print(666666, data['pagination'], data['currentPage'], data['lastPage'])
 
         response_data = {
             'items': serialized_data,
@@ -184,29 +186,7 @@ class CatalogView(APIView):
         return Response(response_data, status=status.HTTP_200_OK)
 
 
-class CatalogByIdView(CatalogView):
-    """
-    Представление для получения каталога по ID.
-    """
-
-    @add_catalog_params
-    def get(self, request: Request, pk: int) -> Response:
-        super().get(request)
-        if id is not None:
-            queryset = Product.objects.filter(category_id=pk).all()
-            data = self.pagination_queryset(queryset)
-            paginated_queryset = data['pagination']
-            serialized_data = ProductSerializer(paginated_queryset, many=True).data
-
-            response_data = {
-                'items': serialized_data,
-                'currentPage': data['currentPage'],
-                'lastPage': data['lastPage'],
-            }
-            return Response(response_data, status=status.HTTP_200_OK)
-
-
-class ProductPopularView(APIView):
+class ProductPopularAPIView(APIView):
     """
     Представление для получения популярных продуктов
     """
@@ -217,13 +197,14 @@ class ProductPopularView(APIView):
         ).order_by('sort_index', '-count')[:8]
 
         for product in products:
+            product.title = product.title[:25] + '...'
             product.categoryName = product.category
         serializer = ProductSerializer(products, many=True)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class ProductLimitedView(APIView):
+class ProductLimitedAPIView(APIView):
     """
     Представление для получения лимитированных продуктов
     """
@@ -232,32 +213,36 @@ class ProductLimitedView(APIView):
         products = Product.objects.filter(limited=False).prefetch_related('images').order_by('id')[:16]
 
         for product in products:
+            product.title = product.title[:25] + '...'
             product.categoryName = product.category
         serializer = ProductSerializer(products, many=True)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class SalesView(APIView):
+class SalesAPIView(APIView):
     """
     Представление для получения товаров со скидками.
     """
 
     def get(self, request: Request, *args, **kwargs) -> Response:
-        count_products_on_page = 8  # Определяем количество продуктов на странице
-        products = (Sale.objects.filter(Q(dateFrom__gte=datetime.today()) | Q(dateTo__gte=datetime.today())).
-                    select_related('product').filter(product__active=True))
-        paginator = Paginator(products, 8)
-        current_page = paginator.get_page(request.GET.get('page'))
-        if len(products) % count_products_on_page == 0:
-            lastPage = len(products) // count_products_on_page
+        products = (Sale.objects
+                    .filter(Q(dateFrom__gte=datetime.today()) | Q(dateTo__gte=datetime.today()))
+                    .select_related('product')
+                    .filter(product__available=True)).order_by("salePrice")
+        setting = PaymentSettings.objects.first()
+        paginator = Paginator(products, setting.page_size)
+        current_page = paginator.get_page(request.GET.get('page', 1))
+        if len(products) % setting.page_size == 0:
+            lastPage = len(products) // setting.page_size
         else:
-            lastPage = len(products) // count_products_on_page + 1
+            lastPage = len(products) // setting.page_size + 1
         serializer = SaleSerializer(current_page, many=True)
-        return Response({'salesCards': serializer.data, 'currentPage': request.GET.get('page'), 'lastPage': lastPage}, status=status.HTTP_200_OK)
+        return Response({'salesCards': serializer.data, 'currentPage': request.GET.get('page', 1), 'lastPage': lastPage}, status=status.HTTP_200_OK)
 
 
-class BannersView(APIView):
+
+class BannersAPIView(APIView):
     """
     Представление для получения баннеров главной страницы.
     """

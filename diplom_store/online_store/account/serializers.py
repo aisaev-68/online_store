@@ -4,6 +4,7 @@ from rest_framework import serializers
 from django.contrib.auth.hashers import make_password
 from drf_yasg import openapi
 from account.models import User
+from online_store import settings
 from order.serializers import OrderSerializer, OrderProductSerializer, OrderForAvatarSerializer
 
 
@@ -47,10 +48,12 @@ class UserPasswordChangeSerializer(serializers.ModelSerializer):
     """
     Сериализация пароля пользователя
     """
+    passwordCurrent = serializers.CharField()
+    passwordReply = serializers.CharField()
 
     class Meta:
-        model = User
-        fields = ['password']
+        model = User #settings.AUTH_USER_MODEL
+        fields = ['passwordCurrent', 'password', 'passwordReply']
 
     def save(self, **kwargs):
         self.instance.password = make_password(self.validated_data['password'])

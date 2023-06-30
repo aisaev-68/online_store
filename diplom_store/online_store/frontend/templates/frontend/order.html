@@ -8,14 +8,14 @@
     <div class="Middle-top">
         <div class="wrap">
             <div class="Middle-header">
-                <h1 class="Middle-title">Оформление заказа
+                <h1 class="Middle-title">{% trans 'Checkout' %}
                 </h1>
                 <ul class="breadcrumbs Middle-breadcrumbs">
                     <li class="breadcrumbs-item">
-                        <a href="/">home</a>
+                        <a href="/">{% trans 'home' %}</a>
                     </li>
                     <li class="breadcrumbs-item breadcrumbs-item_current">
-                        <span>Оформление заказа</span>
+                        <span>{% trans 'Checkout' %}</span>
                     </li>
                 </ul>
             </div>
@@ -27,29 +27,29 @@
 
                 <div class="Section-columnSection">
                     <header class="Section-header">
-                        <strong class="Section-title">Прогресс заполнения
+                        <strong class="Section-title">Fill progress
                         </strong>
                     </header>
                     <div class="Section-columnContent">
                         <ul class="menu menu_vt Order-navigate">
                             <li class="menu-item_ACTIVE menu-item">
                                 <a class="menu-link" href="#step1">
-                                    Шаг 1. Параметры пользователя
+                                    Step 1: User Options
                                 </a>
                             </li>
                             <li class="menu-item">
                                 <a class="menu-link" href="#step2">
-                                    Шаг 2. Способ доставки
+                                    Step 2 Shipping Method
                                 </a>
                             </li>
                             <li class="menu-item">
                                 <a class="menu-link" href="#step3">
-                                    Шаг 3. Способ оплаты
+                                    Step 3. Payment method
                                 </a>
                             </li>
                             <li class="menu-item">
                                 <a class="menu-link" href="#step4">
-                                    Шаг 4. Подтверждение заказа
+                                    Step 4. Order confirmation
                                 </a>
                             </li>
                         </ul>
@@ -62,35 +62,35 @@
                 <form class="form" action="#" method="post" @submit.prevent="confirmOrder">
                     <div class="Order-block Order-block_OPEN" id="step1">
                         <header class="Section-header Section-header_sm">
-                            <h2 class="Section-title">Шаг 1. Параметры пользователя
+                            <h2 class="Section-title">{% trans 'Step 1: User Options' %}
                             </h2>
                         </header>
                         <div class="row">
                             <div class="row-block">
                                 <div class="form-group">
 
-                                    <label class="form-label" for="name">ФИО</label>
+                                    <label class="form-label" for="name">{% trans 'Full name' %}</label>
                                     <input class="form-input" v-model="fullName" id="name" name="name" type="text"
                                            value="{{fullName}}"/>
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label" for="phone">Телефон</label>
+                                    <label class="form-label" for="phone">{% trans 'Phone' %}</label>
                                     <input class="form-input" v-model="phone" id="phone" name="phone" type="text"
                                            />
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label" for="mail">E-mail</label>
+                                    <label class="form-label" for="mail">{% trans 'E-mail' %}</label>
                                     <input class="form-input" v-model="email" id="mail" name="mail" type="text"
                                            data-validate="require" />
                                 </div>
                             </div>
                         </div>
-                        <div class="Order-footer"><a class="btn btn_success Order-next" href="#step2">Дальше</a>
+                        <div class="Order-footer"><a class="btn btn_success Order-next" href="#step2">{% trans 'Next' %}</a>
                         </div>
                     </div>
                     <div class="Order-block" id="step2">
                         <header class="Section-header Section-header_sm">
-                            <h2 class="Section-title">Шаг 2. Способ доставки
+                            <h2 class="Section-title">{% trans 'Step 2 Shipping Method' %}
                             </h2>
                         </header>
                         <div class="form-group">
@@ -105,23 +105,23 @@
 
                         </div>
                         <div class="form-group">
-                            <label class="form-label" for="city">Город
+                            <label class="form-label" for="city">{% trans 'City' %}
                             </label>
                             <input class="form-input" v-model="city" id="city" name="city" type="text"
                                    />
                         </div>
                         <div class="form-group">
-                            <label class="form-label" for="address">Адрес
+                            <label class="form-label" for="address">{% trans 'Address' %}
                             </label>
                             <textarea class="form-textarea" v-model="address" name="address"
                                       id="address" ></textarea>
                         </div>
-                        <div class="Order-footer"><a class="btn btn_success Order-next" href="#step3">Дальше</a>
+                        <div class="Order-footer"><a class="btn btn_success Order-next" href="#step3">{% trans 'Next' %}</a>
                         </div>
                     </div>
                     <div class="Order-block" id="step3">
                         <header class="Section-header Section-header_sm">
-                            <h2 class="Section-title">Шаг 3. Способ оплаты
+                            <h2 class="Section-title">{% trans 'Step 3. Payment method' %}
                             </h2>
                         </header>
                         <div class="form-group">
@@ -134,12 +134,12 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="Order-footer"><a class="btn btn_success Order-next" href="#step4">Дальше</a>
+                        <div class="Order-footer"><a class="btn btn_success Order-next" href="#step4">{% trans 'Next' %}</a>
                         </div>
                     </div>
                     <div class="Order-block" id="step4">
                         <header class="Section-header Section-header_sm">
-                            <h2 class="Section-title">Шаг 4. Подтверждение заказа
+                            <h2 class="Section-title">{% trans 'Step 4. Order confirmation' %}
                             </h2>
                         </header>
                         <!--+div.Order.-confirmation-->
@@ -148,19 +148,19 @@
                                 <div class="row">
                                     <div class="row-block">
                                         <div class="Order-info">
-                                            <div class="Order-infoType">ФИО:
+                                            <div class="Order-infoType">{% trans 'Full name:' %}
                                             </div>
                                             <div class="Order-infoContent">${ fullName }$
                                             </div>
                                         </div>
                                         <div class="Order-info">
-                                            <div class="Order-infoType">Телефон:
+                                            <div class="Order-infoType">{% trans 'Phone:' %}
                                             </div>
                                             <div class="Order-infoContent">${ phone }$
                                             </div>
                                         </div>
                                         <div class="Order-info">
-                                            <div class="Order-infoType">E-mail:
+                                            <div class="Order-infoType">{% trans 'E-mail:' %}
                                             </div>
                                             <div class="Order-infoContent">${ email }$
                                             </div>
@@ -168,25 +168,25 @@
                                     </div>
                                     <div class="row-block">
                                         <div class="Order-info Order-info_delivery">
-                                            <div class="Order-infoType">Тип доставки:
+                                            <div class="Order-infoType">{% trans 'Delivery type:' %}
                                             </div>
                                             <div class="Order-infoContent">${ deliveryType }$
                                             </div>
                                         </div>
                                         <div class="Order-info">
-                                            <div class="Order-infoType">Город:
+                                            <div class="Order-infoType">{% trans 'City:' %}
                                             </div>
                                             <div class="Order-infoContent">${ city }$
                                             </div>
                                         </div>
                                         <div class="Order-info">
-                                            <div class="Order-infoType">Адрес:
+                                            <div class="Order-infoType">{% trans 'Address:' %}
                                             </div>
                                             <div class="Order-infoContent">${ address }$
                                             </div>
                                         </div>
                                         <div class="Order-info Order-info_pay">
-                                            <div class="Order-infoType">Оплата:
+                                            <div class="Order-infoType">{% trans 'Payment:' %}
                                             </div>
                                             <div class="Order-infoContent">${ paymentType }$
                                             </div>
@@ -224,11 +224,11 @@
 
                             <div class="Cart-total">
                                 <div class="Cart-block Cart-block_total">
-                                    <strong class="Cart-title">Итого с доставкой:</strong>
+                                    <strong class="Cart-title">{% trans 'Total with delivery:' %}</strong>
                                     <span class="Cart-price">${ totalCost }$$</span>
                                 </div>
                                 <div class="Cart-block">
-                                    <button class="btn btn_primary btn_lg" type="submit">Оплатить
+                                    <button class="btn btn_primary btn_lg" type="submit">{% trans 'Pay' %}
                                     </button>
                                 </div>
                             </div>

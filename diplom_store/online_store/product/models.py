@@ -115,7 +115,7 @@ class ProductImage(models.Model):
         Получаем ссылку на изображение.
         :return: изображение
         """
-        return self.image
+        return self.image.url
 
     def __str__(self):
         return f'/{self.image}'
@@ -144,9 +144,9 @@ class Review(models.Model):  # отзыв
 class Sale(models.Model):
     product = models.ForeignKey('Product', on_delete=models.CASCADE, related_name='sales', verbose_name=_('product'))
     count = models.IntegerField(default=0, verbose_name=_('quantity of goods at a discount'))
-    salePrice = models.IntegerField(default=0, verbose_name=_('sale price'))
-    dateFrom = models.DateField()
-    dateTo = models.DateField()
+    salePrice = models.DecimalField(decimal_places=2, max_digits=10, verbose_name=_('sale price'))
+    dateFrom = models.DateField(verbose_name=_('date from'))
+    dateTo = models.DateField(verbose_name=_('date to'))
 
     class Meta:
         verbose_name = _('sale')

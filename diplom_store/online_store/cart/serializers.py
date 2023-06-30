@@ -17,7 +17,7 @@ class BasketSerializer(serializers.ModelSerializer):
     href = serializers.StringRelatedField()
     description = serializers.StringRelatedField()
     reviews = serializers.SerializerMethodField()
-    rating = serializers.DecimalField(decimal_places=1, max_digits=2, source='rating_info.rating')
+    rating = serializers.DecimalField(decimal_places=1, max_digits=2, source='rating_info')
 
     class Meta:
         model = Product

@@ -13,6 +13,7 @@ var mix = {
       const productId = location.pathname.startsWith('/product/')
         ? Number(location.pathname.replace('/product/', '').replace('/', ''))
         : null;
+
       this.getData(`/api/product/${productId}/`)
         .then(data => {
           this.product = { ...this.product, ...data };
@@ -34,7 +35,7 @@ var mix = {
       })
         .then(data => {
           this.product.reviews = data;
-          alert('Отзыв опубликован');
+          //alert('Отзыв опубликован');
           this.review.author = '';
           this.review.email = '';
           this.review.text = '';

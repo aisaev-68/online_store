@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth import password_validation
+from django.utils.translation import gettext_lazy as _
 
 from account.models import User
 
@@ -20,61 +21,61 @@ class UserRegistrationForm(forms.ModelForm):
 
     username = forms.CharField(
         required=True,
-        label='Username*:',
+        label=_('Username*:'),
         widget=forms.TextInput(
             attrs={
                 'class': 'form-input',
-                'placeholder': 'Username*',
+                'placeholder': _('Username*'),
             }
         )
     )
 
     phone = forms.CharField(
         required=True,
-        label='Phone number*:',
+        label=_('Phone number*:'),
         widget=forms.TextInput(
             attrs={
                 'class': 'form-input',
-                'placeholder': 'Phone number*',
+                'placeholder': _('Phone number*'),
             }
         )
     )
     password1 = forms.CharField(
         required=True,
-        label='Password*:',
+        label=_('Password*:'),
         widget=forms.PasswordInput(
             attrs={
                 'class': 'form-input',
-                'placeholder': 'Password*',
+                'placeholder': _('Password*'),
             }
         ),
         help_text=password_validation.password_validators_help_text_html()
     )
     password2 = forms.CharField(
         required=True,
-        label='Confirm the password*:',
+        label=_('Confirm the password*:'),
         widget=forms.PasswordInput(
             attrs={
                 'class': 'form-input',
-                'placeholder': 'Confirm the password*',
+                'placeholder': _('Confirm the password*'),
             }
         )
     )
     email = forms.CharField(
         required=True,
-        label='E-mail address*:',
+        label=_('E-mail address*:'),
         widget=forms.EmailInput(
             attrs={
                 'class': 'form-input',
-                'placeholder': 'E-mail address*',
+                'placeholder': _('E-mail address*'),
             }
         )
     )
 
     error_messages = {
-        "password_mismatch": "Пароли не совпадают! Повторите ввод!",
-        "phone_exists": "Пользователь с таким номером телефона уже существует!",
-        "email_exists": "Пользователь с таким email уже существует!",
+        "password_mismatch": _("Password mismatch! Retype!"),
+        "phone_exists": _("A user with this phone number already exists!"),
+        "email_exists": _("A user with this email already exists!"),
     }
 
     class Meta:
@@ -95,7 +96,7 @@ class UserRegistrationForm(forms.ModelForm):
         """
         phone = self.cleaned_data.get('phone')
         if phone and User.objects.filter(phone=phone).exclude(pk=self.instance.pk).exists():
-            raise forms.ValidationError("This phone number is already in use.")
+            raise forms.ValidationError(_("This phone number is already in use."))
         return phone
 
     def clean_email(self):
@@ -105,17 +106,20 @@ class UserRegistrationForm(forms.ModelForm):
         """
         email = self.cleaned_data.get('email')
         if User.objects.filter(email=email).exclude(pk=self.instance.pk).exists():
-            raise forms.ValidationError("This email is already in use.")
+            raise forms.ValidationError(_("This email is already in use."))
         return email
 
 
 class LoginForm(forms.Form):
+    """
+    Класс формы ввода пароля и логина.
+    """
     username = forms.CharField(
         max_length=100,
         widget=forms.TextInput(
             attrs={
                 'class': 'form-input',
-                'placeholder': 'Username*',
+                'placeholder': _('Username*'),
             }
         ),
         required=True
@@ -124,7 +128,7 @@ class LoginForm(forms.Form):
         widget=forms.PasswordInput(
             attrs={
                 'class': 'form-input',
-                'placeholder': 'Password*',
+                'placeholder': _('Password*'),
                 'help_text': ''
             }
         )

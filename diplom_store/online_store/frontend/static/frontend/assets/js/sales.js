@@ -1,8 +1,10 @@
 var mix = {
     methods: {
         getSales() {
-            this.getData("/api/sales").then(data => {
-                this.salesCards = data
+            this.getData("/api/sale/").then(data => {
+                this.salesCards = data.salesCards;
+                this.currentPage = data.currentPage;
+                this.lastPage = data.lastPage;
             })
         },
     },
@@ -12,7 +14,8 @@ var mix = {
     data() {
         return {
             salesCards: [],
-            // TODO добавить пагинацию
+            currentPage: null,
+            lastPage: 1
         }
     },
 }

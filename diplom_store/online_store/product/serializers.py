@@ -89,6 +89,7 @@ class ProductSerializer(serializers.ModelSerializer):
     description = serializers.SerializerMethodField()
     href = serializers.SerializerMethodField()
     tags = serializers.SerializerMethodField()
+    title = serializers.SerializerMethodField()
 
     class Meta:
         model = Product
@@ -115,18 +116,24 @@ class ProductSerializer(serializers.ModelSerializer):
     def get_tags(self, obj):
         return [tag.name for tag in obj.tags.all()]
 
+    def get_title(self, obj):
+        return obj.title[:25]
 
 class ProductOrderSerializer(serializers.ModelSerializer):
     category = serializers.PrimaryKeyRelatedField(read_only=True)
     images = serializers.SerializerMethodField()
     tags = serializers.SerializerMethodField()
+    title = serializers.SerializerMethodField()
     reviews = serializers.SerializerMethodField()
-    rating = serializers.DecimalField(decimal_places=1, max_digits=2, source='rating_info.rating')
+    rating = serializers.DecimalField(decimal_places=1, max_digits=2, source='rating_info')
 
     class Meta:
         model = Product
         fields = ('id', 'category', 'price', 'count', 'date', 'title', 'description', 'href',
                   'freeDelivery', 'images', 'tags', 'reviews', 'rating')
+
+    def get_title(self, obj):
+        return obj.title[:25]
 
     def get_images(self, instance):
         images = instance.images.all()
@@ -162,6 +169,11 @@ class SaleSerializer(serializers.ModelSerializer):
         fields = ('id', 'price', 'salePrice', 'dateFrom', 'dateTo', 'title', 'href', 'images')
 
 
+    def to_representation(self, obj):
+        data = super().to_representation(obj)
+        data["dateFrom"] = obj.dateFrom.strftime('%d.%m')
+        data["dateTo"] = obj.dateTo.strftime('%d.%m')
+        return data
 class ManufacturerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Manufacturer

@@ -1,5 +1,6 @@
 {% extends "frontend/base.html" %}
 {% load static %}
+{% load i18n %}
 
 {% block content %}
 {% if user.is_authenticated %}
@@ -7,12 +8,12 @@
     <div class="Middle-top">
         <div class="wrap">
             <div class="Middle-header">
-                <h1 class="Middle-title">Оплата
+                <h1 class="Middle-title">{% trans 'Payment' %}
                 </h1>
                 <ul class="breadcrumbs Middle-breadcrumbs">
-                    <li class="breadcrumbs-item"><a href="index.html">home</a>
+                    <li class="breadcrumbs-item"><a href="index.html">{% trans 'home' %}</a>
                     </li>
-                    <li class="breadcrumbs-item breadcrumbs-item_current"><span>Оплата</span>
+                    <li class="breadcrumbs-item breadcrumbs-item_current"><span>{% trans 'Payment' %}</span>
                     </li>
                 </ul>
             </div>
@@ -23,7 +24,7 @@
             <form class="form Payment" action="/progress-payment/" @submit.prevent="submitPayment">
                 <div class="Payment-card">
                     <div class="form-group">
-                        <label class="form-label">Номер счета
+                        <label class="form-label">{% trans 'Card number' %}
                         </label>
                         <input class="form-input Payment-bill"
                                id="number"
@@ -36,7 +37,7 @@
                     </div>
                     <div class="form-group ">
                         <label for="month" class="form-label">
-                            Месяц
+                            {% trans 'Month' %}
                             <input class="form-input Payment-bill Payment-month"
                                    id="month"
                                    name="month"
@@ -50,7 +51,7 @@
                     </div>
                     <div class="form-group ">
                         <label for="year" class="form-label">
-                            Год
+                            {% trans 'Year' %}
                             <input class="form-input Payment-bill Payment-year"
                                    id="year"
                                    name="year"
@@ -78,7 +79,7 @@
                     </div>
                     <div class="form-group">
                         <label for="name1" class="form-label">
-                            ФИО
+                            {% trans 'Full name ' %}
                             <input class="form-input Payment-bill Payment-name"
                                    id="name1"
                                    name="name1"
@@ -91,11 +92,11 @@
                 </div>
                 <div class="form-group">
                     <a class="btn btn_success" href="#" @click="generateRandomData">
-                        Сгенирировать случайный счет
+                        {% trans 'Generate random score' %}
                     </a>
                 </div>
                 <div class="Payment-pay">
-                    <button class="btn btn_primary" type="submit">Оплатить</button>
+                    <button class="btn btn_primary" type="submit">{% trans 'Pay' %}</button>
                 </div>
             </form>
         </div>

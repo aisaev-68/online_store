@@ -3,22 +3,15 @@ from django.contrib.auth import views
 from django.views.generic import TemplateView
 
 
-from account.views import CheckAuthenticationAPI, SettingsAPIView, AccountUser, RegisterView, MyLoginView, MyLogoutView, UserProfileView, UserAvatarView, UserPasswordChangeView, HistoryOrder
+from account.views import CheckAuthenticationAPI, SettingsAPIView, AccountUserAPIView, UserProfileAPIView, UserAvatarAPIView, UserPasswordChangeView
 
 app_name = 'account'
 urlpatterns = [
-    path('api/account/', AccountUser.as_view()),
-    path('api/profile/', UserProfileView.as_view()),
-    path('api/profile/avatar/', UserAvatarView.as_view()),
+    path('api/account/', AccountUserAPIView.as_view()),
+    path('api/profile/', UserProfileAPIView.as_view()),
+    path('api/profile/avatar/', UserAvatarAPIView.as_view()),
     path('api/profile/password/', UserPasswordChangeView.as_view(), name='user-password-change'),
-    path('api/history-order/', HistoryOrder.as_view(), name='history_order'),
     path('api/settings/', SettingsAPIView.as_view(), name='settings'),
     path('api/check-authentication/', CheckAuthenticationAPI.as_view(), name='check_authentication_api'),
-    # path('register/', RegisterView.as_view(), name='register'),
-    # path('login/', MyLoginView.as_view(), name='login'),
-    # path('logout/', MyLogoutView.as_view(), name='logout'),
-    # path("login/", views.LoginView.as_view(), name="login"),
-    # path("logout/", views.LogoutView.as_view(), name="logout"),
-
 ]
 

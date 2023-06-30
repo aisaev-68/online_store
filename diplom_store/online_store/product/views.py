@@ -6,8 +6,6 @@ from drf_yasg import openapi
 from django.shortcuts import render
 from django.views import View
 from rest_framework import viewsets, status
-from rest_framework.generics import GenericAPIView
-from rest_framework.mixins import CreateModelMixin
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.request import Request
@@ -35,7 +33,7 @@ class ProductDetailView(APIView):
     def get(self, request, pk) -> Response:
         product = Product.objects.prefetch_related('reviews').get(pk=pk)
         serializer = ProductReviewsSerializer(product, many=False)
-        return Response(serializer.data, status=200)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class ProductReviewView(APIView):
@@ -86,7 +84,7 @@ class ManufacturerListAPIView(APIView):
     def get(self, request: Request) -> Response:
         manufacturers = Manufacturer.objects.all()
         serializer = ManufacturerSerializer(manufacturers, many=True)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class SellerListAPIView(APIView):
@@ -97,7 +95,7 @@ class SellerListAPIView(APIView):
     def get(self, request: Request) -> Response:
         sellers = Seller.objects.all()
         serializer = SellerSerializer(sellers, many=True)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class SpecificationAPIView(APIView):
@@ -106,6 +104,7 @@ class SpecificationAPIView(APIView):
     """
 
     def get(self, request: Request, pk: int) -> Response:
-        specifications = Specification.objects.filter(category=pk).first()
+        specifications = Specification.objects.filter(category_id=pk).first()
         serializer = SpecificationSerializer(specifications)
-        return Response(serializer.data)
+        print("SPEC", serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)

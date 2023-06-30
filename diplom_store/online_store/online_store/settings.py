@@ -3,6 +3,7 @@ from decouple import config
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
+DEFAULT_CHARSET = 'utf-8'
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', cast=bool, default=False)
@@ -32,8 +33,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.admindocs',
     'rest_framework',
-    # 'rest_framework.authtoken',
     'corsheaders',
     'drf_yasg',
     'django_filters',
@@ -50,6 +51,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware', #добавлено для локализации
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -123,13 +125,20 @@ REST_FRAMEWORK = {
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
+LANGUAGES = (
+    ('en', _('English')),
+    ('ru', _('Russian')),
+)
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR, 'locale/'),
+)
 
-LANGUAGE_CODE = 'en-us'
+# LANGUAGE_CODE = 'en'
 
 TIME_ZONE = 'UTC'
 
 USE_I18N = True
-
+USE_L10N = True
 USE_TZ = True
 
 SHORT_DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S'
@@ -154,20 +163,26 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 SESSION_COOKIE_AGE = 30 * 24 * 60 * 60
 
 PAYMENT_METHODS = (
-    (1, "Online from a random someone else's account"),
-    (2, 'Online card'),
+    (1, _("Online from a random someone else's account")),
+    (2, _('Online card')),
 )
 
 SHIPPING_METHODS = (
-    (1, 'Standard Shipping'),
-    (2, 'Express Shipping'),
+    (1, _('Standard Shipping')),
+    (2, _('Express Shipping')),
 )
 
 ORDER_STATUSES = (
-    (1, 'Paid'),
-    (2, 'Payment error'),
-    (3, 'Process'),
+    (1, _('Paid')),
+    (2, _('Payment error')),
+    (3, _('Process')),
 )
+
+FILTER_MIN_PRICE = 1
+FILTER_MAX_PRICE = 500000
+FILTER_CURRENT_FROM_PRICE = 1000
+FILTER_CURRENT_TO_PRICE = 20000
+
 
 EXPRESS_SHIPPING_COST = 500.00
 STANDARD_SHIPPING_COST = 200.00

@@ -65,6 +65,31 @@ class PaymentSettings(models.Model):
         default=settings.MIN_AMOUNT_FREE_SHIPPING,
         verbose_name=_('minimum amount free shipping')
     )
+    filter_min_price = models.DecimalField(
+        decimal_places=0,
+        max_digits=6,
+        default=settings.FILTER_MIN_PRICE,
+        verbose_name=_('filter minimum price')
+    )
+    filter_max_price = models.DecimalField(
+        decimal_places=0,
+        max_digits=6,
+        default=settings.FILTER_MAX_PRICE,
+        verbose_name=_('filter maximum price')
+    )
+    filter_current_from_price = models.DecimalField(
+        decimal_places=0,
+        max_digits=6,
+        default=settings.FILTER_CURRENT_FROM_PRICE,
+        verbose_name=_('filter current from price')
+    )
+    filter_current_to_price = models.DecimalField(
+        decimal_places=0,
+        max_digits=6,
+        default=settings.FILTER_CURRENT_TO_PRICE,
+        verbose_name=_('filter current to price')
+    )
 
     class Meta:
-        verbose_name_plural = _('Payment and shipping settings')
+        verbose_name = _('Setting')
+        verbose_name_plural = _('Settings')

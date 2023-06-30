@@ -1,5 +1,6 @@
 {% extends "frontend/base.html" %}
 {% load static %}
+{% load i18n %}
 
 {% block content %}
 {% if user.is_authenticated %}
@@ -7,14 +8,14 @@
     <div class="Middle-top">
       <div class="wrap">
         <div class="Middle-header">
-          <h1 class="Middle-title">Заказ №${orderId}$
+          <h1 class="Middle-title">{% trans 'Order' %} №${orderId}$
           </h1>
           <ul class="breadcrumbs Middle-breadcrumbs">
-            <li class="breadcrumbs-item"><a href="index.html">home</a>
+            <li class="breadcrumbs-item"><a href="/">{% trans 'home' %}</a>
             </li>
-            <li class="breadcrumbs-item"><a href="historyorder.html">История заказов</a>
+            <li class="breadcrumbs-item"><a href="">{% trans 'History of orders' %}</a>
             </li>
-            <li class="breadcrumbs-item breadcrumbs-item_current"><span>Заказ №${orderId}$</span>
+            <li class="breadcrumbs-item breadcrumbs-item_current"><span>{% trans 'Order' %} №${orderId}$</span>
             </li>
           </ul>
         </div>
@@ -32,45 +33,45 @@
 
                   <div class="row-block">
                     <div class="Order-info Order-info_date">
-                      <div class="Order-infoType">Дата заказа:</div>
+                      <div class="Order-infoType">{% trans 'Order date:' %}</div>
                       <div class="Order-infoContent">${createdAt}$</div>
                     </div>
                     <div class="Order-info">
-                      <div class="Order-infoType">ФИО:</div>
+                      <div class="Order-infoType">{% trans 'Full name:' %}</div>
                       <div class="Order-infoContent">${fullName}$</div>
                     </div>
                     <div class="Order-info">
-                      <div class="Order-infoType">Телефон:</div>
+                      <div class="Order-infoType">{% trans 'Phone:' %}</div>
                       <div class="Order-infoContent">${phone}$</div>
                     </div>
                     <div class="Order-info">
-                      <div class="Order-infoType">E-mail:</div>
+                      <div class="Order-infoType">{% trans 'E-mail:' %}</div>
                       <div class="Order-infoContent">${email}$</div>
                     </div>
                   </div>
                   <div class="row-block">
                     <div class="Order-info Order-info_delivery">
-                      <div class="Order-infoType">Тип доставки:</div>
+                      <div class="Order-infoType">{% trans 'Delivery type:' %}</div>
                       <div class="Order-infoContent">${deliveryType}$</div>
                     </div>
                     <div class="Order-info">
-                      <div class="Order-infoType">Город:</div>
+                      <div class="Order-infoType">{% trans 'City:' %}</div>
                       <div class="Order-infoContent">${city}$</div>
                     </div>
                     <div class="Order-info">
-                      <div class="Order-infoType">Адрес:</div>
+                      <div class="Order-infoType">{% trans 'Address:' %}</div>
                       <div class="Order-infoContent">${address}$</div>
                     </div>
                     <div class="Order-info Order-info_pay">
-                      <div class="Order-infoType">Оплата:</div>
+                      <div class="Order-infoType">{% trans 'Payment:' %}</div>
                       <div class="Order-infoContent">${paymentType}$</div>
                     </div>
                     <div class="Order-info Order-info_status">
-                      <div class="Order-infoType">Статус:</div>
+                      <div class="Order-infoType">{% trans 'Status:' %}</div>
                       <div class="Order-infoContent">${status}$</div>
                     </div>
-                    <div v-if="status === 'Payment error'" class="Order-info Order-info_error">
-                      <div class="Order-infoType">Оплата не прошла:</div>
+                    <div v-if="status === 'Payment error' || status === 'Ошибка оплаты'" class="Order-info Order-info_error">
+                      <div class="Order-infoType">{% trans 'Payment failed:' %}</div>
 <!--                      <div class="Order-infoContent">${paymentError}$</div>-->
                     </div>
                   </div>
@@ -100,13 +101,13 @@
                 </div>
                 <div class="Cart-total">
                   <div class="Cart-block Cart-block_total">
-                    <strong class="Cart-title">Итого:<span class="Cart-price">${totalCost}$$</span>
+                    <strong class="Cart-title">{% trans 'Total:' %}<span class="Cart-price">${totalCost}$$</span>
                     </strong>
                   </div>
 
-                  <div v-if="status === 'Payment error'"
+                  <div v-if="status === 'Payment error' || status === 'Ошибка оплаты'"
                        class="Cart-block">
-                    <a class="btn btn_primary btn_lg" :href="`/payment/${orderId}/`">Оплатить</a>
+                    <a class="btn btn_primary btn_lg" :href="`/payment/${orderId}/`">{% trans 'Pay' %}</a>
                   </div>
                 </div>
               </div>

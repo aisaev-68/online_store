@@ -103,11 +103,16 @@ var mix = {
           this.passwordCurrent = '';
           this.password = '';
           this.passwordReply = '';
+          this.passwordUpdated = true;
         })
-        .catch(() => {
+        .catch(error => {
+          this.passwordError = true;
+          this.passwordCurrent = '';
+          this.password = '';
+          this.passwordReply = '';
           console.warn('Ошибка при сохранении пароля');
         });
-        this.passwordUpdated = true;
+
     },
 
     setAvatar(event) {
@@ -192,7 +197,9 @@ var mix = {
       passwordReply: '',
       profileUpdated: false,
       avatarUpdated: false,
-      passwordUpdated: false
+      passwordUpdated: false,
+      passwordError: false
     };
   }
 };
+

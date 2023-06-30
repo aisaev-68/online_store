@@ -14,6 +14,11 @@ var mix = {
           this.shipping_methods = data.shipping_methods;
           this.order_status = data.order_status;
 
+          this.filter_min_price = data.filter_min_price;
+          this.filter_max_price = data.filter_max_price;
+          this.filter_current_from_price = data.filter_current_from_price;
+          this.filter_current_to_price = data.filter_current_to_price;
+
           // Установка списков выбора для каждого поля
           this.payment_methods_choices = data.payment_methods_choices;
           this.shipping_methods_choices = data.shipping_methods_choices;
@@ -34,6 +39,10 @@ var mix = {
         payment_methods: this.payment_methods,
         shipping_methods: this.shipping_methods,
         order_status: this.order_status,
+        filter_min_price: this.filter_min_price,
+        filter_max_price: this.filter_max_price,
+        filter_current_from_price: this.filter_current_from_price,
+        filter_current_to_price: this.filter_current_to_price
       };
 
       this.postData("/api/settings/", requestData, {
@@ -102,6 +111,10 @@ var mix = {
       payment_methods_choices: {},
       shipping_methods_choices: {},
       order_status_choices: {},
+      filter_min_price: '',
+      filter_max_price: '',
+      filter_current_from_price: '',
+      filter_current_to_price: ''
     };
   }
 };

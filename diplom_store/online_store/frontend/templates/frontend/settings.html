@@ -30,63 +30,83 @@
                 <div class="Profile">
                     <div class="row">
                         <div class="row-block">
-                            {{settings.page_size}}
+
                             <form action="" @submit.prevent="changeSettings">
-                                <div class="form-group">
-                                    <label class="form-label" for="page_size">{% trans 'Page size' %}</label>
-                                    <input class="form-input" id="page_size" name="page_size" v-model="page_size" value="page_size" style="padding: 10px 0px 10px 25px;"/>
+                                <div class="row">
+                                    <div class="row-block">
+                                        <div class="form-group">
+                                            <label class="form-label" for="page_size">{% trans 'Page size' %}</label>
+                                            <input class="form-input" id="page_size" name="page_size" v-model="page_size" value="page_size" style="padding: 10px 0px 10px 25px;"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label" for="express">{% trans 'Express shipping cost' %}</label>
+                                            <input class="form-input" id="express" name="express" v-model="express" style="padding: 10px 0px 10px 25px;"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label" for="standard">{% trans 'Standard shipping cost' %}</label>
+                                            <input class="form-input" id="standard" name="standard" v-model="standard" style="padding: 10px 0px 10px 25px;"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label" for="amount_free">{% trans 'Minimal amount free shipping' %}</label>
+                                            <input class="form-input" id="amount_free" name="amount_free" v-model="amount_free" style="padding: 10px 0px 10px 25px;"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label" for="payment_methods">{% trans 'Payment methods' %}</label>
+                                            <select class="setting_select" id="payment_methods" name="payment_methods"
+                                                    v-model="payment_methods">
+                                                <option class="setting_select" v-for="(value, key) in payment_methods_choices" :value="key">
+                                                    ${ value }$
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row-block">
+                                        <div class="form-group">
+                                            <label class="form-label" for="shipping_methods">{% trans 'Shipping methods' %}</label>
+                                            <select class="setting_select" id="shipping_methods" name="shipping_methods"
+                                                    v-model="shipping_methods">
+                                                <option class="setting_select" v-for="(value, key) in shipping_methods_choices" :value="key">
+                                                    ${ value }$
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label" for="order_status">{% trans 'Order status' %}</label>
+                                            <select class="setting_select" id="order_status" name="order_status"
+                                                    v-model="order_status">
+                                                <option class="setting_select" v-for="(value, key) in order_status_choices" :value="key">
+                                                    ${ value }$
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label" for="filter_min_price">{% trans 'Filter minimum price' %}</label>
+                                            <input class="form-input" id="filter_min_price" name="filter_min_price" v-model="filter_min_price" value="filter_min_price" style="padding: 10px 0px 10px 25px;"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label" for="filter_max_price">{% trans 'Filter maximum price' %}</label>
+                                            <input class="form-input" id="filter_max_price" name="filter_max_price" v-model="filter_max_price" style="padding: 10px 0px 10px 25px;"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label" for="filter_current_from_price">{% trans 'Filter current from price' %}</label>
+                                            <input class="form-input" id="filter_current_from_price" name="filter_current_from_price" v-model="filter_current_from_price" style="padding: 10px 0px 10px 25px;"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label" for="filter_current_to_price">{% trans 'Filter current to price' %}</label>
+                                            <input class="form-input" id="filter_current_to_price" name="filter_current_to_price" v-model="filter_current_to_price" style="padding: 10px 0px 10px 25px;"/>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="form-label" for="express">{% trans 'Express shipping cost' %}</label>
-                                    <input class="form-input" id="express" name="express" v-model="express" style="padding: 10px 0px 10px 25px;"/>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label" for="standard">{% trans 'Standard shipping cost' %}</label>
-                                    <input class="form-input" id="standard" name="standard" v-model="standard" style="padding: 10px 0px 10px 25px;"/>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label" for="amount_free">{% trans 'Minimal amount free shipping' %}</label>
-                                    <input class="form-input" id="amount_free" name="amount_free" v-model="amount_free" style="padding: 10px 0px 10px 25px;"/>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label" for="payment_methods">{% trans 'Payment methods' %}</label>
-                                    <select class="setting_select" id="payment_methods" name="payment_methods"
-                                            v-model="payment_methods">
-                                        <option class="setting_select" v-for="(value, key) in payment_methods_choices" :value="key">
-                                            ${ value }$
-                                        </option>
-                                    </select>
-                                </div>
-
-                                <div class="form-group">
-                                    <label class="form-label" for="shipping_methods">{% trans 'Shipping methods' %}</label>
-                                    <select class="setting_select" id="shipping_methods" name="shipping_methods"
-                                            v-model="shipping_methods">
-                                        <option class="setting_select" v-for="(value, key) in shipping_methods_choices" :value="key">
-                                            ${ value }$
-                                        </option>
-                                    </select>
-                                </div>
-
-                                <div class="form-group">
-                                    <label class="form-label" for="order_status">Order status</label>
-                                    <select class="setting_select" id="order_status" name="order_status"
-                                            v-model="order_status">
-                                        <option class="setting_select" v-for="(value, key) in order_status_choices" :value="key">
-                                            ${ value }$
-                                        </option>
-                                    </select>
-                                </div>
-
                                 <div v-if="settingUpdated" class="success-message">
-                                    Настройки успешно обновлены!
+                                    {% trans 'Settings updated successfully!' %}
                                 </div>
 
                                 <div class="form-group">
-                                    <button class="btn btn_success" type="submit">Сохранить</button>
+                                    <button class="btn btn_success" type="submit">{% trans 'Save' %}</button>
                                 </div>
                             </form>
-                        </div>
+                            </div>
+
                     </div>
                 </div>
             </div>

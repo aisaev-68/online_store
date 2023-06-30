@@ -1,5 +1,4 @@
 from django.urls import path
-from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
 from account.views import RegisterView, MyLoginView, MyLogoutView
 
@@ -8,6 +7,7 @@ name = 'frontend'
 urlpatterns = [
     path('', TemplateView.as_view(template_name="frontend/index.html"), name='index'),
     path('about/', TemplateView.as_view(template_name="frontend/about.html")),
+    path('delivery/', TemplateView.as_view(template_name="frontend/delivery.html"), name='delivery'),
     path('account/', TemplateView.as_view(template_name="frontend/account.html"), name='account'),
     path('cart/', TemplateView.as_view(template_name="frontend/cart.html"), name='cart'),
     path('catalog/', TemplateView.as_view(template_name="frontend/catalog.html")),

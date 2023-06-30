@@ -31,9 +31,23 @@
             <div class="row ControlPanel-row">
                 <div class="row-block">
                     <div class="row ControlPanel-rowSplit">
-                        <div class="row-block"><a class="ControlPanel-title" href="#">Free delivery</a>
+                        <div class="row-block">
+                          <form action="{% url 'set_language' %}" method="post">
+                                    {% csrf_token %}
+                                    {% get_current_language as LANGUAGE_CODE %}
+                                    {% get_available_languages as LANGUAGES %}
+                                    {% for language in LANGUAGES %}
+                                    {% if language.0 != LANGUAGE_CODE %}
+                                    <button class="text-white" type="submit" name="language" value="{{ language.0 }}">
+                                        {{ language.0 }}
+                                    </button>
+                                    {% endif %}
+                                    {% endfor %}
+                                </form>
+                       </div>
+                        <div class="row-block"><a class="ControlPanel-title" href="{% url 'delivery' %}">{% trans 'Free delivery' %}</a>
                         </div>
-                        <div class="row-block hide_700"><span class="ControlPanel-title">Follow Us</span>
+                        <div class="row-block hide_700"><span class="ControlPanel-title">{% trans 'Follow Us' %}</span>
                             <ul class="menu menu_img menu_smallImg ControlPanel-menu">
                                 <li class="menu-item"><a class="menu-link" href="#"><img
                                         src="{% static 'frontend/assets/img/icons/socialHeader/fb.svg' %}"
@@ -90,16 +104,16 @@
             <nav class="row-block row-block_right Header-menu">
                 <div class="menuModal" id="navigate">
                     <ul class="menu menu_main">
-                        <li class="menu-item"><a class="menu-link" href="/">Home</a>
+                        <li class="menu-item"><a class="menu-link" href="/">{% trans 'Home' %}</a>
                         </li>
 
-                        <li class="menu-item"><a class="menu-link" href="sale.html">Blog</a>
+                        <li class="menu-item"><a class="menu-link" href="/sale">{% trans 'Sale' %}</a>
                         </li>
-                        <li class="menu-item"><span class="menu-label menu-label_success">Hot</span>
-                            <a class="menu-link" href="product.html">Gallery</a>
+                        <li class="menu-item"><span class="menu-label menu-label_success">{% trans 'Hot' %}</span>
+                            <a class="menu-link" href="product.html">{% trans 'Gallery' %}</a>
                         </li>
 
-                        <li class="menu-item"><a class="menu-link" href="catalog.html">Purchase</a>
+                        <li class="menu-item"><a class="menu-link" href="catalog.html">{% trans 'Purchase' %}</a>
                         </li>
                     </ul>
                 </div>
@@ -117,7 +131,7 @@
             </div>
             <div class="row-block Header-trigger">
                 <a class="menuTrigger" href="#navigate">
-                    <div class="menuTrigger-content">Показать навигацию</div>
+                    <div class="menuTrigger-content">{% trans 'Show navigation' %}</div>
                     <span></span>
                     <span></span>
                     <span></span>
@@ -133,7 +147,7 @@
                         <div class="CategoriesButton-icon"><img
                                 src="{% static 'frontend/assets/img/icons/allDep.svg' %}" alt="allDep.svg"/>
                         </div>
-                        <span class="CategoriesButton-text">All Departments</span>
+                        <span class="CategoriesButton-text">{% trans 'All Departments' %}</span>
                         <div class="CategoriesButton-arrow">
                         </div>
                     </div>
@@ -174,9 +188,9 @@
                 <div class="search">
                     <form class="form form_search" @submit.prevent="search">
                         <input class="search-input" id="query" name="query" type="text" v-model="searchText"
-                               placeholder="What are you looking for ..."/>
+                               placeholder="{% trans 'What are you looking for ...' %}"/>
                         <button class="search-button" type="submit" name="search" id="search"><img
-                                src="{% static 'frontend/assets/img/icons/search.svg' %}" alt="search.svg"/>Search
+                                src="{% static 'frontend/assets/img/icons/search.svg' %}" alt="search.svg"/>{% trans 'Search' %}
                         </button>
                     </form>
                 </div>
@@ -185,7 +199,8 @@
     </div>
 </header>
 
-{% block content %}{% endblock %}
+{% block content %}
+{% endblock %}
 
 <footer class="Footer">
     <div class="wrap">
@@ -193,8 +208,7 @@
             <div class="row-block"><a class="logo Footer-logo" href="/"><img class="logo-image"
                                                                              src="{% static 'frontend/assets/img/logo_footer.png' %}"
                                                                              alt="logo_footer.png"/></a>
-                <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincid unt ut
-                    laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad
+                <p>{% trans 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincid unt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad' %}
                 </p>
                 <ul class="menu menu_img menu_smallImg Footer-menuSoc">
                     <li class="menu-item"><a class="menu-link" href="#"><img
@@ -211,20 +225,14 @@
                 </ul>
             </div>
             <div class="row-block">
-                <strong class="Footer-title">Useful Links
+                <strong class="Footer-title">{% trans 'Useful Links' %}
                 </strong>
                 <ul class="menu menu_vt Footer-menu">
-                    <li class="menu-item"><a class="menu-link" href="#">Checkout</a>
+                    <li class="menu-item"><a class="menu-link" href="#">{% trans 'Home' %}</a>
                     </li>
-                    <li class="menu-item"><a class="menu-link" href="#">My Cart</a>
+                    <li class="menu-item"><a class="menu-link" href="#">{% trans 'Sale' %}</a>
                     </li>
-                    <li class="menu-item"><a class="menu-link" href="#">Delivery</a>
-                    </li>
-                    <li class="menu-item"><a class="menu-link" href="#">Order Info</a>
-                    </li>
-                    <li class="menu-item"><a class="menu-link" href="#">Terms</a>
-                    </li>
-                    <li class="menu-item"><a class="menu-link" href="#">Conditions</a>
+                    <li class="menu-item"><a class="menu-link" href="#">{% trans 'Delivery' %}</a>
                     </li>
                 </ul>
             </div>
@@ -238,16 +246,10 @@
                     </li>
                     <li class="menu-item"><a class="menu-link" href="#">Cameras</a>
                     </li>
-                    <li class="menu-item"><a class="menu-link" href="#">Clothings</a>
-                    </li>
-                    <li class="menu-item"><a class="menu-link" href="#">Electronics</a>
-                    </li>
-                    <li class="menu-item"><a class="menu-link" href="#">Fashion</a>
-                    </li>
                 </ul>
             </div>
             <div class="row-block">
-                <strong class="Footer-title">Contacts
+                <strong class="Footer-title">{% trans 'Contacts' %}
                 </strong>
                 <p>Phone: 8.800.200.600<br>Email: Support@ninzio.com<br>Skype: techno<br>Address: New York, north<br>Avenue
                     26/7<br>0057
@@ -260,7 +262,7 @@
             <div class="row row_space">
                 <div class="row-block">© Copyright&#32;<a href="#">Megano Store.</a>&#32;All rights reserved.
                 </div>
-                <div class="row-block"><span>Accepted Payments</span>
+                <div class="row-block"><span>{% trans 'Accepted Payments' %}</span>
                     <div class="Footer-payments">
                         <div><img src="{% static 'frontend/assets/img/payments/visa.png' %}" alt="visa.png"/></div>
                         <div><img src="{% static 'frontend/assets/img/payments/mastercard.png' %}"

@@ -1,5 +1,6 @@
 {% extends "frontend/base.html" %}
 {% load static %}
+{% load i18n %}
 
 {% block content %}
 {% if user.is_authenticated %}
@@ -7,12 +8,12 @@
     <div class="Middle-top">
       <div class="wrap">
         <div class="Middle-header">
-          <h1 class="Middle-title">История заказов
+          <h1 class="Middle-title">{% trans 'History of orders' %}
           </h1>
           <ul class="breadcrumbs Middle-breadcrumbs">
-            <li class="breadcrumbs-item"><a href="/">home</a>
+            <li class="breadcrumbs-item"><a href="/">{% trans 'home' %}</a>
             </li>
-            <li class="breadcrumbs-item breadcrumbs-item_current"><span>История заказов</span>
+            <li class="breadcrumbs-item breadcrumbs-item_current"><span>{% trans 'History of orders' %}</span>
             </li>
           </ul>
         </div>
@@ -33,33 +34,36 @@
                 <div class="row">
                   <div class="row-block">
                     <a class="Order-title" :href="`/order-detail/${order.orderId}`">
-                      Заказ&#32;<span class="Order-numberOrder">№${order.orderId}$</span>&#32;от&#32;
+                      {% trans 'Order' %}&#32;<span class="Order-numberOrder">№${order.orderId}$</span>&#32;от&#32;
                       <span class="Order-dateOrder">${order.createdAt}$</span>
                     </a>
                   </div>
                   <div class="row-block">
                     <div class="Order-info Order-info_delivery">
-                      <div class="Order-infoType">Тип доставки:</div>
+                      <div class="Order-infoType">{% trans 'Delivery type:' %}</div>
                       <div class="Order-infoContent">${order.deliveryType}$</div>
                     </div>
                     <div class="Order-info Order-info_pay">
-                      <div class="Order-infoType">Оплата:</div>
+                      <div class="Order-infoType">{% trans 'Payment:' %}</div>
                       <div class="Order-infoContent">${order.paymentType}$</div>
                     </div>
                     <div class="Order-info">
-                      <div class="Order-infoType">Общая стоимость:
+                      <div class="Order-infoType">{% trans 'Total cost:' %}
                       </div>
                       <div class="Order-infoContent">
                         <span class="Order-price">${order.totalCost}$$</span>
                       </div>
                     </div>
                     <div class="Order-info Order-info_status">
-                      <div class="Order-infoType">Статус:</div>
+                      <div class="Order-infoType">{% trans 'Status:' %}</div>
                       <div class="Order-infoContent">${order.status}$</div>
                     </div>
                   </div>
                 </div>
               </div>
+<!--              <div v-if="index === 0" class="Order-personal">-->
+<!--                {% trans 'Order history is empty' %}-->
+<!--              </div>-->
             </div>
              <!-- Пагинация!  -->
                 <div class="Pagination">

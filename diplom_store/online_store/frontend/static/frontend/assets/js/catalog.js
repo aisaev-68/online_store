@@ -87,6 +87,19 @@ var mix = {
           console.warn('Ошибка получения тегов');
         });
     },
+//    getSettings() {
+//          const csrfToken = this.getCookie('csrftoken');
+//          this.getData("/api/settings/", {
+//            headers: { 'X-CSRFToken': csrfToken }
+//          })
+//            .then(data => {
+//              this.filter.minPrice = data.filter_min_price;
+//              this.filter.maxPrice = data.filter_max_price;
+//            })
+//            .catch(() => {
+//              console.warn('Ошибка при получении настроек');
+//            });
+//        },
     getCatalogs(page) {
       if (typeof page === 'undefined') {
         page = 1;
@@ -95,10 +108,12 @@ var mix = {
       const tags = this.topTags
         .filter((tag) => tag.selected)
         .map((tag) => tag.id);
+        const str = location.pathname;
 
-      this.category = location.pathname.startsWith('/catalog/')
-        ? Number(location.pathname.replace('/catalog/', ''))
-        : null;
+      this.category = parseInt(str.match(/\/\w+\/(\d+)$/)[1]);
+//      this.category = location.pathname.startsWith('/catalog/', 3)
+//        ? Number(location.pathname.replace('/catalog/', ''))
+//        : null;
 
       this.getData('/api/catalog/', {
         page,
@@ -127,11 +142,11 @@ var mix = {
           console.warn('Ошибка при получении каталога');
         });
     },
-  },
+      },
   mounted() {
     this.selectedSort = this.sortRules.find((sort) => sort.id === 'price');
     this.selectedSort.selected = 'inc';
-
+    //this.getSettings();
     this.getTags();
     this.getSellers();
     this.getManufacturers();
@@ -156,13 +171,15 @@ var mix = {
       selectedSort: null,
       filter: {
         name: '',
-        minPrice: 0,
-        maxPrice: 50000,
+        minPrice: 1000,
+        maxPrice: 30000,
         freeDelivery: false,
         available: true,
         sellers: [], // список выбранных продавцов
         manufacturers: [], // список выбранных производителей
         specifications: [],
+//        minValue: 0,
+//        maxValue: 0,
       },
       sellers: [], // список всех продавцов
       manufacturers: [], // список всех производителей

@@ -17,10 +17,10 @@ class Order(models.Model):  # Заказы
         verbose_name=_('user'),
         null=True
     )
-    products = models.ManyToManyField(Product, verbose_name=_('goods in order'),
+    products = models.ManyToManyField(Product, verbose_name=_('products in order'),
                                       through='OrderProducts', related_name='order_products')
 
-    createdAt = models.DateTimeField(auto_now_add=True, verbose_name=_('created order'))
+    createdAt = models.DateTimeField(auto_now_add=True, verbose_name=_('date order'))
     fullName = models.CharField(max_length=100, default='', verbose_name=_('full name'))
     email = models.EmailField(verbose_name='email')
     phone = models.CharField(max_length=16,
@@ -51,8 +51,8 @@ class OrderProducts(models.Model):
         """
         Метакласс для определения названий в единственном и множественном числе
         """
-        verbose_name = _('товар из заказа')
-        verbose_name_plural = _('все товары из заказа')
+        verbose_name = _('item from the order')
+        verbose_name_plural = _('all items in the order')
 
     id = models.AutoField(primary_key=True, unique=True)
     order = models.ForeignKey(Order, on_delete=models.CASCADE, verbose_name=_('order'))

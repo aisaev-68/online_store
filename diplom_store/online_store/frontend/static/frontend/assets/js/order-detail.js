@@ -1,6 +1,7 @@
 var mix = {
   methods: {
     getOrderDetail() {
+
       this.id = location.pathname.startsWith('/order-detail/')
         ? Number(location.pathname.replace('/order-detail/', ''))
         : null;

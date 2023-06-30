@@ -1,0 +1,135 @@
+{% extends "frontend/base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block content %}
+
+<div class="Middle Middle_top">
+    <div class="Middle-top">
+        <div class="wrap">
+            <div class="Middle-header">
+                <h1 class="Middle-title">{% trans 'Delivery' %}
+                </h1>
+                <ul class="breadcrumbs Middle-breadcrumbs">
+                    <li class="breadcrumbs-item"><a href="/">{% trans 'Home' %}</a>
+                    </li>
+                    <li class="breadcrumbs-item breadcrumbs-item_current"><span>{% trans 'Delivery' %}</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="Section Section_column Section_columnLeft Section_columnWide">
+      <div class="wrap">
+        <div class="Section-column">
+          <div class="Section-columnSection Section-columnSection_mark">
+            <div class="media media_advantage">
+              <div class="media-image"><img src="{% static 'frontend/assets/img/icons/advantages/shipping.svg' %}" alt="shipping.svg"/>
+              </div>
+              <div class="media-content">
+                <strong class="media-title">{% trans 'Shipping & Returns' %}
+                </strong>
+                <p class="media-text">{% trans 'World wide shipping' %}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="Section-columnSection Section-columnSection_mark">
+            <div class="media media_advantage">
+              <div class="media-image"><img src="{% static 'frontend/assets/img/icons/advantages/moneyBack.svg' %}" alt="moneyBack.svg"/>
+              </div>
+              <div class="media-content">
+                <strong class="media-title">{% trans 'Money Back' %}
+                </strong>
+                <p class="media-text">{% trans 'Guaranted payments' %}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="Section-columnSection Section-columnSection_mark">
+            <div class="media media_advantage">
+              <div class="media-image"><img src="{% static 'frontend/assets/img/icons/advantages/support.svg' %}" alt="support.svg"/>
+              </div>
+              <div class="media-content">
+                <strong class="media-title">{% trans 'Support Policy' %}
+                </strong>
+                <p class="media-text">{% trans 'Fast support team' %}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="Section-columnSection Section-columnSection_mark">
+            <div class="media media_advantage">
+              <div class="media-image"><img src="{% static 'frontend/assets/img/icons/advantages/quality.svg' %}" alt="quality.svg"/>
+              </div>
+              <div class="media-content">
+                <strong class="media-title">{% trans 'Quality Guarantee' %}
+                </strong>
+                <p class="media-text">{% trans 'Best guaranted items' %}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="Section-columnSection">
+            <header class="Section-header">
+              <strong class="Section-title">{% trans 'Follow Us' %}
+              </strong>
+            </header>
+            <div class="Section-columnContent">
+              <div class="Footer-payments Footer-payments_column">
+                <div><img src="{% static 'frontend/assets/img/icons/socialContent/fb.png' %}" alt="fb.png"/></div>
+                <div><img src="{% static 'frontend/assets/img/icons/socialContent/tw.png' %}" alt="tw.png"/></div>
+                <div><img src="{% static 'frontend/assets/img/icons/socialContent/gg.png' %}" alt="gg.png"/></div>
+                <div><img src="{% static 'frontend/assets/img/icons/socialContent/in.png' %}" alt="in.png"/></div>
+                <div><img src="{% static 'frontend/assets/img/icons/socialContent/pt.png' %}" alt="pt.png"/></div>
+                <div><img src="{% static 'frontend/assets/img/icons/socialContent/ml.png' %}" alt="ml.png"/></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="Section-content">
+          <article class="Article">
+            <div class="Article-section">
+              <div class="row row_verticalCenter row_maxHalf">
+                <div class="row-block">
+                  <h2>{% trans 'What is the cost of shipping?' %}
+                  </h2>
+                  <h3>{% trans 'Attention! Dear customers, payment for the order upon receipt through delivery is made only in cash and plastic cards! The use of gadgets and virtual cards is not possible!' %}</h3>
+                  <p>{% trans 'For delivery, the following rules apply: for express delivery, the client is charged a fee of 500 rubles, and for regular delivery - if the order value less than 2000 rubles, then delivery costs 200 rubles, if more, then it is free.' %}</p>
+                  <div><a class="btn btn_primary" href="{% url 'index' %}">{% trans 'Get Started' %}</a>
+                  </div>
+                </div>
+                <div class="row-block">
+                  <div class="pict"><img src="{% static 'frontend/assets/img/content/home/slider.png' %}" alt="slider.png"/>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="Article-section">
+              <div class="row row_verticalCenter row_maxHalf">
+                <div class="row-block">
+                  <div class="pict"><img src="{% static 'frontend/assets/img/content/home/bigGoods.png' %}" alt="bigGoods.png"/>
+                  </div>
+                </div>
+                <div class="row-block">
+                  <h2>{% trans 'New' %}
+                  </h2>
+                  <p>{% trans "A slim 15-inch laptop with powerful hardware that's easy to take with you as a portable gaming or workstation. And it is also relatively inexpensive when compared with models from more well-known brands. Should I choose this gaming laptop when buying and what should I look for?" %}</p>
+<!--                  <ul>-->
+<!--                    <li>{% trans 'The cover and the surface around the keyboard are made of aluminum, while the bottom of the laptop, the sides and the screen frame are plastic. Therefore, there is no feeling that you are using an inexpensive gaming laptop that is made entirely of plastic: when you touch the lid or put your hands on the keyboard, there is a pleasant coolness of metal.' %}-->
+<!--                    </li>-->
+<!--                    <li>{% trans 'Inside is a 14-core Intel Core i7-12700H with a hybrid architecture: eight powerful cores for heavy tasks like gaming or 3D rendering, and four energy-efficient cores for background computing. It also has 16 GB of RAM, a half-terabyte SSD and a mobile RTX 3060.' %}-->
+<!--                    </li>-->
+<!--                    <li>{% trans 'In normal mode, the laptop does not operate on battery power for more than 2.5 hours. Even the most innocuous Google Docs cloud editor drains the laptop by 20-40% in an hour, with watching YouTube at medium brightness and volume, the result is the same. With the energy-efficient profile enabled, you can expect 3 hours - this is the maximum, but the display refresh rate drops to 60 Hz.' %}-->
+<!--                    </li>-->
+<!--                  </ul>-->
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+</div>
+
+{% endblock %}

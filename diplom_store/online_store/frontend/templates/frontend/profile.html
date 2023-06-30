@@ -107,6 +107,9 @@ Profile
                                 <div v-if="passwordUpdated" class="success-message">
                                     {% trans 'Password updated successfully!' %}
                                 </div>
+                                <div v-if="passwordError" class="error-message" style="font-size: 14px; color: red;">
+                                    {% trans 'Incorrect current password.' %}
+                                </div>
                                 <div class="form-group">
                                     <button class="btn btn_success" type="submit">{% trans 'Save' %}</button>
                                 </div>

@@ -1,15 +1,15 @@
 from django.contrib.auth import authenticate, login, update_session_auth_hash
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import Group
-from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeDoneView, PasswordChangeView
+from django.contrib.auth.views import LogoutView
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from drf_yasg.utils import swagger_auto_schema
 from django.urls import reverse_lazy, reverse
 from django.views import View
-from rest_framework.parsers import MultiPartParser, FormParser, JSONParser, FileUploadParser
-from rest_framework import status, generics, mixins
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.parsers import MultiPartParser
+from rest_framework import status, generics
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -18,15 +18,12 @@ from cart.cart import Cart
 from online_store import settings
 from account.forms import UserRegistrationForm, LoginForm
 from account.serializers import UserPasswordChangeSerializer, UserAvatarSerializer, UserSerializer
-from order.models import Order
-
-from account.models import User
 from payment.models import PaymentSettings
-
+from account.permissions import IsAdminOrSuperuser
 from payment.serializers import PaymentSettingsSerializer
 
 
-class AccountUser(APIView):
+class AccountUserAPIView(APIView):
     """
     API для получения аватара и полного имени.
     """
@@ -38,8 +35,14 @@ class AccountUser(APIView):
     #     responses={200: UserAvatarSerializer},
     #     operation_description=_("Get user full name and avatar"),
     # )
-    def get(self, request, *args, **kwargs):
-        print("ACCOUNT", request)
+    def get(self, request, *args, **kwargs) -> Response:
+        """
+        Метод для получения аватара и полного имени.
+        :param request:
+        :param args:
+        :param kwargs:
+        :return: Response
+        """
         user = self.request.user
         serializer = self.serializer_class(user)
         return Response(serializer.data, status=200)
@@ -106,11 +109,9 @@ class MyLoginView(View):
             if user is not None:
                 if user.is_active:
                     login(request, user)
-                    # request.session['is_authenticated'] = True
                     if Cart(request).cart:
                         return redirect('cart')
                     return redirect('account')
-                    # return redirect(request.get_full_path())
                 else:
                     messages.error(request, _('Disabled account.'))
             else:
@@ -125,20 +126,7 @@ class MyLogoutView(LogoutView):
     next_page = reverse_lazy('login')
 
 
-class ChangePasswordViewDone(PasswordChangeDoneView):
-    template_name = 'account/password_change_done.html'
-
-
-class HistoryOrder(View):
-
-    def get(self, request):
-        context = {
-            'order': Order.objects.all()
-        }
-        return render(request, 'frontend/historyorder.html', context=context)
-
-
-class UserProfileView(generics.ListCreateAPIView):
+class UserProfileAPIView(generics.ListCreateAPIView):
     """
     API для получения и обновления профиля пользователя.
     """
@@ -150,16 +138,16 @@ class UserProfileView(generics.ListCreateAPIView):
         responses={200: UserSerializer},
         operation_description=_("Get user profile"),
     )
-    def get(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs) -> Response:
         serializer = self.serializer_class(self.request.user)
         return Response(serializer.data)
 
     @swagger_auto_schema(
         request_body=UserSerializer,
         responses={200: UserSerializer},
-        operation_description="Update user profile",
+        operation_description=_("Update user profile"),
     )
-    def post(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs) -> Response:
         serializer = self.serializer_class(request.user, data=request.data, partial=True)
 
         if serializer.is_valid():
@@ -168,7 +156,7 @@ class UserProfileView(generics.ListCreateAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class UserAvatarView(APIView):
+class UserAvatarAPIView(APIView):
     """
     API для обновления автара.
     """
@@ -180,7 +168,7 @@ class UserAvatarView(APIView):
         responses={200: UserAvatarSerializer},
         operation_description=_("URL of the uploaded avatar."),
     )
-    def post(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs) -> Response:
         serializer = self.serializer_class(request.user, data=request.data, partial=True)
         if serializer.is_valid():
             user = serializer.save()
@@ -201,25 +189,27 @@ class UserPasswordChangeView(APIView):
         responses={200: UserPasswordChangeSerializer},
         operation_description=_("URL of the uploaded password."),
     )
-    def post(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs) -> Response:
+        print('request.data', request.data)
         serializer = self.serializer_class(request.user, data=request.data)
         if serializer.is_valid():
-            user = serializer.save()
-            update_session_auth_hash(request, user)  # Обновление сессии после изменения пароля
-            return Response(status=status.HTTP_200_OK)
+            current_password = request.data.get('passwordCurrent')
+            user = authenticate(username=request.user.username, password=current_password)
+            if user is not None:
+                user.set_password(serializer.validated_data['password'])
+                user.save()
+                print('PASSWORD', user.password)
+                update_session_auth_hash(request, user)
+                return Response(status=status.HTTP_200_OK)
+            else:
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-# class ProfileView(View):
-#     def get(self, request):
-#         return render(request, 'frontend/profile.html')
-
-
 class SettingsAPIView(APIView):
     """
     API для получения и обновления настроек.
     """
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAdminOrSuperuser,)
     authentication_classes = (SessionAuthentication,)
     serializer_class = PaymentSettingsSerializer
 
@@ -227,7 +217,7 @@ class SettingsAPIView(APIView):
         responses={200: PaymentSettingsSerializer},
         operation_description=_("Get settings"),
     )
-    def get(self, request):
+    def get(self, request) -> Response:
         payment_settings = PaymentSettings.objects.first()
         serializer = self.serializer_class(payment_settings)
         settings_data = serializer.data
@@ -269,10 +259,30 @@ class SettingsAPIView(APIView):
         else:
             settings_data['order_status'] = payment_settings.order_status
 
+        if not settings_data.get('filter_min_price'):
+            settings_data['filter_min_price'] = settings.FILTER_MIN_PRICE
+        else:
+            settings_data['filter_min_price'] = payment_settings.filter_min_price
+
+        if not settings_data.get('filter_max_price'):
+            settings_data['filter_max_price'] = settings.FILTER_MAX_PRICE
+        else:
+            settings_data['filter_max_price'] = payment_settings.filter_max_price
+
+        if not settings_data.get('filter_current_from_price'):
+            settings_data['filter_current_from_price'] = settings.FILTER_CURRENT_FROM_PRICE
+        else:
+            settings_data['filter_current_from_price'] = payment_settings.filter_current_from_price
+
+        if not settings_data.get('filter_current_to_price'):
+            settings_data['filter_current_to_price'] = settings.FILTER_CURRENT_TO_PRICE
+        else:
+            settings_data['filter_current_to_price'] = payment_settings.filter_current_to_price
+
         settings_data['payment_methods_choices'] = dict(settings.PAYMENT_METHODS)
         settings_data['shipping_methods_choices'] = dict(settings.SHIPPING_METHODS)
         settings_data['order_status_choices'] = dict(settings.ORDER_STATUSES)
-        print(11111, settings_data)
+
         return Response(settings_data)
 
     @swagger_auto_schema(
@@ -292,7 +302,10 @@ class SettingsAPIView(APIView):
 
 
 class CheckAuthenticationAPI(APIView):
-    # permission_classes = [IsAuthenticated]
-    def get(self, request):
+    """
+    Представление API для проверки пользователя на аутентификацию.
+    """
+
+    def get(self, request) -> Response:
         is_authenticated = request.user.is_authenticated
         return Response({"is_authenticated": is_authenticated})

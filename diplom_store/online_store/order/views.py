@@ -32,7 +32,7 @@ class OrderHistoryAPiView(APIView):
         limit = payment_settings.page_size
 
         paginator.page_size = limit
-        queryset = Order.objects.all()
+        queryset = Order.objects.order_by('-createdAt').all()
         len_orders = len(queryset)
 
         paginated_queryset = paginator.paginate_queryset(queryset, self.request)

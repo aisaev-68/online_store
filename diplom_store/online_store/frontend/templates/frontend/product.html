@@ -1,15 +1,16 @@
 {% extends "frontend/base.html" %}
 {% load static %}
+{% load i18n %}
 
 {% block content %}
 <div class="Middle Middle_top">
     <div class="Middle-top">
         <div class="wrap">
             <div class="Middle-header">
-                <h1 class="Middle-title">Megano Product
+                <h1 class="Middle-title">{% trans 'Megano Product' %}
                 </h1>
                 <ul class="breadcrumbs Middle-breadcrumbs">
-                    <li class="breadcrumbs-item"><a href="/">home</a></li>
+                    <li class="breadcrumbs-item"><a href="/">{% trans 'home' %}</a></li>
                     <li class="breadcrumbs-item breadcrumbs-item_current"><span>${product.title}$</span></li>
                 </ul>
             </div>
@@ -68,19 +69,13 @@
                                 <button class="btn btn_primary" @click="addToBasket(product, count)">
                                     <img class="btn-icon" src="/static/frontend/assets/img/icons/card/cart_white.svg"
                                          alt="cart_white.svg"/>
-                                    <span class="btn-content">Add To Cart</span>
+                                    <span class="btn-content">{% trans 'Add To Cart' %}</span>
                                 </button>
-<!--                                <div v-if="showSuccessModal" class="modal">-->
-<!--                                    <div class="modal-content">-->
-<!--                                        <span class="close" @click="closeModal">&times;</span>-->
-<!--                                        <p>Товар успешно добавлен в корзину!</p>-->
-<!--                                    </div>-->
-<!--                                </div>-->
                             </div>
                         </div>
                         <div class="ProductCard-footer">
                             <div class="ProductCard-tags">
-                                <strong class="ProductCard-tagsTitle">Tags:</strong>
+                                <strong class="ProductCard-tagsTitle">{% trans 'Tags:' %}</strong>
                                 <!-- Как добавить пробел между ссылками? -->
                                 <div v-for="(tag, index) in product.tags">
                                     ${ tag }$
@@ -94,10 +89,10 @@
                 <div class="Tabs Tabs_default">
                     <div class="Tabs-links">
                         <a class="Tabs-link_ACTIVE Tabs-link" href="#description">
-                            <span>Описание</span>
+                            <span>{% trans 'Description' %}</span>
                         </a>
                         <a class="Tabs-link" href="#reviews">
-                            <span>Отзывы (${ product.reviews ? product.reviews.length : 0 }$)</span>
+                            <span>{% trans 'Reviews' %} (${ product.reviews ? product.reviews.length : 0 }$)</span>
                         </a>
                     </div>
                     <div class="Tabs-wrap">
@@ -108,12 +103,12 @@
                             <div class="table">
                                 <table>
                                     <tr>
-                                        <th>Характеристика
+                                        <th>{% trans 'Specifications' %}
                                         </th>
-                                        <th>Значение
+                                        <th>{% trans 'Value' %}
                                         </th>
                                     </tr>
-                                    <tr v-for="spec, value in product.attributes">
+                                    <tr v-for="spec, value in product.specifications">
                                         <td>${ value }$</td>
                                         <td>${ spec }$</td>
                                     </tr>
@@ -123,7 +118,7 @@
                         <div class="Tabs-block" id="reviews">
                             <header class="Section-header">
                                 <h3 class="Section-title">${ product.reviews ? (product.reviews.length || 0) : 0 }$
-                                    Отзывов</h3>
+                                    {% trans 'Reviews' %}</h3>
                             </header>
                             <div class="Comments">
                                 <div v-for="review in product.reviews" class="Comment">
@@ -133,9 +128,9 @@
                                     <div class="Comment-column">
                                         <header class="Comment-header">
                                             <div>
-                                                <strong class="Comment-title">Автор: ${ review.author }$</strong>
-                                                <span class="Comment-date">Дата : ${ review.date }$</span><br>
-                                                <span class="Comment-date">Оценка: ${ review.rate }$</span><br>
+                                                <strong class="Comment-title">{% trans 'Author:' %} ${ review.author }$</strong>
+                                                <span class="Comment-date">{% trans 'Date:' %} ${ review.date }$</span><br>
+                                                <span class="Comment-date">{% trans 'Rate:' %} ${ review.rate }$</span><br>
                                             </div>
                                         </header>
                                         <div class="Comment-content">${ review.text }$</div>
@@ -144,7 +139,7 @@
                             </div>
                              {% if user.is_authenticated %}
                             <header class="Section-header Section-header_product">
-                                <h3 class="Section-title">Add Review</h3>
+                                <h3 class="Section-title">{% trans 'Add Review' %}</h3>
                             </header>
                             <div class="Tabs-addComment">
                                 <form class="form" @submit.prevent="submitReview">
@@ -180,11 +175,11 @@
 
 
                                     <div class="form-group">
-                                        <button class="btn btn_muted" type="submit">Submit Review</button>
+                                        <button class="btn btn_muted" type="submit">{% trans 'Submit Review' %}</button>
                                     </div>
                                     {% else %}
                                     <div class="form-group">
-                                        <a class="" href="{% url 'login' %}">Авторизируйтесь, чтобы оставить отзыв</a>
+                                        <a class="" href="{% url 'login' %}">{% trans 'Log in to leave a review' %}</a>
                                     </div>
                                     {% endif %}
                                 </form>

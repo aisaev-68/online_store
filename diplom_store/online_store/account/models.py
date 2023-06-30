@@ -29,6 +29,9 @@ def validate_image_file_extension(image):
 
 
 class User(AbstractUser):
+    """
+    Модель абстрактного пользователя.
+    """
     fullName = models.CharField(max_length=100, verbose_name=_("Full name"))
     email = models.EmailField(unique=True, verbose_name=_("Email"))
     surname = models.CharField(max_length=50, blank=True, verbose_name=_("Surname"))
@@ -37,10 +40,10 @@ class User(AbstractUser):
                                validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png']),
                                            validate_image_file_extension], verbose_name=_("Avatar"))
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.username
 
-    def save(self, *args, **kwargs):
+    def save(self, *args, **kwargs) -> None:
 
         if self.fullName:
             self.last_name, self.first_name, self.surname = str(self.fullName).split(' ', 2)
@@ -49,7 +52,7 @@ class User(AbstractUser):
         super().save(*args, **kwargs)
 
 
-    def get_url(self):
+    def get_url(self) -> str:
         return f'/profile/'
     def clean(self):
         super().clean()
