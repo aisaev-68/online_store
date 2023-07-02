@@ -174,6 +174,8 @@ class SaleSerializer(serializers.ModelSerializer):
         data["dateFrom"] = obj.dateFrom.strftime('%d.%m')
         data["dateTo"] = obj.dateTo.strftime('%d.%m')
         return data
+
+
 class ManufacturerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Manufacturer

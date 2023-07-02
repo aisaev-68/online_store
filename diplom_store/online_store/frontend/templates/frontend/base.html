@@ -186,10 +186,12 @@
             </div>
             <div class="Header-search">
                 <div class="search">
+<!--                    <form class="form form_search" method="get" action="/catalog/">-->
                     <form class="form form_search" @submit.prevent="search">
-                        <input class="search-input" id="query" name="query" type="text" v-model="searchText"
+                        <input class="search-input" id="query" name="query" type="text" v-model="filterSearch"
+
                                placeholder="{% trans 'What are you looking for ...' %}"/>
-                        <button class="search-button" type="submit" name="search" id="search"><img
+                        <button class="search-button" type="submit"><img
                                 src="{% static 'frontend/assets/img/icons/search.svg' %}" alt="search.svg"/>{% trans 'Search' %}
                         </button>
                     </form>

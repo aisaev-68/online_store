@@ -1,6 +1,7 @@
 from django.core.validators import MinValueValidator
 from django.utils.translation import gettext_lazy as _
 from django.db import models
+from django.db.models import F
 
 from online_store import settings
 from order.models import Order
@@ -19,6 +20,23 @@ class Payment(models.Model):
         verbose_name = _('Payment')
         verbose_name_plural = _('Payments')
 
+    def save(self, *args, **kwargs):
+        """
+        Метод refund возвращает товар при неудачной оплате
+        и изменяет признак available товара, если товары снова доступны.
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        super().save(*args, **kwargs)
+        # Возврат товара при неудачной оплате
+        if self.order and self.order.status == 2:
+            order_products = self.order.order_products.all()
+            for order_product in order_products:
+                order_product.product.count = F('count') + order_product.count_product
+                if order_product.product.count > 0:
+                    order_product.product.available = True
+                order_product.product.save()
     def __str__(self):
         return self.number
 
@@ -64,30 +82,6 @@ class PaymentSettings(models.Model):
         max_digits=6,
         default=settings.MIN_AMOUNT_FREE_SHIPPING,
         verbose_name=_('minimum amount free shipping')
-    )
-    filter_min_price = models.DecimalField(
-        decimal_places=0,
-        max_digits=6,
-        default=settings.FILTER_MIN_PRICE,
-        verbose_name=_('filter minimum price')
-    )
-    filter_max_price = models.DecimalField(
-        decimal_places=0,
-        max_digits=6,
-        default=settings.FILTER_MAX_PRICE,
-        verbose_name=_('filter maximum price')
-    )
-    filter_current_from_price = models.DecimalField(
-        decimal_places=0,
-        max_digits=6,
-        default=settings.FILTER_CURRENT_FROM_PRICE,
-        verbose_name=_('filter current from price')
-    )
-    filter_current_to_price = models.DecimalField(
-        decimal_places=0,
-        max_digits=6,
-        default=settings.FILTER_CURRENT_TO_PRICE,
-        verbose_name=_('filter current to price')
     )
 
     class Meta:

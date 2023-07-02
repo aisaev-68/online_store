@@ -27,7 +27,7 @@ class Order(models.Model):  # Заказы
                              validators=[RegexValidator(regex=r"^\+?1?\d{8,15}$")], verbose_name=_('phone'))
     deliveryType = models.CharField(max_length=50, verbose_name=_('availability of free shipping'))
     paymentType = models.CharField(max_length=50, verbose_name=_('payment method'))
-    status = models.TextField(max_length=50, verbose_name=_('payment state'))
+    status = models.IntegerField(default=2, verbose_name=_('payment state'), blank=True)
     city = models.CharField(max_length=50, default=_('not specified'), verbose_name=_('delivery city'))
     address = models.CharField(max_length=100, default=_('not specified'), verbose_name=_('delivery address'),
                                blank=True)
@@ -60,9 +60,18 @@ class OrderProducts(models.Model):
     count_product = models.PositiveIntegerField(default=0, verbose_name=_('quantity of goods in the order'))
 
     def save(self, *args, **kwargs):
+        """
+        Метод sell уменьшает количество товаров при продаже
+        и изменяет признак available, если товары закончились.
+        :param args:
+        :param kwargs:
+        :return:
+        """
         super().save(*args, **kwargs)
         # Уменьшение количества продукта при создании заказа
         self.product.count = F('count') - self.count_product
+        if self.product.count == 0:
+            self.product.available = False
         self.product.save()
 
 

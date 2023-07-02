@@ -25,20 +25,18 @@ class PaymentService:
             # Получаем информацию о платеже из очереди
             payment_data = self.payment_queue.get()
             card_number = payment_data['card_number']
-            print("SERVICE", card_number)
+
             try:
                 # Проверяем логику оплаты
                 if card_number % 2 == 0 and card_number % 10 != 0:
-                    print("SERVICE", True, settings.ORDER_STATUSES[0][1])
                     # Платеж подтвержден, если номер четный и не заканчивается на ноль
-                    payment_data['status'] = settings.ORDER_STATUSES[0][1]
+                    payment_data['status'] = settings.ORDER_STATUSES[0][0]
                 else:
-                    print("SERVICE", False, settings.ORDER_STATUSES[1][1])
                     # Устанавливаем статус ошибки и код ошибки в информацию о платеже
-                    payment_data['status'] = settings.ORDER_STATUSES[1][1]
+                    payment_data['status'] = settings.ORDER_STATUSES[1][0]
             except Exception as e:
                 # Обрабатываем возможные исключения
-                payment_data['status'] = 'Payment error'
+                payment_data['status'] = settings.ORDER_STATUSES[1][0]
             finally:
                 # Отмечаем задачу платежа как выполненную
                 self.payment_queue.task_done()

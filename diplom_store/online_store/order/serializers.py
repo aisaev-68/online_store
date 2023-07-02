@@ -16,6 +16,8 @@ class OrderForAvatarSerializer(serializers.ModelSerializer):
         data = super().to_representation(obj)
         data["createdAt"] = obj.createdAt.strftime('%Y-%m-%d %H:%M')
         return data
+
+
 class OrderSerializer(serializers.ModelSerializer):
     """
     Сериализация заказа

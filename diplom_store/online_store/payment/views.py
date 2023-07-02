@@ -34,9 +34,9 @@ class PaymentAPIView(APIView):
         return Response(data)
 
     def post(self, request, *args, **kwargs):
-        order = Order.objects.filter(user=request.user, status="").first()
+        order = Order.objects.filter(user=request.user, status=2).first()
         if not order:
-            order = Order.objects.filter(user=request.user, status=settings.ORDER_STATUSES[1][1]).first()
+            order = Order.objects.filter(user=request.user, status=settings.ORDER_STATUSES[1][0]).first()
         number_of_cart = int("".join(request.data.get('number').split()))
         name = request.data.get('name')
         month = request.data.get('month')

@@ -65,19 +65,19 @@ var mix = {
         this.filter.specifications = this.specifications.filter((specification) =>
           this.selectedSpecifications.includes(specification.id)
         );
-        this.getCatalogs();
+        //this.getCatalogs();
       },
       updateManufacturers() {
         this.filter.manufacturers = this.manufacturers.filter((manufacturer) =>
           this.selectedManufacturers.includes(manufacturer.id)
         );
-        this.getCatalogs();
+        //this.getCatalogs();
       },
       updateSellers() {
         this.filter.sellers = this.sellers.filter((seller) =>
           this.selectedSellers.includes(seller.id)
         );
-        this.getCatalogs();
+        //this.getCatalogs();
       },
     getTags() {
       this.getData('/api/tags', { category: this.category })
@@ -87,19 +87,6 @@ var mix = {
           console.warn('Ошибка получения тегов');
         });
     },
-//    getSettings() {
-//          const csrfToken = this.getCookie('csrftoken');
-//          this.getData("/api/settings/", {
-//            headers: { 'X-CSRFToken': csrfToken }
-//          })
-//            .then(data => {
-//              this.filter.minPrice = data.filter_min_price;
-//              this.filter.maxPrice = data.filter_max_price;
-//            })
-//            .catch(() => {
-//              console.warn('Ошибка при получении настроек');
-//            });
-//        },
     getCatalogs(page) {
       if (typeof page === 'undefined') {
         page = 1;
@@ -108,16 +95,18 @@ var mix = {
       const tags = this.topTags
         .filter((tag) => tag.selected)
         .map((tag) => tag.id);
-        const str = location.pathname;
+      const str = location.pathname;
 
-      this.category = parseInt(str.match(/\/\w+\/(\d+)$/)[1]);
-//      this.category = location.pathname.startsWith('/catalog/', 3)
-//        ? Number(location.pathname.replace('/catalog/', ''))
-//        : null;
-
+      //this.category = parseInt(str.match(/\/\w+\/(\d+)$/)[1]);
+      // alert(location.pathname);
+      this.category = location.pathname.startsWith('/catalog/')
+        ? Number(location.pathname.replace('/catalog/', '').replace('/', ''))
+        : null;
+      //alert(location.pathname);
       this.getData('/api/catalog/', {
         page,
-        category: this.category,
+        filterSearch: this.filterSearch ? this.filterSearch : null,
+        category: this.category ? this.category : null,
         sort: this.selectedSort ? this.selectedSort.id : null,
         sortType: this.selectedSort ? this.selectedSort.selected : null,
         filter: {
@@ -142,11 +131,13 @@ var mix = {
           console.warn('Ошибка при получении каталога');
         });
     },
-      },
+
+
+  },
   mounted() {
     this.selectedSort = this.sortRules.find((sort) => sort.id === 'price');
     this.selectedSort.selected = 'inc';
-    //this.getSettings();
+    //this.getCatalogs();
     this.getTags();
     this.getSellers();
     this.getManufacturers();
@@ -154,16 +145,19 @@ var mix = {
     this.updateManufacturers();
     this.getSpecifications();
     this.updateSpecifications();
+
     //this.selectedSellers = []; // список выбранных продавцов
     //this.selectedManufacturers = []; // список выбранных производителей
 
     this.category = location.pathname.startsWith('/catalog/')
-      ? Number(location.pathname.replace('/catalog/', ''))
-      : null;
+        ? Number(location.pathname.replace('/catalog/', '').replace('/', ''))
+        : null;
   },
+
   data() {
     return {
       pages: 1,
+      filterSearch: '',
       category: null,
       catalogCards: [],
       currentPage: null,
@@ -171,8 +165,8 @@ var mix = {
       selectedSort: null,
       filter: {
         name: '',
-        minPrice: 1000,
-        maxPrice: 30000,
+        minPrice: 1,
+        maxPrice: 300000,
         freeDelivery: false,
         available: true,
         sellers: [], // список выбранных продавцов

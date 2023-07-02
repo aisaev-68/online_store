@@ -131,7 +131,7 @@ class OrderActiveAPIView(APIView):
     serializer_class = OrderProductSerializer
 
     def get(self, request, *args, **kwargs):
-        order = Order.objects.get(user=request.user, status="")
+        order = Order.objects.get(user=request.user, status=2)
         serializer = self.serializer_class(order)
         print("ORDER_SER", serializer.data)
         return Response(serializer.data, status=200)

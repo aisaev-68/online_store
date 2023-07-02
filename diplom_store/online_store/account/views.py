@@ -259,26 +259,6 @@ class SettingsAPIView(APIView):
         else:
             settings_data['order_status'] = payment_settings.order_status
 
-        if not settings_data.get('filter_min_price'):
-            settings_data['filter_min_price'] = settings.FILTER_MIN_PRICE
-        else:
-            settings_data['filter_min_price'] = payment_settings.filter_min_price
-
-        if not settings_data.get('filter_max_price'):
-            settings_data['filter_max_price'] = settings.FILTER_MAX_PRICE
-        else:
-            settings_data['filter_max_price'] = payment_settings.filter_max_price
-
-        if not settings_data.get('filter_current_from_price'):
-            settings_data['filter_current_from_price'] = settings.FILTER_CURRENT_FROM_PRICE
-        else:
-            settings_data['filter_current_from_price'] = payment_settings.filter_current_from_price
-
-        if not settings_data.get('filter_current_to_price'):
-            settings_data['filter_current_to_price'] = settings.FILTER_CURRENT_TO_PRICE
-        else:
-            settings_data['filter_current_to_price'] = payment_settings.filter_current_to_price
-
         settings_data['payment_methods_choices'] = dict(settings.PAYMENT_METHODS)
         settings_data['shipping_methods_choices'] = dict(settings.SHIPPING_METHODS)
         settings_data['order_status_choices'] = dict(settings.ORDER_STATUSES)

@@ -96,7 +96,9 @@ class CatalogAPIView(APIView):
 
     def filter_queryset(self, queryset):
         # Извлечение параметров запроса
-        print(555, self.request.query_params)
+        print(555, self.request)
+        search_text = self.request.query_params.get('filterSearch')
+        print("REARCH_TEXT", search_text)
         category = self.request.query_params.get('category')
         sort = self.request.query_params.get('sort')
         sort_type = self.request.query_params.get('sortType')
@@ -111,7 +113,10 @@ class CatalogAPIView(APIView):
         available = self.request.query_params.get('filter[available]')
         tags = self.request.query_params.get('tags[]')
         # Применение фильтров к queryset
-
+        if search_text:
+            queryset = queryset.filter(
+                Q(title__icontains=search_text) | Q(fullDescription__icontains=search_text)
+            )
         if category:
             queryset = queryset.filter(category_id=category)
         if name_filter:
@@ -167,11 +172,13 @@ class CatalogAPIView(APIView):
 
     @add_catalog_params
     def get(self, request: Request, pk: int = None) -> Response:
-
+        print("PK", pk)
         if pk is not None:
-            queryset = self.filter_queryset(Product.objects.filter(category_id=pk).order_by('-date').all())
+            print(999999999)
+            queryset = self.filter_queryset(Product.objects.filter(category_id=pk, available=True).order_by('-date').all())
         else:
-            queryset = self.filter_queryset(Product.objects.order_by('-date').all())
+            print(1000000000)
+            queryset = self.filter_queryset(Product.objects.filter(available=True).order_by('-date').all())
 
         data = self.pagination_queryset(queryset)
         paginated_queryset = data['pagination']
@@ -182,6 +189,7 @@ class CatalogAPIView(APIView):
             'currentPage': data['currentPage'],
             'lastPage': data['lastPage'],
         }
+        print("SEARCH", response_data)
 
         return Response(response_data, status=status.HTTP_200_OK)
 

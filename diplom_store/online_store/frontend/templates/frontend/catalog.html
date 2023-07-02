@@ -54,7 +54,7 @@ Catalog
                                     <input type="hidden" name="maxPrice" v-model="filters.price.currentToValue">
                                     <!-- Получаем данные по фильтру цены -->
 
-                                    <div class="range-price">{% trans 'Price:' %}&#32;
+                                    <div class="range-price">{% trans 'Price' %}:&#32;
                                         <div class="rangePrice">
                                         </div>
                                     </div>
@@ -66,44 +66,32 @@ Catalog
                                        name="title"
                                        type="text"
                                        v-model="filter.name"
-                                       placeholder="Название"
+                                       placeholder="{% trans 'Product name' %}"
                                 />
                             </div>
 
-                            <!--                            <div class="form-group" >-->
-
-                            <!--                                <label for="specifications">Specification:</label>-->
-                            <!--                                <div style="overflow: auto;max-height: 150px;">-->
-                            <!--                                    <div id="specifications" class="form-input form-input_full" style="display: flex; flex-direction: column;">-->
-                            <!--                                    <label v-for="specification in specifications" :key="specification.id">-->
-                            <!--                                        <input type="checkbox" v-model="filter.specifications" :value="specification.attributes">-->
-                            <!--                                        ${ specification.attributes }$-->
-                            <!--                                    </label>-->
-                            <!--                                </div>-->
-                            <!--                                </div>-->
-                            <!--                            </div>-->
                             <div class="form-group">
-                                <label for="specifications">Specification:</label>
+                                <label for="specifications">{% trans 'Specification' %}:</label>
                                 <div style="overflow: auto; max-height: 150px;">
                                     <div id="specifications" class="form-input form-input_full"
                                          style="display: flex; flex-direction: column;">
-                                        <template v-for="(values, key) in specifications.attributes">
+                                        <div v-for="(values, key) in specifications.attributes" >
                                             <label :key="key">${ key }$</label>
-                                            <template v-for="value in values">
+                                            <div v-for="value in values">
                                                 <label :key="value">
                                                     <input type="checkbox" v-model="filter.specifications"
                                                            :value="{ key: key, value: value }">
                                                     ${ value }$
                                                 </label>
-                                            </template>
-                                        </template>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
 
                             <div class="form-group">
-                                <label for="sellers">Seller:</label>
+                                <label for="sellers">{% trans 'Seller' %}:</label>
                                 <div style="overflow: auto;max-height: 150px;">
                                     <div id="sellers" class="form-input form-input_full"
                                          style="display: flex; flex-direction: column;">
@@ -114,27 +102,18 @@ Catalog
                                     </div>
                                 </div>
                             </div>
-
-
-                            <!--                            <div class="form-group">-->
-                            <!--                                <label for="sellers">Seller:</label>-->
-                            <!--                                <select id="sellers" class="form-input form-input_full" multiple-->
-                            <!--                                        v-model="filter.sellers">-->
-                            <!--                                    <option v-for="seller in sellers">-->
-                            <!--                                        ${ seller.name }$-->
-                            <!--                                    </option>-->
-                            <!--                                </select>-->
-                            <!--                            </div>-->
                             <div class="form-group">
-                                <label for="manufacturers">Manufacturer:</label>
-                                <select id="manufacturers" class="form-input form-input_full" multiple
-                                        v-model="filter.manufacturers">
-                                    <option v-for="manufacturer in manufacturers">
+                                <label for="manufacturers">{% trans 'Manufacturer' %}:</label>
+                                <div style="overflow: auto;max-height: 150px;">
+                                <div id="manufacturers" class="form-input form-input_full" style="display: flex; flex-direction: column;">
+                                    <label v-for="manufacturer in manufacturers" :key="manufacturer.id">
+                                        <input type="checkbox" v-model="filter.manufacturers" :value="manufacturer.name">
                                         ${ manufacturer.name }$
-                                    </option>
-                                </select>
-                            </div>
+                                    </label>
+                                </div>
 
+                                </div>
+                            </div>
                             <div class="form-group">
                             </div>
                             <div class="form-group">

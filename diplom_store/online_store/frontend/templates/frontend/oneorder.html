@@ -68,9 +68,16 @@
                     </div>
                     <div class="Order-info Order-info_status">
                       <div class="Order-infoType">{% trans 'Status:' %}</div>
-                      <div class="Order-infoContent">${status}$</div>
+                      <div class="Order-infoContent">
+                        <p v-if="status === 1">
+                          {% trans 'Paid' %}
+                        </p>
+                         <p v-if="status === 2">
+                          {% trans 'Payment error' %}
+                         </p>
+                      </div>
                     </div>
-                    <div v-if="status === 'Payment error' || status === 'Ошибка оплаты'" class="Order-info Order-info_error">
+                    <div v-if="status === 2" class="Order-info Order-info_error">
                       <div class="Order-infoType">{% trans 'Payment failed:' %}</div>
 <!--                      <div class="Order-infoContent">${paymentError}$</div>-->
                     </div>
@@ -105,7 +112,7 @@
                     </strong>
                   </div>
 
-                  <div v-if="status === 'Payment error' || status === 'Ошибка оплаты'"
+                  <div v-if="status === 2"
                        class="Cart-block">
                     <a class="btn btn_primary btn_lg" :href="`/payment/${orderId}/`">{% trans 'Pay' %}</a>
                   </div>

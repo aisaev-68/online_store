@@ -38,19 +38,19 @@ class Product(models.Model):  # товар
         verbose_name = _('product')
         verbose_name_plural = _('products')
 
-    def sell(self, quantity_sold):
-        """
-        Метод sell уменьшает количество товаров при продаже
-        и изменяет признак in_stock, если товары закончились.
-        :param quantity_sold:
-        :return:
-        """
-        self.count -= quantity_sold
+    # def sell(self, quantity_sold):
+    #     """
+    #     Метод sell уменьшает количество товаров при продаже
+    #     и изменяет признак available, если товары закончились.
+    #     :param quantity_sold:
+    #     :return:
+    #     """
+    #     self.count -= quantity_sold
+    #
+    #     if self.count == 0:
+    #         self.available = False
 
-        if self.count == 0:
-            self.available = False
-
-        self.save()
+        # self.save()
 
     def rating_info(self):
         return self.reviews.aggregate(avg_rating=models.Avg('rate')).get('avg_rating')

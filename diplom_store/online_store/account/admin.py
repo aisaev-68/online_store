@@ -33,4 +33,4 @@ class PaymentSettingsAdmin(admin.ModelAdmin):
     """
     Отображение категорий в административной панели
     """
-    list_display = ('filter_min_price', 'filter_max_price', 'filter_current_from_price', 'filter_current_to_price', 'payment_methods', 'shipping_methods', 'order_status', 'page_size')
+    list_display = ('payment_methods', 'shipping_methods', 'order_status', 'page_size')
