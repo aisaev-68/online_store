@@ -97,7 +97,7 @@ class CatalogAPIView(APIView):
     def filter_queryset(self, queryset):
         # Извлечение параметров запроса
         print(555, self.request)
-        search_text = self.request.query_params.get('filterSearch')
+        search_text = self.request.query_params.get('searchText')
         print("REARCH_TEXT", search_text)
         category = self.request.query_params.get('category')
         sort = self.request.query_params.get('sort')

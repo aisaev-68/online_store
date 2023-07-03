@@ -138,7 +138,7 @@ var mix = {
   mounted() {
     this.selectedSort = this.sortRules.find((sort) => sort.id === 'price');
     this.selectedSort.selected = 'inc';
-    //this.getCatalogs();
+    this.getCatalogs();
     this.getTags();
     this.getSellers();
     this.getManufacturers();

@@ -44,7 +44,7 @@ class Category(models.Model):
         Получение ссылки
         :return: ссылка
         """
-        return f'/catalog/{self.pk}'
+        return f'/catalog?category={self.pk}'
 
     def alt(self):
         return self.title
