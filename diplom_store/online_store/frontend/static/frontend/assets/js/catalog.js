@@ -39,6 +39,9 @@ var mix = {
           });
       },
       getSpecifications() {
+      this.category = location.pathname.startsWith('/catalog/')
+        ? Number(location.pathname.replace('/catalog/', '').replace('/', ''))
+        : null;
        const url = '/api/specification/' + this.category + '/';
         this.getData(url)
           .then((data) => {
@@ -87,7 +90,7 @@ var mix = {
           console.warn('Ошибка получения тегов');
         });
     },
-    getCatalogs(page) {
+    getCatalogs(page, filterSearch) {
       if (typeof page === 'undefined') {
         page = 1;
       }
@@ -131,8 +134,6 @@ var mix = {
           console.warn('Ошибка при получении каталога');
         });
     },
-
-
   },
   mounted() {
     this.selectedSort = this.sortRules.find((sort) => sort.id === 'price');
@@ -152,6 +153,7 @@ var mix = {
     this.category = location.pathname.startsWith('/catalog/')
         ? Number(location.pathname.replace('/catalog/', '').replace('/', ''))
         : null;
+    //alert(location.pathname.startsWith('/catalog/'));
   },
 
   data() {

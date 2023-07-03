@@ -28,7 +28,7 @@ def add_catalog_params(func):
         operation_description='get catalog items',
         manual_parameters=[
             openapi.Parameter(
-                'filter',
+                'filterSearch',
                 openapi.IN_QUERY,
                 description='Search text',
                 type=openapi.TYPE_STRING

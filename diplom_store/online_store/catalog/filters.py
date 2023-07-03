@@ -3,7 +3,8 @@ from rest_framework.filters import BaseFilterBackend
 
 from product.models import Product
 
-#page=1&sort=price&sortType=inc&
+
+# page=1&sort=price&sortType=inc&
 # filter[name]=&
 # filter[minPrice]=0&
 # filter[maxPrice]=50000&
@@ -11,6 +12,7 @@ from product.models import Product
 # filter[available]=true&limit=20
 
 class ProductFilterSet(BaseFilterBackend):
+    @staticmethod
     def filter_queryset(self, request, queryset, view):
         # Извлечение параметров запроса
 
