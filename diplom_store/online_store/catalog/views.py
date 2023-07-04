@@ -69,9 +69,6 @@ def add_catalog_params(func):
     )(func)
 
 
-
-
-
 class CategoryAPIView(APIView):
     """
     Представление для получения категорий товаров.
@@ -88,16 +85,13 @@ class CategoryAPIView(APIView):
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
 
-
-
-
 class CatalogAPIView(APIView):
     permission_classes = (AllowAny,)
 
     def filter_queryset(self, queryset):
         # Извлечение параметров запроса
         print(555, self.request)
-        search_text = self.request.query_params.get('searchText')
+        search_text = self.request.query_params.get('filterSearch')
         print("REARCH_TEXT", search_text)
         category = self.request.query_params.get('category')
         sort = self.request.query_params.get('sort')
@@ -106,9 +100,12 @@ class CatalogAPIView(APIView):
         min_price = self.request.query_params.get('filter[minPrice]')
         max_price = self.request.query_params.get('filter[maxPrice]')
         sellers_filter = [value for key, value in self.request.query_params.items() if 'filter[sellers]' in key]
-        specifications_filter = [{key:value} for key, value in self.request.query_params.items() if 'filter[specifications]' in key]
+
+        specifications_filter = [{key: value} for key, value in self.request.query_params.items() if
+                                 'filter[specifications]' in key]
         print(666666666666, specifications_filter)
-        manufacturers_filter = [value for key, value in self.request.query_params.items() if 'filter[manufacturers]' in key]
+        manufacturers_filter = [value for key, value in self.request.query_params.items() if
+                                'filter[manufacturers]' in key]
         free_delivery = self.request.query_params.get('filter[freeDelivery]')
         available = self.request.query_params.get('filter[available]')
         tags = self.request.query_params.get('tags[]')
@@ -117,6 +114,8 @@ class CatalogAPIView(APIView):
             queryset = queryset.filter(
                 Q(title__icontains=search_text) | Q(fullDescription__icontains=search_text)
             )
+            if not category:
+                category = queryset.first().category_id
         if category:
             queryset = queryset.filter(category_id=category)
         if name_filter:
@@ -125,6 +124,40 @@ class CatalogAPIView(APIView):
             queryset = queryset.filter(price__gte=min_price)
         if max_price:
             queryset = queryset.filter(price__lte=max_price)
+
+        if len(specifications_filter) > 1:
+            # Итерируемся по фильтру и извлекаем атрибуты
+            attributes = {}
+            for index, item in enumerate(specifications_filter):
+                for key, value in item.items():
+                    if index % 2 == 0:
+                        v = value
+                    else:
+                        k = key
+
+                    print(key, value)
+                    # if not attributes.get(item[key]):
+                    #     attributes[item[key]] = [item[value]]
+                    # else:
+                    #     lst = attributes[item[key]]
+                    #     attributes[item[key]] = lst.append(attributes[item[key]])
+
+
+            print("ATTR", attributes)
+            # Создаем список Q-объектов для каждого фильтра
+            q_objects = []
+            for index, attrs in attributes.items():
+                q_object = Q()
+                for attr, value in attrs.items():
+                    q_object &= Q(attributes__contains={attr + index: value})
+                q_objects.append(q_object)
+                print("Q_OBJECT", q_objects)
+            # Сводим все Q-объекты с использованием оператора AND
+            query = Q()
+            for q_object in q_objects:
+                query &= q_object
+            queryset = queryset.filter(query)
+
         filters_sellers = Q()
         if len(sellers_filter) >= 1:
             for seller in sellers_filter:
@@ -149,7 +182,7 @@ class CatalogAPIView(APIView):
             queryset = queryset.order_by(sort_field)
 
         return queryset
-    
+
     def pagination_queryset(self, queryset):
         len_products = len(queryset)
         paginator = PageNumberPagination()
@@ -175,7 +208,8 @@ class CatalogAPIView(APIView):
         print("PK", pk)
         if pk is not None:
             print(999999999)
-            queryset = self.filter_queryset(Product.objects.filter(category_id=pk, available=True).order_by('-date').all())
+            queryset = self.filter_queryset(
+                Product.objects.filter(category_id=pk, available=True).order_by('-date').all())
         else:
             print(1000000000)
             queryset = self.filter_queryset(Product.objects.filter(available=True).order_by('-date').all())
@@ -201,7 +235,8 @@ class ProductPopularAPIView(APIView):
 
     def get(self, request: Request, *args, **kwargs) -> Response:
         products = Product.objects.annotate(
-            sort_index=Cast((1 / F('price')), output_field=FloatField()) + Avg('reviews__rate', filter=Q(reviews__isnull=False)),
+            sort_index=Cast((1 / F('price')), output_field=FloatField()) + Avg('reviews__rate',
+                                                                               filter=Q(reviews__isnull=False)),
         ).order_by('sort_index', '-count')[:8]
 
         for product in products:
@@ -246,8 +281,9 @@ class SalesAPIView(APIView):
         else:
             lastPage = len(products) // setting.page_size + 1
         serializer = SaleSerializer(current_page, many=True)
-        return Response({'salesCards': serializer.data, 'currentPage': request.GET.get('page', 1), 'lastPage': lastPage}, status=status.HTTP_200_OK)
-
+        return Response(
+            {'salesCards': serializer.data, 'currentPage': request.GET.get('page', 1), 'lastPage': lastPage},
+            status=status.HTTP_200_OK)
 
 
 class BannersAPIView(APIView):
@@ -261,3 +297,10 @@ class BannersAPIView(APIView):
         print("BANNER", serializer.data)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+
+class SearchAPIView(APIView):
+
+    def get(self, request: Request) -> Response:
+        search_text = self.request.query_params.get('filterSearch')
+        product = Product.objects.filter(title__icontains=search_text).first()
+        return Response({'category': product.category_id}, status=status.HTTP_200_OK)

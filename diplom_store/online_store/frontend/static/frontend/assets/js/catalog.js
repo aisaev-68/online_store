@@ -39,9 +39,6 @@ var mix = {
           });
       },
       getSpecifications() {
-      this.category = location.pathname.startsWith('/catalog/')
-        ? Number(location.pathname.replace('/catalog/', '').replace('/', ''))
-        : null;
        const url = '/api/specification/' + this.category + '/';
         this.getData(url)
           .then((data) => {
@@ -99,13 +96,6 @@ var mix = {
         .filter((tag) => tag.selected)
         .map((tag) => tag.id);
       const str = location.pathname;
-
-      //this.category = parseInt(str.match(/\/\w+\/(\d+)$/)[1]);
-      // alert(location.pathname);
-      this.category = location.pathname.startsWith('/catalog/')
-        ? Number(location.pathname.replace('/catalog/', '').replace('/', ''))
-        : null;
-      //alert(location.pathname);
       this.getData('/api/catalog/', {
         page,
         filterSearch: this.filterSearch ? this.filterSearch : null,
@@ -113,14 +103,14 @@ var mix = {
         sort: this.selectedSort ? this.selectedSort.id : null,
         sortType: this.selectedSort ? this.selectedSort.selected : null,
         filter: {
-          name: this.filter.name,
-          minPrice: this.filter.minPrice,
-          maxPrice: this.filter.maxPrice,
-          freeDelivery: this.filter.freeDelivery,
-          available: this.filter.available,
-          sellers: this.filter.sellers,
-          manufacturers: this.filter.manufacturers,
-          specifications: this.filter.specifications,
+          name: this.filter.name ? this.filter.name : null,
+          minPrice: this.filter.minPrice ? this.filter.minPrice : null,
+          maxPrice: this.filter.maxPrice ? this.filter.maxPrice : null,
+          freeDelivery: this.filter.freeDelivery ? this.filter.freeDelivery : null,
+          available: this.filter.available ? this.filter.available : null,
+          sellers: this.filter.sellers ? this.filter.sellers : null,
+          manufacturers: this.filter.manufacturers ? this.filter.manufacturers : null,
+          specifications: this.filter.specifications ? this.filter.specifications : null,
         },
         tags,
         limit: PAGE_LIMIT,
@@ -136,6 +126,9 @@ var mix = {
     },
   },
   mounted() {
+    const urlParams = new URL(window.location.href).searchParams;
+    this.filterSearch = urlParams.get('filterSearch');
+    this.category = urlParams.get('category') ? Number(urlParams.get('category')) : null;
     this.selectedSort = this.sortRules.find((sort) => sort.id === 'price');
     this.selectedSort.selected = 'inc';
     this.getCatalogs();
@@ -150,9 +143,9 @@ var mix = {
     //this.selectedSellers = []; // список выбранных продавцов
     //this.selectedManufacturers = []; // список выбранных производителей
 
-    this.category = location.pathname.startsWith('/catalog/')
-        ? Number(location.pathname.replace('/catalog/', '').replace('/', ''))
-        : null;
+//    this.category = location.pathname.startsWith('/catalog/')
+//        ? Number(location.pathname.replace('/catalog/', '').replace('/', ''))
+//        : null;
     //alert(location.pathname.startsWith('/catalog/'));
   },
 

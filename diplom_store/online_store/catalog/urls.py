@@ -6,12 +6,14 @@ from catalog.views import (
     ProductLimitedAPIView,
     SalesAPIView,
     BannersAPIView,
+    SearchAPIView,
 )
 from product.views import ManufacturerListAPIView, SellerListAPIView, SpecificationAPIView
 
 app_name = 'catalog'
 urlpatterns = [
     path('api/categories/', CategoryAPIView.as_view(), name="category"),
+    path('api/search/', SearchAPIView.as_view(), name="search"),
     path('api/catalog/', CatalogAPIView.as_view(), name="catalog"),
     path("api/catalog/<int:pk>/", CatalogAPIView.as_view(), name="catalog_by_id"), #{'get': 'list'}
     path('api/manufacturers/', ManufacturerListAPIView.as_view(), name='manufacturer-list'),
