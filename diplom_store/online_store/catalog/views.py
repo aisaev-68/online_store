@@ -23,6 +23,21 @@ from product.models import Product, Sale
 from product.serializers import ProductSerializer, SaleSerializer, ProductOrderSerializer
 
 
+def get_filtr_specification(data: list) -> dict:
+    result = {}
+    for item in data:
+        key = next(iter(item))  # Получаем ключ словаря
+        value = item[key]  # Получаем значение словаря
+        # Извлекаем информацию из ключа
+        if 'key' in key:
+            property_key = value
+            if property_key not in result:
+                result[property_key] = []
+        else:
+            result[property_key].append(value)
+    return result
+
+
 def add_catalog_params(func):
     return swagger_auto_schema(
         operation_description='get catalog items',
@@ -101,8 +116,9 @@ class CatalogAPIView(APIView):
         max_price = self.request.query_params.get('filter[maxPrice]')
         sellers_filter = [value for key, value in self.request.query_params.items() if 'filter[sellers]' in key]
 
-        specifications_filter = [{key: value} for key, value in self.request.query_params.items() if
+        specifications = [{key: value} for key, value in self.request.query_params.items() if
                                  'filter[specifications]' in key]
+        specifications_filter = get_filtr_specification(specifications)
         print(666666666666, specifications_filter)
         manufacturers_filter = [value for key, value in self.request.query_params.items() if
                                 'filter[manufacturers]' in key]
@@ -125,31 +141,15 @@ class CatalogAPIView(APIView):
         if max_price:
             queryset = queryset.filter(price__lte=max_price)
 
-        if len(specifications_filter) > 1:
+        print("SPECIF", specifications_filter)
+        if len(specifications_filter) >= 1:
             # Итерируемся по фильтру и извлекаем атрибуты
-            attributes = {}
-            for index, item in enumerate(specifications_filter):
-                for key, value in item.items():
-                    if index % 2 == 0:
-                        v = value
-                    else:
-                        k = key
 
-                    print(key, value)
-                    # if not attributes.get(item[key]):
-                    #     attributes[item[key]] = [item[value]]
-                    # else:
-                    #     lst = attributes[item[key]]
-                    #     attributes[item[key]] = lst.append(attributes[item[key]])
-
-
-            print("ATTR", attributes)
             # Создаем список Q-объектов для каждого фильтра
             q_objects = []
-            for index, attrs in attributes.items():
+            for key, attrs in specifications_filter.items():
                 q_object = Q()
-                for attr, value in attrs.items():
-                    q_object &= Q(attributes__contains={attr + index: value})
+                q_object &= Q(attributes__contains={key: attrs})
                 q_objects.append(q_object)
                 print("Q_OBJECT", q_objects)
             # Сводим все Q-объекты с использованием оператора AND
@@ -302,5 +302,6 @@ class SearchAPIView(APIView):
 
     def get(self, request: Request) -> Response:
         search_text = self.request.query_params.get('filterSearch')
+        print("SEARCH_TEXT", self.request.query_params)
         product = Product.objects.filter(title__icontains=search_text).first()
         return Response({'category': product.category_id}, status=status.HTTP_200_OK)

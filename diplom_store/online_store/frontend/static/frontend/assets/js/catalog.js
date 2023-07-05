@@ -62,9 +62,22 @@ var mix = {
           });
       },
       updateSpecifications() {
+
         this.filter.specifications = this.specifications.filter((specification) =>
-          this.selectedSpecifications.includes(specification.id)
+        this.selectedSpecifications.includes(specification.id)
+
         );
+        //alert(this.filter.specifications);
+//        this.filter.specifications = {};
+//          if (this.selectedSpecifications && this.selectedSpecifications.length > 0) {
+//            for (const { key, value } of this.selectedSpecifications) {
+//              if (!this.filter.specifications[key]) {
+//                this.filter.specifications[key] = [];
+//              }
+//              this.filter.specifications[key].push(value);
+//            }
+//          }
+        //alert(this.filter.specifications);
         //this.getCatalogs();
       },
       updateManufacturers() {
@@ -96,6 +109,7 @@ var mix = {
         .filter((tag) => tag.selected)
         .map((tag) => tag.id);
       const str = location.pathname;
+
       this.getData('/api/catalog/', {
         page,
         filterSearch: this.filterSearch ? this.filterSearch : null,
