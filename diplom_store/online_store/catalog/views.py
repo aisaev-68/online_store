@@ -4,6 +4,7 @@ from django.core.paginator import Paginator
 from django.shortcuts import render
 from django.views import View
 from django.utils.decorators import method_decorator
+from django.db import connection
 from rest_framework.response import Response
 from rest_framework.request import Request
 from rest_framework import viewsets, status
@@ -143,19 +144,21 @@ class CatalogAPIView(APIView):
 
         print("SPECIF", specifications_filter)
         if len(specifications_filter) >= 1:
-            # Итерируемся по фильтру и извлекаем атрибуты
-
-            # Создаем список Q-объектов для каждого фильтра
             q_objects = []
-            for key, attrs in specifications_filter.items():
+            for attr in specifications_filter.keys():
+                values = specifications_filter[attr]
                 q_object = Q()
-                q_object &= Q(attributes__contains={key: attrs})
+                for value in values:
+                    if connection.vendor == 'sqlite':  # Проверяем, что используется sqlite
+                        q_object |= Q(attributes__jsonb_contains_any={attr: value})
+                    else:
+                        q_object |= Q(attributes__contains={attr: value})
                 q_objects.append(q_object)
-                print("Q_OBJECT", q_objects)
-            # Сводим все Q-объекты с использованием оператора AND
-            query = Q()
+
+            query = q_objects.pop() if q_objects else Q()
             for q_object in q_objects:
-                query &= q_object
+                query |= q_object
+            print("q_object", query)
             queryset = queryset.filter(query)
 
         filters_sellers = Q()

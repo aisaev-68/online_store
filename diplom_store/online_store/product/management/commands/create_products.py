@@ -94,7 +94,6 @@ class Command(BaseCommand):
                             attributes["Объем оперативной памяти"] = values['value'] + ' ' + 'ГБ'
 
 
-
                 manufacturer, create = Manufacturer.objects.get_or_create(name=value.get('brandName'))
                 product = Product.objects.create(
                     category=category,

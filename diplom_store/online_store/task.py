@@ -1,15 +1,37 @@
-data = [{'filter[specifications][0][key]': 'Объем встроенной памяти'}, {'filter[specifications][0][value]': '8 ГБ'}, {'filter[specifications][1][key]': 'Объем встроенной памяти'}, {'filter[specifications][1][value]': '16 ГБ'}, {'filter[specifications][2][key]': 'Объем встроенной памяти'}, {'filter[specifications][2][value]': '64 ГБ'}, {'filter[specifications][3][key]': 'Разрешение экрана'}, {'filter[specifications][3][value]': '2732x2048'}, {'filter[specifications][4][key]': 'Разрешение экрана'}, {'filter[specifications][4][value]': '2960x1848'}]
+import xlrd, xlwt
 
-result = {}
-for item in data:
-    key = next(iter(item))  # Получаем ключ словаря
-    value = item[key]  # Получаем значение словаря
-    # Извлекаем информацию из ключа
-    if 'key' in key:
-        property_key = value
-        if property_key not in result:
-            result[property_key] = []
-    else:
-        result[property_key].append(value)
+list_smeta = ['ИС', 'ССОИ', 'СТН', 'СОТС', 'СКУД', 'ССО', 'СЭ', 'СОО']
+rb = xlrd.open_workbook('oldsmeta.xls', formatting_info=True)
+wb = xlwt.Workbook()
+for i in range(8):
+    ws = wb.add_sheet(list_smeta[i])
+    sheet = rb.sheet_by_index(i)
+    j = 0
+    for rownum in range(sheet.nrows):
+        new_row = []
+        new_row_2 = []
+        row = sheet.row_values(rownum)
 
-print(result)
+        row_str = str(row[1])
+        if not row_str.startswith('ФЕР'):
+            if str(row[1]).startswith('ТЦ'):
+                price = sheet.row_values(rownum + 2)
+                row[9] = price[2][5:].split('/')[0] # меняю цену
+                new_row.append(row[2])
+                new_row.append(row[5])
+                new_row.append(row[8])
+                new_row.append(row[9])
+                print(new_row)
+                # print(price[2])
+            elif '-' in str(row[1]) and str(row[1]).split('.')[0].isdigit():
+                new_row.append(row[2])
+                new_row.append(row[5])
+                new_row.append(row[8])
+                new_row.append(row[9])
+                print(new_row)
+        for ind, item in enumerate(new_row):
+            ws.write(j, ind, item)
+        j += 1
+wb.save('new06.xls')
+    # for c_el in row:
+    #     print(c_el)
