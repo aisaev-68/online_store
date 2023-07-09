@@ -64,6 +64,8 @@ MIDDLEWARE = [
 
 CORS_ORIGIN_ALLOW_ALL = True
 
+CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8080']
+
 ROOT_URLCONF = 'online_store.urls'
 
 TEMPLATES = [

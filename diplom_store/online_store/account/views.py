@@ -187,7 +187,7 @@ class UserPasswordChangeView(APIView):
         operation_description=_("URL of the uploaded password."),
     )
     def post(self, request, *args, **kwargs) -> Response:
-        print('request.data', request.data)
+
         serializer = self.serializer_class(request.user, data=request.data)
         if serializer.is_valid():
             current_password = request.data.get('passwordCurrent')
@@ -195,7 +195,6 @@ class UserPasswordChangeView(APIView):
             if user is not None:
                 user.set_password(serializer.validated_data['password'])
                 user.save()
-                print('PASSWORD', user.password)
                 update_session_auth_hash(request, user)
                 return Response(status=status.HTTP_200_OK)
             else:

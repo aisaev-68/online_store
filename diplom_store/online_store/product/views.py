@@ -104,12 +104,7 @@ class SpecificationAPIView(APIView):
     """
 
     def get(self, request: Request, pk: int) -> Response:
-        print(8888888888888888888)
         specifications = Specification.objects.filter(category_id=pk).first()
-        # if pk is not None:
-        #     specifications = Specification.objects.filter(category_id=pk).first()
-        # else:
-        #     specifications = Specification.objects.first()
         serializer = SpecificationSerializer(specifications)
-        print("SPEC", serializer.data)
+
         return Response(serializer.data, status=status.HTTP_200_OK)

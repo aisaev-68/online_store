@@ -108,7 +108,6 @@ class CatalogAPIView(APIView):
         # Извлечение параметров запроса
 
         search_text = self.request.query_params.get('filterSearch')
-        print("REARCH_TEXT", search_text)
         category = self.request.query_params.get('category')
         sort = self.request.query_params.get('sort')
         sort_type = self.request.query_params.get('sortType')
@@ -142,7 +141,6 @@ class CatalogAPIView(APIView):
         if max_price:
             queryset = queryset.filter(price__lte=max_price)
 
-        print("SPECIF", specifications_filter)
         if len(specifications_filter) >= 1:
             q_objects = []
             for attr in specifications_filter.keys():
@@ -220,7 +218,6 @@ class CatalogAPIView(APIView):
             'currentPage': data['currentPage'],
             'lastPage': data['lastPage'],
         }
-        print("SEARCH", response_data)
 
         return Response(response_data, status=status.HTTP_200_OK)
 
@@ -291,7 +288,7 @@ class BannersAPIView(APIView):
     def get(self, request: Request, *args, **kwargs) -> Response:
         products = Product.objects.filter(banner=True).prefetch_related('images').order_by('id')[:4]
         serializer = ProductOrderSerializer(products, many=True)
-        print("BANNER", serializer.data)
+
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 

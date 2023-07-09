@@ -85,8 +85,6 @@ class OrderHistoryAPiView(APIView):
 
             return Response([orders], status=201)
         else:
-            # return Response({"detail": "Authentication required."}, status=401)
-            # return render(request, 'account/login.html', context={"form": LoginForm()})
             return HttpResponseRedirect(reverse('login'))
 
 class OrderAPIView(APIView):
@@ -133,7 +131,7 @@ class OrderActiveAPIView(APIView):
     def get(self, request, *args, **kwargs):
         order = Order.objects.get(user=request.user, status=2)
         serializer = self.serializer_class(order)
-        print("ORDER_SER", serializer.data)
+
         return Response(serializer.data, status=200)
 
 

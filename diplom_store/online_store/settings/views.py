@@ -28,7 +28,6 @@ class SettingsAPIView(APIView):
         payment_settings = PaymentSettings.objects.first()
         serializer = self.serializer_class(payment_settings)
         settings_data = serializer.data
-        print(222, settings_data)
 
         # Добавляем возможные выборы для полей
         if not settings_data.get('page_size'):
