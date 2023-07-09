@@ -17,7 +17,7 @@ from product.serializers import ProductSerializer, ProductOrderSerializer
 
 from online_store import settings
 
-from payment.models import PaymentSettings
+from settings.models import PaymentSettings
 
 
 class OrderHistoryAPiView(APIView):

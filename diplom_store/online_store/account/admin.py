@@ -2,7 +2,6 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import gettext_lazy as _
 
-from payment.models import PaymentSettings
 from .models import User
 
 
@@ -27,10 +26,3 @@ class CustomUserAdmin(UserAdmin):
 
 
 admin.site.register(User, CustomUserAdmin)
-
-@admin.register(PaymentSettings)
-class PaymentSettingsAdmin(admin.ModelAdmin):
-    """
-    Отображение категорий в административной панели
-    """
-    list_display = ('payment_methods', 'shipping_methods', 'order_status', 'page_size')

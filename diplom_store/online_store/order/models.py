@@ -5,10 +5,11 @@ from django.utils.translation import gettext_lazy as _
 from online_store import settings
 from product.models import Product
 
-# from payment.models import Payment
 
-
-class Order(models.Model):  # Заказы
+class Order(models.Model):
+    """
+    Модель Заказов.
+    """
     orderId = models.AutoField(primary_key=True, unique=True, verbose_name=_('order number'))
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -18,7 +19,7 @@ class Order(models.Model):  # Заказы
         null=True
     )
     products = models.ManyToManyField(Product, verbose_name=_('products in order'),
-                                      through='OrderProducts', related_name='order_products')
+                                               through='OrderProducts', related_name='order_products')
 
     createdAt = models.DateTimeField(auto_now_add=True, verbose_name=_('date order'))
     fullName = models.CharField(max_length=100, default='', verbose_name=_('full name'))
@@ -32,7 +33,6 @@ class Order(models.Model):  # Заказы
     address = models.CharField(max_length=100, default=_('not specified'), verbose_name=_('delivery address'),
                                blank=True)
     totalCost = models.IntegerField(default=0, verbose_name=_('total order value'), blank=True)
-    # payment = models.OneToOneField(Payment, on_delete=models.CASCADE, related_name='order', verbose_name=_('payment'), null=True)
 
     class Meta:
         verbose_name = _('order')
@@ -73,7 +73,6 @@ class OrderProducts(models.Model):
         if self.product.count == 0:
             self.product.available = False
         self.product.save()
-
 
     def __str__(self):
         """

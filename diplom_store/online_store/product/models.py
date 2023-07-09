@@ -2,7 +2,6 @@ from django.utils.translation import gettext_lazy as _
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 
-
 from catalog.models import Category
 from tag.models import Tag
 
@@ -17,8 +16,12 @@ def get_upload_path_by_products(instance, filename):
     return f'product_images/"%Y/%m/%d"/{filename}'
 
 
-class Product(models.Model):  # товар
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products', verbose_name=_('product category'))
+class Product(models.Model):
+    """
+    Модель товаров.
+    """
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products',
+                                 verbose_name=_('product category'))
     price = models.DecimalField(decimal_places=2, max_digits=10, verbose_name=_('price'))
     count = models.IntegerField(default=0, verbose_name=_('quantity'))
     date = models.DateTimeField(auto_now_add=True, verbose_name=_('created data'))
@@ -28,29 +31,16 @@ class Product(models.Model):  # товар
     limited = models.BooleanField(default=False, verbose_name=_('limited edition'))  # ограниченный тираж
     banner = models.BooleanField(default=False, verbose_name=_('banner on home page'))
     available = models.BooleanField(default=True, verbose_name=_('available'))
-    brand = models.ForeignKey('Manufacturer', on_delete=models.CASCADE, related_name='products', verbose_name='manufacturer')
+    brand = models.ForeignKey('Manufacturer', on_delete=models.CASCADE, related_name='products',
+                              verbose_name='manufacturer')
     seller = models.ForeignKey('Seller', on_delete=models.CASCADE, related_name='products',
-                              verbose_name='seller')
+                               verbose_name='seller')
     attributes = models.JSONField(default=dict, blank=True, verbose_name=_('attributes'))
     tags = models.ManyToManyField(Tag, verbose_name=_('tag'), blank=True, related_name='product_tags')
 
     class Meta:
         verbose_name = _('product')
         verbose_name_plural = _('products')
-
-    # def sell(self, quantity_sold):
-    #     """
-    #     Метод sell уменьшает количество товаров при продаже
-    #     и изменяет признак available, если товары закончились.
-    #     :param quantity_sold:
-    #     :return:
-    #     """
-    #     self.count -= quantity_sold
-    #
-    #     if self.count == 0:
-    #         self.available = False
-
-        # self.save()
 
     def rating_info(self):
         return self.reviews.aggregate(avg_rating=models.Avg('rate')).get('avg_rating')
@@ -91,9 +81,6 @@ class Product(models.Model):  # товар
             return salePrice.salePrice
         return self.price
 
-    # def id(self):
-    #     return f'{self.pk}'
-
     def __str__(self):
         return self.title
 
@@ -103,7 +90,8 @@ class ProductImage(models.Model):
     Модель изображения продукта
     """
     image = models.FileField(upload_to=get_upload_path_by_products, verbose_name=_('Image product'))
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images', verbose_name=_('Product'))
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images',
+                                         verbose_name=_('Product'))
 
     class Meta:
         ordering = ["pk"]
@@ -121,14 +109,17 @@ class ProductImage(models.Model):
         return f'/{self.image}'
 
 
-class Review(models.Model):  # отзыв
+class Review(models.Model):
+    """
+    Модель отзывов.
+    """
     rate = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(5)], verbose_name=_('rate'))
     author = models.CharField(max_length=128, verbose_name=_('author'))
     email = models.EmailField(max_length=254)
     text = models.TextField(verbose_name=_('Text'))
     date = models.DateTimeField(auto_now_add=True, verbose_name=_('created data'))
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews',
-                                verbose_name=_('product'))
+                                         verbose_name=_('product'))
 
     class Meta:
         verbose_name = _('review')
@@ -140,9 +131,12 @@ class Review(models.Model):  # отзыв
         return self.text
 
 
-
 class Sale(models.Model):
-    product = models.ForeignKey('Product', on_delete=models.CASCADE, related_name='sales', verbose_name=_('product'))
+    """
+    Модель распродаж.
+    """
+    product = models.ForeignKey('Product', on_delete=models.CASCADE, related_name='sales',
+                                         verbose_name=_('product'))
     count = models.IntegerField(default=0, verbose_name=_('quantity of goods at a discount'))
     salePrice = models.DecimalField(decimal_places=2, max_digits=10, verbose_name=_('sale price'))
     dateFrom = models.DateField(verbose_name=_('date from'))
@@ -185,6 +179,9 @@ class Sale(models.Model):
 
 
 class Manufacturer(models.Model):
+    """
+    Модель производителей.
+    """
     name = models.CharField(max_length=150, verbose_name=_('name'))
 
     class Meta:
@@ -196,6 +193,9 @@ class Manufacturer(models.Model):
 
 
 class Seller(models.Model):
+    """
+    Модель продавцов.
+    """
     name = models.CharField(max_length=150, verbose_name=_('name'))
     city = models.TextField(max_length=100, verbose_name=_('city'))
     address = models.TextField(max_length=100, verbose_name=_('address'))
@@ -208,10 +208,13 @@ class Seller(models.Model):
         return self.name
 
 
-
 class Specification(models.Model):
+    """
+    Модель характеристик.
+    """
     attributes = models.JSONField(default=dict, blank=True, verbose_name=_('attributes'))
-    category = models.OneToOneField(Category, on_delete=models.CASCADE, related_name='specifications', verbose_name=_('category'))
+    category = models.OneToOneField(Category, on_delete=models.CASCADE, related_name='specifications',
+                                    verbose_name=_('category'))
 
     class Meta:
         verbose_name = _('specification')

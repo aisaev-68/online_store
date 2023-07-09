@@ -28,9 +28,6 @@ schema_view = get_schema_view(
    permission_classes=[permissions.AllowAny],
 )
 
-# urlpatterns = [
-#     path('i18n/', include('django.conf.urls.i18n')),
-# ]
 
 urlpatterns = [
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
@@ -41,6 +38,7 @@ urlpatterns = [
     path('', include('product.urls')),
     path('', include('tag.urls')),
     path('', include('account.urls')),
+    path('', include('settings.urls')),
     path('', include('cart.urls')),
     path('', include('order.urls')),
     path('', include('payment.urls')),

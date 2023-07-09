@@ -1,17 +1,13 @@
-from django.http import HttpResponse
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import SessionAuthentication
-from django.utils.translation import gettext_lazy as _
+
 from rest_framework.response import Response
-# from online_store import settings
+
 from order.models import Order
-
-from payment.models import Payment, PaymentSettings
-
+from payment.models import Payment
 from payment.serializers import PaymentSerializer
 from payment.services import PaymentService
-
 from online_store import settings
 
 
