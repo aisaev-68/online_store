@@ -1,10 +1,7 @@
+import logging
 from datetime import datetime
 from django.db.models import F, FloatField, Count, Q, Avg, DecimalField
 from django.core.paginator import Paginator
-from django.shortcuts import render
-from django.views import View
-from django.utils.decorators import method_decorator
-from django.db import connection
 from rest_framework.response import Response
 from rest_framework.request import Request
 from rest_framework import viewsets, status
@@ -22,6 +19,9 @@ from settings.models import PaymentSettings
 
 from product.models import Product, Sale
 from product.serializers import ProductSerializer, SaleSerializer, ProductOrderSerializer
+
+
+logger = logging.getLogger(__name__)
 
 
 def get_filtr_specification(data: list) -> dict:

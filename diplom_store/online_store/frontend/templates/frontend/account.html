@@ -43,14 +43,14 @@
                         <div class="Account-column Account-column_full">
                             <div class="Order Order_anons">
                                 <div class="Order-personal">
-                                    <div class="row">
+                                    <div v-if="order.orderId" class="row">
                                         <div class="row-block">
                                             <a class="Order-title" :href="`/order-detail/${order.orderId}`">Заказ&#32;
                                                 <span
-                                                    class="Order-numberOrder">№${order.orderId}$
+                                                        class="Order-numberOrder">№${order.orderId}$
                                                 </span>&#32;{% trans 'from' %}&#32;
                                                 <span
-                                                    class="Order-dateOrder">${order.createdAt}$
+                                                        class="Order-dateOrder">${order.createdAt}$
                                                 </span>
                                             </a>
                                             <div class="Account-editLink">
