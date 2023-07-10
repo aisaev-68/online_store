@@ -1,0 +1,1219 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-07-01 20:09+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
+"(n%100>=11 && n%100<=14)? 2 : 3);\n"
+#: account/admin.py:14
+msgid "Personal info"
+msgstr "Личная информация"
+
+#: account/admin.py:15
+msgid "Permissions"
+msgstr "Разрешения"
+
+#: account/admin.py:16
+msgid "Important dates"
+msgstr "Важные даты"
+
+#: account/forms.py:24
+msgid "Username*:"
+msgstr "Пользователь*:"
+
+#: account/forms.py:28 account/forms.py:122
+msgid "Username*"
+msgstr "Пользователь*"
+
+#: account/forms.py:35
+msgid "Phone number*:"
+msgstr "Номер телефона*:"
+
+#: account/forms.py:39
+msgid "Phone number*"
+msgstr "Номер телефона*"
+
+#: account/forms.py:45
+msgid "Password*:"
+msgstr "Пароль*:"
+
+#: account/forms.py:49 account/forms.py:131
+msgid "Password*"
+msgstr "Пароль*"
+
+#: account/forms.py:56
+msgid "Confirm the password*:"
+msgstr "Подтвердите пароль*:"
+
+#: account/forms.py:60
+msgid "Confirm the password*"
+msgstr "Подтвердите пароль*"
+
+#: account/forms.py:66
+msgid "E-mail address*:"
+msgstr "Адрес электронной почты*:"
+
+#: account/forms.py:70
+msgid "E-mail address*"
+msgstr "Адрес электронной почты*"
+
+#: account/forms.py:76
+msgid "Password mismatch! Retype!"
+msgstr "Пароли не совпадают! Повторите ввод!"
+
+#: account/forms.py:77
+msgid "A user with this phone number already exists!"
+msgstr "Пользователь с таким номером телефона уже существует!"
+
+#: account/forms.py:78
+msgid "A user with this email already exists!"
+msgstr "Пользователь с таким адресом электронной почты уже существует!"
+
+#: account/forms.py:99
+msgid "This phone number is already in use."
+msgstr "Этот номер телефона уже используется."
+
+#: account/forms.py:109
+msgid "This email is already in use."
+msgstr "Этот электронный адрес уже используется."
+
+#: account/models.py:28
+msgid "The image exceeds the maximum size in {max_size / (1024 * 1024)} Mb"
+msgstr "Изображение превышает максимальный размер в {max_size / (1024 * 1024)} Мб."
+
+#: account/models.py:35 frontend/templates/frontend/order.html:72
+#: frontend/templates/frontend/profile.html:59
+#: frontend/templates/frontend/profileAvatar.html:47
+msgid "Full name"
+msgstr "ФИО"
+
+#: account/models.py:36
+msgid "Email"
+msgstr "Адрес электронной почты"
+
+#: account/models.py:37
+msgid "Surname"
+msgstr "Отчество"
+
+#: account/models.py:38 frontend/templates/frontend/order.html:77
+#: frontend/templates/frontend/profile.html:65
+#: frontend/templates/frontend/profileAvatar.html:55
+msgid "Phone"
+msgstr "Номер телефона"
+
+#: account/models.py:41 frontend/templates/frontend/profile.html:40
+#: frontend/templates/frontend/profileAvatar.html:35
+msgid "Avatar"
+msgstr "Аватар"
+
+#: account/models.py:62
+msgid "Phone number already exists."
+msgstr "Номер телефона уже существует."
+
+#: account/models.py:69
+msgid "Email already exists."
+msgstr "Адрес электронной почты уже существует."
+
+#: account/models.py:76
+msgid "The image file size should not exceed 2 MB."
+msgstr "Размер файла изображения не должен превышать 2 МБ."
+
+#: account/models.py:79 order/models.py:17
+msgid "user"
+msgstr "пользователь"
+
+#: account/models.py:80
+msgid "users"
+msgstr "пользователи"
+
+#: account/templates/account/login.html:17
+#: account/templates/account/login.html:20
+#: frontend/templates/frontend/base.html:87
+#: frontend/templates/includes/log-in.html:21
+#: frontend/templates/includes/no-authorized.html:6
+msgid "Login"
+msgstr "Вход"
+
+#: account/templates/account/login.html:19
+#: frontend/templates/frontend/historyorder.html:14
+#: frontend/templates/frontend/oneorder.html:14
+#: frontend/templates/frontend/order.html:15
+#: frontend/templates/frontend/payment.html:14
+#: frontend/templates/frontend/paymentsomeone.html:14
+#: frontend/templates/frontend/product.html:13
+#: frontend/templates/frontend/profileAvatar.html:14
+#: frontend/templates/frontend/progressPayment.html:14
+#: frontend/templates/frontend/sale.html:13
+msgid "home"
+msgstr "главная"
+
+#: account/templates/account/register.html:17
+msgid "Registration new user"
+msgstr "Регистрация нового пользователя"
+
+#: account/templates/account/register.html:19 cart/templates/cart/cart.html:13
+#: frontend/templates/frontend/account.html:14
+#: frontend/templates/frontend/base.html:107
+#: frontend/templates/frontend/base.html:231
+#: frontend/templates/frontend/catalog.html:17
+#: frontend/templates/frontend/delivery.html:14
+#: frontend/templates/frontend/error.html:17
+#: frontend/templates/frontend/profile.html:18
+#: frontend/templates/frontend/settings.html:14
+#: order/templates/order/historyorder.html:17
+#: product/templates/product/catalog.html:13
+msgid "Home"
+msgstr "Главная"
+
+#: account/templates/account/register.html:20
+msgid "Sign Up"
+msgstr "Зарегистрироваться"
+
+#: account/templates/account/register.html:44
+#: frontend/templates/frontend/base.html:90
+#: frontend/templates/includes/log-in.html:22
+msgid "Register"
+msgstr "Регистрация"
+
+#: account/views.py:81
+msgid "Created profile."
+msgstr "Создан профиль."
+
+#: account/views.py:87
+msgid "Profile creation error."
+msgstr "Ошибка создания профиля."
+
+#: account/views.py:116
+msgid "Disabled account."
+msgstr "Отключенный аккаунт."
+
+#: account/views.py:118
+msgid "Password or username does not match."
+msgstr "Пароль или имя пользователя не совпадают."
+
+#: account/views.py:139
+msgid "Get user profile"
+msgstr "Получить профиль пользователя"
+
+#: account/views.py:148
+msgid "Update user profile"
+msgstr "Обновить профиль пользователя"
+
+#: account/views.py:169
+msgid "URL of the uploaded avatar."
+msgstr "URL загруженного аватара."
+
+#: account/views.py:190
+msgid "URL of the uploaded password."
+msgstr "URL загруженного пароля."
+
+#: account/views.py:218
+msgid "Get settings"
+msgstr "Получить настройки"
+
+#: account/views.py:271
+msgid "URL of the uploaded settings."
+msgstr "URL загруженных настроек."
+
+#: cart/templates/cart/cart.html:10 cart/templates/cart/cart.html:15
+#: frontend/templates/frontend/cart.html:10
+#: frontend/templates/frontend/cart.html:13
+#: frontend/templates/frontend/cart.html:15
+msgid "Cart"
+msgstr "Корзина"
+
+#: catalog/models.py:32 catalog/models.py:39 product/models.py:214
+msgid "category"
+msgstr "категория"
+
+#: catalog/models.py:40
+msgid "categories"
+msgstr "категории"
+
+#: frontend/templates/frontend/account.html:11
+#: frontend/templates/frontend/account.html:16
+#: frontend/templates/includes/profile-menu.html:9
+msgid "My account"
+msgstr "Личный кабинет"
+
+#: frontend/templates/frontend/account.html:39
+msgid "Edit profile"
+msgstr "Редактировать профиль"
+
+#: frontend/templates/frontend/account.html:51
+#: frontend/templates/frontend/index.html:20
+msgid "from"
+msgstr "от"
+
+#: frontend/templates/frontend/account.html:57
+#: frontend/templates/includes/profile-menu.html:13
+msgid "History orders"
+msgstr "История заказов"
+
+#: frontend/templates/frontend/account.html:62
+#: frontend/templates/frontend/historyorder.html:43
+#: frontend/templates/frontend/oneorder.html:54
+#: frontend/templates/frontend/order.html:171
+msgid "Delivery type:"
+msgstr "Тип доставки:"
+
+#: frontend/templates/frontend/account.html:66
+#: frontend/templates/frontend/historyorder.html:47
+#: frontend/templates/frontend/oneorder.html:66
+#: frontend/templates/frontend/order.html:189
+msgid "Payment:"
+msgstr "Оплата"
+
+#: frontend/templates/frontend/account.html:70
+#: frontend/templates/frontend/historyorder.html:51
+msgid "Total cost:"
+msgstr "Общая стоимость:"
+
+#: frontend/templates/frontend/account.html:74
+#: frontend/templates/frontend/historyorder.html:58
+#: frontend/templates/frontend/oneorder.html:70
+msgid "Status:"
+msgstr "Статус"
+
+#: frontend/templates/frontend/base.html:48
+msgid "Free delivery"
+msgstr "Бесплатная доставка"
+
+#: frontend/templates/frontend/base.html:50
+#: frontend/templates/frontend/delivery.html:75
+msgid "Follow Us"
+msgstr "Подписывайтесь на нас"
+
+#: frontend/templates/frontend/base.html:83
+msgid "Logout"
+msgstr "Выход"
+
+#: frontend/templates/frontend/base.html:110
+#: frontend/templates/frontend/base.html:233
+msgid "Sale"
+msgstr "Распродажа"
+
+#: frontend/templates/frontend/base.html:112
+msgid "Hot"
+msgstr "Горячие"
+
+#: frontend/templates/frontend/base.html:113
+msgid "Gallery"
+msgstr "Предложения"
+
+#: frontend/templates/frontend/base.html:116
+msgid "Purchase"
+msgstr "Покупка"
+
+#: frontend/templates/frontend/base.html:134
+msgid "Show navigation"
+msgstr "Показать навигацию"
+
+#: frontend/templates/frontend/base.html:150
+msgid "All Departments"
+msgstr "Все категории"
+
+#: frontend/templates/frontend/base.html:191
+msgid "What are you looking for ..."
+msgstr "Что Вы ищете ..."
+
+#: frontend/templates/frontend/base.html:193
+msgid "Search"
+msgstr "Поиск"
+
+#: frontend/templates/frontend/base.html:211
+msgid ""
+"Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy "
+"nibh euismod tincid unt ut laoreet dolore magna aliquam erat volutpat. Ut "
+"wisi enim ad"
+msgstr ""
+
+#: frontend/templates/frontend/base.html:228
+msgid "Useful Links"
+msgstr "Полезные ссылки"
+
+#: frontend/templates/frontend/base.html:235
+#: frontend/templates/frontend/delivery.html:11
+#: frontend/templates/frontend/delivery.html:16
+msgid "Delivery"
+msgstr "Доставка"
+
+#: frontend/templates/frontend/base.html:252
+msgid "Contacts"
+msgstr "Контакты"
+
+#: frontend/templates/frontend/base.html:265
+msgid "Accepted Payments"
+msgstr "Принятые платежи"
+
+#: frontend/templates/frontend/cart.html:75
+#: frontend/templates/frontend/order.html:11
+#: frontend/templates/frontend/order.html:18
+msgid "Checkout"
+msgstr "Оформить"
+
+#: frontend/templates/frontend/cart.html:79
+msgid "Cart is empty"
+msgstr "Корзина пуста"
+
+#: frontend/templates/frontend/catalog.html:14
+msgid "Catalog Megano"
+msgstr "Каталог Megano"
+
+#: frontend/templates/frontend/catalog.html:19
+#: product/templates/product/catalog.html:10
+#: product/templates/product/catalog.html:15
+msgid "Catalog"
+msgstr "Каталог"
+
+#: frontend/templates/frontend/catalog.html:30
+#: product/templates/product/catalog.html:26
+msgid "Filter"
+msgstr "Фильтр"
+
+#: frontend/templates/frontend/catalog.html:57
+msgid "Price"
+msgstr "Цена"
+
+#: frontend/templates/frontend/catalog.html:69
+msgid "Product name"
+msgstr "Название товара"
+
+#: frontend/templates/frontend/catalog.html:74
+msgid "Specification"
+msgstr "Характеристика"
+
+#: frontend/templates/frontend/catalog.html:94
+msgid "Seller"
+msgstr "Продавец"
+
+#: frontend/templates/frontend/catalog.html:106
+msgid "Manufacturer"
+msgstr "Приозводитель"
+
+#: frontend/templates/frontend/catalog.html:123
+msgid "Only items in stock"
+msgstr "Только товары в наличии"
+
+#: frontend/templates/frontend/catalog.html:130
+msgid "With free shipping"
+msgstr "С бесплатной доставкой"
+
+#: frontend/templates/frontend/catalog.html:137
+msgid "Apply"
+msgstr "Принять"
+
+#: frontend/templates/frontend/catalog.html:146
+msgid "Popular tags"
+msgstr "Популярные теги"
+
+#: frontend/templates/frontend/catalog.html:168
+msgid "Sort by:"
+msgstr "Сортировать по:"
+
+#: frontend/templates/frontend/delivery.html:30
+#: frontend/templates/frontend/index.html:84
+msgid "Shipping & Returns"
+msgstr "Доставка и возврат"
+
+#: frontend/templates/frontend/delivery.html:32
+#: frontend/templates/frontend/index.html:86
+msgid "World wide shipping"
+msgstr "Доставка по всему миру"
+
+#: frontend/templates/frontend/delivery.html:42
+#: frontend/templates/frontend/index.html:98
+msgid "Money Back"
+msgstr "Возврат денег"
+
+#: frontend/templates/frontend/delivery.html:44
+#: frontend/templates/frontend/index.html:100
+msgid "Guaranted payments"
+msgstr "Гарантированные платежи"
+
+#: frontend/templates/frontend/delivery.html:54
+#: frontend/templates/frontend/index.html:112
+msgid "Support Policy"
+msgstr "Политика поддержки"
+
+#: frontend/templates/frontend/delivery.html:56
+#: frontend/templates/frontend/index.html:114
+msgid "Fast support team"
+msgstr "Быстрая команда поддержки"
+
+#: frontend/templates/frontend/delivery.html:66
+#: frontend/templates/frontend/index.html:126
+msgid "Quality Guarantee"
+msgstr "Гарантия качества"
+
+#: frontend/templates/frontend/delivery.html:68
+#: frontend/templates/frontend/index.html:128
+msgid "Best guaranted items"
+msgstr "Лучшие товары с гарантией"
+
+#: frontend/templates/frontend/delivery.html:95
+msgid "What is the cost of shipping?"
+msgstr "Какова стоимость доставки?"
+
+#: frontend/templates/frontend/delivery.html:97
+msgid ""
+"Attention! Dear customers, payment for the order upon receipt through "
+"delivery is made only in cash and plastic cards! The use of gadgets and "
+"virtual cards is not possible!"
+msgstr "Внимание! Уважаемые покупатели, оплата заказа при получении через"
+"доставка осуществляется только наличными и пластиковыми картами! Использование гаджетов и"
+"виртуальных карт невозможно!"
+
+#: frontend/templates/frontend/delivery.html:98
+msgid ""
+"For delivery, the following rules apply: for express delivery, the client is "
+"charged a fee of 500 rubles, and for regular delivery - if the order value "
+"less than 2000 rubles, then delivery costs 200 rubles, if more, then it is "
+"free."
+msgstr "Для доставки действуют следующие правила: для экспресс-доставки клиент"
+"взимается комиссия в размере 500 рублей, а за обычную доставку - если стоимость заказа"
+"менее 2000 руб, то доставка стоит 200 руб., если больше, то она"
+"бесплатно."
+
+#: frontend/templates/frontend/delivery.html:99
+msgid "Get Started"
+msgstr "Начать"
+
+#: frontend/templates/frontend/delivery.html:115
+msgid "New"
+msgstr "Новинка"
+
+#: frontend/templates/frontend/delivery.html:117
+msgid ""
+"A slim 15-inch laptop with powerful hardware that's easy to take with you as "
+"a portable gaming or workstation. And it is also relatively inexpensive when "
+"compared with models from more well-known brands. Should I choose this "
+"gaming laptop when buying and what should I look for?"
+msgstr "Тонкий 15-дюймовый ноутбук с мощным оборудованием, который легко взять с собой"
+"портативная игровая или рабочая станция. И это также относительно недорого, когда"
+"по сравнению с моделями более известных брендов. Должен ли я выбрать это"
+"игровой ноутбук при покупке и на что обратить внимание?"
+
+#: frontend/templates/frontend/delivery.html:119
+msgid ""
+"The cover and the surface around the keyboard are made of aluminum, while "
+"the bottom of the laptop, the sides and the screen frame are plastic. "
+"Therefore, there is no feeling that you are using an inexpensive gaming "
+"laptop that is made entirely of plastic: when you touch the lid or put your "
+"hands on the keyboard, there is a pleasant coolness of metal."
+msgstr "Крышка и поверхность вокруг клавиатуры изготовлены из алюминия, при этом"
+"нижняя часть ноутбука, боковины и рамка экрана пластиковые."
+"Поэтому нет ощущения, что вы пользуетесь недорогим игровым"
+"ноутбук, полностью сделанный из пластика: когда вы прикасаетесь к крышке или кладете"
+"руки на клавиатуре, ощущается приятная прохлада металла."
+
+#: frontend/templates/frontend/delivery.html:121
+msgid ""
+"Inside is a 14-core Intel Core i7-12700H with a hybrid architecture: eight "
+"powerful cores for heavy tasks like gaming or 3D rendering, and four energy-"
+"efficient cores for background computing. It also has 16 GB of RAM, a half-"
+"terabyte SSD and a mobile RTX 3060."
+msgstr "Внутри — 14-ядерный Intel Core i7-12700H с гибридной архитектурой: восемь"
+"мощные ядра для тяжелых задач, таких как игры или 3D-рендеринг, и четыре энергоемких"
+"эффективные ядра для фоновых вычислений. Он также имеет 16 ГБ оперативной памяти, пол-"
+"терабайтный SSD и мобильная RTX 3060."
+
+#: frontend/templates/frontend/delivery.html:123
+#, python-format
+msgid ""
+"In normal mode, the laptop does not operate on battery power for more than "
+"2.5 hours. Even the most innocuous Google Docs cloud editor drains the "
+"laptop by 20-40%% in an hour, with watching YouTube at medium brightness and "
+"volume, the result is the same. With the energy-efficient profile enabled, "
+"you can expect 3 hours - this is the maximum, but the display refresh rate "
+"drops to 60 Hz."
+msgstr "В обычном режиме ноутбук не работает от батареи более"
+"2,5 часа. Даже самый безобидный облачный редактор Google Docs истощает"
+"ноутбук на 20-40%% за час, при просмотре YouTube на средней яркости и"
+"громкость, результат тот же. При включенном энергосберегающем профиле"
+"можно ожидать 3 часа - это максимум, но частота обновления дисплея"
+"снижается до 60 Гц."
+
+#: frontend/templates/frontend/error.html:14
+#: frontend/templates/frontend/error.html:19
+#: frontend/templates/frontend/error.html:28
+msgid "Error"
+msgstr "Ошибка"
+
+#: frontend/templates/frontend/historyorder.html:11
+#: frontend/templates/frontend/historyorder.html:16
+#: frontend/templates/frontend/oneorder.html:16
+msgid "History of orders"
+msgstr "История заказов"
+
+#: frontend/templates/frontend/historyorder.html:37
+#: frontend/templates/frontend/oneorder.html:11
+#: frontend/templates/frontend/oneorder.html:18
+msgid "Order"
+msgstr "Заказ"
+
+#: frontend/templates/frontend/historyorder.html:65
+msgid "Order history is empty"
+msgstr "История заказов пуста"
+
+#: frontend/templates/frontend/index.html:42
+msgid "Popular Products"
+msgstr "Популярные товары"
+
+#: frontend/templates/frontend/index.html:137
+msgid "Limited edition"
+msgstr "Ограниченная коллекция"
+
+#: frontend/templates/frontend/oneorder.html:36
+msgid "Order date:"
+msgstr "Дата заказа:"
+
+#: frontend/templates/frontend/oneorder.html:40
+#: frontend/templates/frontend/order.html:151
+msgid "Full name:"
+msgstr "ФИО:"
+
+#: frontend/templates/frontend/oneorder.html:44
+#: frontend/templates/frontend/order.html:157
+msgid "Phone:"
+msgstr "Номер телефона:"
+
+#: frontend/templates/frontend/oneorder.html:48
+#: frontend/templates/frontend/order.html:163
+msgid "E-mail:"
+msgstr "Адрес электронной почты"
+
+#: frontend/templates/frontend/oneorder.html:58
+#: frontend/templates/frontend/order.html:177
+msgid "City:"
+msgstr "Город:"
+
+#: frontend/templates/frontend/oneorder.html:62
+#: frontend/templates/frontend/order.html:183
+msgid "Address:"
+msgstr "Адрес:"
+
+#: frontend/templates/frontend/oneorder.html:74
+msgid "Payment failed:"
+msgstr "Платеж не прошел:"
+
+#: frontend/templates/frontend/oneorder.html:104
+msgid "Total:"
+msgstr "Итого:"
+
+#: frontend/templates/frontend/oneorder.html:110
+#: frontend/templates/frontend/order.html:231
+#: frontend/templates/frontend/payment.html:100
+#: frontend/templates/frontend/paymentsomeone.html:99
+msgid "Pay"
+msgstr "Оплатить"
+
+#: frontend/templates/frontend/order.html:65
+msgid "Step 1: User Options"
+msgstr ""
+
+#: frontend/templates/frontend/order.html:82
+msgid "E-mail"
+msgstr "Шаг 1: Параметры пользователя"
+
+#: frontend/templates/frontend/order.html:88
+#: frontend/templates/frontend/order.html:119
+#: frontend/templates/frontend/order.html:137
+msgid "Next"
+msgstr "Дальше"
+
+#: frontend/templates/frontend/order.html:93
+msgid "Step 2 Shipping Method"
+msgstr "Шаг 2 Способ доставки"
+
+#: frontend/templates/frontend/order.html:108
+msgid "City"
+msgstr "Город"
+
+#: frontend/templates/frontend/order.html:114
+msgid "Address"
+msgstr "Адрес"
+
+#: frontend/templates/frontend/order.html:124
+msgid "Step 3. Payment method"
+msgstr "Шаг 3. Способ оплаты"
+
+#: frontend/templates/frontend/order.html:142
+msgid "Step 4. Order confirmation"
+msgstr "Шаг 4. Подтверждение заказа"
+
+#: frontend/templates/frontend/order.html:227
+msgid "Total with delivery:"
+msgstr "Итого с доставкой:"
+
+#: frontend/templates/frontend/payment.html:11
+#: frontend/templates/frontend/payment.html:16
+#: frontend/templates/frontend/paymentsomeone.html:11
+#: frontend/templates/frontend/paymentsomeone.html:16 payment/models.py:19
+msgid "Payment"
+msgstr "Оплата"
+
+#: frontend/templates/frontend/payment.html:27
+#: frontend/templates/frontend/paymentsomeone.html:27
+msgid "Card number"
+msgstr "Номер карты"
+
+#: frontend/templates/frontend/payment.html:41
+#: frontend/templates/frontend/paymentsomeone.html:40
+msgid "Month"
+msgstr "Месяц"
+
+#: frontend/templates/frontend/payment.html:56
+#: frontend/templates/frontend/paymentsomeone.html:54
+msgid "Year"
+msgstr "Год"
+
+#: frontend/templates/frontend/payment.html:86
+#: frontend/templates/frontend/paymentsomeone.html:82
+msgid "Full name "
+msgstr "ФИО"
+
+#: frontend/templates/frontend/paymentsomeone.html:95
+msgid "Generate random score"
+msgstr "Сгенерировать случайную карту"
+
+#: frontend/templates/frontend/product.html:10
+msgid "Megano Product"
+msgstr "Товар Megano"
+
+#: frontend/templates/frontend/product.html:72
+msgid "Add To Cart"
+msgstr "В корзину"
+
+#: frontend/templates/frontend/product.html:78
+msgid "Tags:"
+msgstr "Теги"
+
+#: frontend/templates/frontend/product.html:92
+msgid "Description"
+msgstr "Описание"
+
+#: frontend/templates/frontend/product.html:95
+#: frontend/templates/frontend/product.html:121
+msgid "Reviews"
+msgstr "Отзывы"
+
+#: frontend/templates/frontend/product.html:106
+msgid "Specifications"
+msgstr "Характеристики"
+
+#: frontend/templates/frontend/product.html:108
+msgid "Value"
+msgstr "Значение"
+
+#: frontend/templates/frontend/product.html:131
+msgid "Author:"
+msgstr "Автор:"
+
+#: frontend/templates/frontend/product.html:132
+msgid "Date:"
+msgstr "Дата:"
+
+#: frontend/templates/frontend/product.html:133
+msgid "Rate:"
+msgstr "Оценка:"
+
+#: frontend/templates/frontend/product.html:142
+msgid "Add Review"
+msgstr "Добавить отзыв"
+
+#: frontend/templates/frontend/product.html:178
+msgid "Submit Review"
+msgstr "Добавить отзыв"
+
+#: frontend/templates/frontend/product.html:182
+msgid "Log in to leave a review"
+msgstr "Войдите, чтобы оставить отзыв"
+
+#: frontend/templates/frontend/profile.html:15
+#: frontend/templates/frontend/profile.html:20
+#: frontend/templates/frontend/profileAvatar.html:11
+#: frontend/templates/frontend/profileAvatar.html:16
+#: frontend/templates/includes/profile-menu.html:11
+msgid "Profile"
+msgstr "Профиль"
+
+#: frontend/templates/frontend/profile.html:42
+#: frontend/templates/frontend/profile.html:49
+#: frontend/templates/frontend/profileAvatar.html:41
+msgid "Choose an avatar"
+msgstr "Выберите аватар"
+
+#: frontend/templates/frontend/profile.html:55
+msgid "Avatar successfully updated!"
+msgstr "Аватар успешно обновлен"
+
+#: frontend/templates/frontend/profile.html:62
+msgid "Full name field must be filled"
+msgstr "Поле ФИО должно быть заполнено"
+
+#: frontend/templates/frontend/profile.html:74
+msgid "The field E-mail must be filled"
+msgstr "Поле E-mail должно быть заполнено"
+
+#: frontend/templates/frontend/profile.html:76
+msgid "Incorrect email format"
+msgstr "Неверный формат электронной почты"
+
+#: frontend/templates/frontend/profile.html:80
+msgid "Profile updated successfully!"
+msgstr "Профиль успешно обновлен!"
+
+#: frontend/templates/frontend/profile.html:84
+#: frontend/templates/frontend/profile.html:114
+#: frontend/templates/frontend/profileAvatar.html:78
+#: frontend/templates/frontend/settings.html:78
+msgid "Save"
+msgstr "Сохранить"
+
+#: frontend/templates/frontend/profile.html:92
+msgid "Current password"
+msgstr "Текущий пароль"
+
+#: frontend/templates/frontend/profile.html:94
+msgid "Enter the current password"
+msgstr "введите текущий пароль"
+
+#: frontend/templates/frontend/profile.html:98
+#: frontend/templates/frontend/profileAvatar.html:65
+msgid "Password"
+msgstr "Пароль"
+
+#: frontend/templates/frontend/profile.html:100
+msgid "New password"
+msgstr "Новый пароль"
+
+#: frontend/templates/frontend/profile.html:103
+#: frontend/templates/frontend/profileAvatar.html:71
+msgid "Password confirmation"
+msgstr "Подтверждение пароля"
+
+#: frontend/templates/frontend/profile.html:105
+msgid "Enter your password again"
+msgstr "Введите пароль еще раз"
+
+#: frontend/templates/frontend/profile.html:108
+msgid "Password updated successfully!"
+msgstr "Пароль успешно обновлен"
+
+#: frontend/templates/frontend/profile.html:111
+msgid "Incorrect current password."
+msgstr "Неверный текущий пароль."
+
+#: frontend/templates/frontend/progressPayment.html:11
+#: frontend/templates/frontend/progressPayment.html:16
+msgid "Waiting for payment"
+msgstr "Ожидается платеж"
+
+#: frontend/templates/frontend/progressPayment.html:25
+msgid "We are waiting for confirmation of payment by the payment system"
+msgstr "Ждем подтверждения платежа платежной системой"
+
+#: frontend/templates/frontend/sale.html:10
+#: frontend/templates/frontend/sale.html:15
+msgid "Sales"
+msgstr "Распродажи"
+
+#: frontend/templates/frontend/settings.html:11
+#: frontend/templates/frontend/settings.html:16
+#: frontend/templates/includes/profile-menu.html:16 payment/models.py:71
+msgid "Settings"
+msgstr "Настройки"
+
+#: frontend/templates/frontend/settings.html:38
+msgid "Page size"
+msgstr "Количество товара на странице"
+
+#: frontend/templates/frontend/settings.html:42
+msgid "Express shipping cost"
+msgstr "Стоимость экспресс-доставки"
+
+#: frontend/templates/frontend/settings.html:46
+msgid "Standard shipping cost"
+msgstr ""
+
+#: frontend/templates/frontend/settings.html:50
+msgid "Minimal amount free shipping"
+msgstr "Стандартная стоимость доставки"
+
+#: frontend/templates/frontend/settings.html:54
+msgid "Payment methods"
+msgstr "Способы оплаты"
+
+#: frontend/templates/frontend/settings.html:63
+msgid "Shipping methods"
+msgstr "Методы доставки"
+
+#: frontend/templates/frontend/settings.html:74
+msgid "Settings updated successfully!"
+msgstr "Настройки успешно обновлены!"
+
+#: frontend/templates/includes/log-in.html:18
+msgid "Forgot your password?"
+msgstr "Забыли пароль?"
+
+#: frontend/templates/includes/no-authorized.html:5
+msgid "You must be logged in to view."
+msgstr "Вы должны войти в систему для просмотра."
+
+#: frontend/templates/includes/profile-menu.html:3
+msgid "Navigation"
+msgstr "Навигация"
+
+#: frontend/templates/includes/profile-menu.html:19
+msgid "Administrative section"
+msgstr "Административный раздел"
+
+#: online_store/settings.py:129
+msgid "English"
+msgstr "Английский"
+
+#: online_store/settings.py:130
+msgid "Russian"
+msgstr "Русский"
+
+#: online_store/settings.py:166
+msgid "Online from a random someone else's account"
+msgstr "Онлайн со случайного чужого аккаунта"
+
+#: online_store/settings.py:167
+msgid "Online card"
+msgstr "Онлайн карта"
+
+#: online_store/settings.py:171
+msgid "Standard Shipping"
+msgstr "Стандартная Доставка"
+
+#: online_store/settings.py:172
+msgid "Express Shipping"
+msgstr "Экспресс-доставка"
+
+#: online_store/settings.py:176
+msgid "Paid"
+msgstr "Оплачено"
+
+#: online_store/settings.py:177
+msgid "Payment error"
+msgstr "Ошибка оплаты"
+
+#: online_store/settings.py:178
+msgid "Process"
+msgstr "В процессе"
+
+#: online_store/urls.py:54
+msgid "Megano store administration panel"
+msgstr "Панель управления магазином Мегано"
+
+#: online_store/urls.py:55
+msgid "Admin panel MEGANO Shop"
+msgstr "Панель администратора МЕГАНО Магазина"
+
+#: online_store/urls.py:56
+msgid "MEGANO Shop"
+msgstr "Магазин Мегано"
+
+#: order/models.py:12
+msgid "order number"
+msgstr "номер заказа"
+
+#: order/models.py:20
+msgid "products in order"
+msgstr "товары заказа"
+
+#: order/models.py:23
+msgid "date order"
+msgstr "дата заказа"
+
+#: order/models.py:24
+msgid "full name"
+msgstr "ФИО"
+
+#: order/models.py:27
+msgid "phone"
+msgstr "номер телефона"
+
+#: order/models.py:28
+msgid "availability of free shipping"
+msgstr "наличие бесплатной доставки"
+
+#: order/models.py:29 payment/models.py:28
+msgid "payment method"
+msgstr "способ оплаты"
+
+#: order/models.py:30
+msgid "payment state"
+msgstr "состояние платежа"
+
+#: order/models.py:31 order/models.py:32
+msgid "not specified"
+msgstr "не указан"
+
+#: order/models.py:31
+msgid "delivery city"
+msgstr "город доставки"
+
+#: order/models.py:32
+msgid "delivery address"
+msgstr "адрес доставки"
+
+#: order/models.py:34
+msgid "total order value"
+msgstr "общая стоимость заказа"
+
+#: order/models.py:38 order/models.py:58 payment/models.py:15
+msgid "order"
+msgstr "заказ"
+
+#: order/models.py:39
+msgid "orders"
+msgstr "заказы"
+
+#: order/models.py:42
+msgid "Order № "
+msgstr "Заказ № "
+
+#: order/models.py:54
+msgid "item from the order"
+msgstr "товар из заказа"
+
+#: order/models.py:55
+msgid "all items in the order"
+msgstr "все позиции в заказе"
+
+#: order/models.py:59 product/models.py:38 product/models.py:131
+#: product/models.py:145
+msgid "product"
+msgstr "товар"
+
+#: order/models.py:60
+msgid "quantity of goods in the order"
+msgstr "количество товара в заказе"
+
+#: order/templates/order/historyorder.html:14
+#: order/templates/order/historyorder.html:19
+msgid "Orders"
+msgstr "Заказы"
+
+#: payment/models.py:10
+msgid "account number"
+msgstr "номер счета"
+
+#: payment/models.py:11 product/models.py:188 product/models.py:199
+#: tag/models.py:11
+msgid "name"
+msgstr "название"
+
+#: payment/models.py:12
+msgid "month"
+msgstr "месяц"
+
+#: payment/models.py:13
+msgid "year"
+msgstr "год"
+
+#: payment/models.py:14
+msgid "payment code"
+msgstr "платежный код"
+
+#: payment/models.py:20
+msgid "Payments"
+msgstr "Платежи"
+
+#: payment/models.py:34
+msgid "shipping method"
+msgstr "способ доставки"
+
+#: payment/models.py:40
+msgid "order status"
+msgstr "статус заказа"
+
+#: payment/models.py:46
+msgid "page size"
+msgstr "количество товара на странице"
+
+#: payment/models.py:54
+msgid "express price"
+msgstr "стоимость эксперсс-доставки"
+
+#: payment/models.py:60
+msgid "standard price"
+msgstr "стоимость обычной доставки"
+
+#: payment/models.py:66
+msgid "minimum amount free shipping"
+msgstr "минимальная стоимость бесплатной доставки"
+
+#: payment/models.py:70
+msgid "Setting"
+msgstr "Настройка"
+
+#: product/models.py:21
+msgid "product category"
+msgstr "категория товара"
+
+#: product/models.py:22
+msgid "price"
+msgstr "цена"
+
+#: product/models.py:23
+msgid "quantity"
+msgstr "количество"
+
+#: product/models.py:24 product/models.py:129
+msgid "created data"
+msgstr "дата создания"
+
+#: product/models.py:25
+msgid "title"
+msgstr "название товара"
+
+#: product/models.py:26
+msgid "full description product"
+msgstr "полное описание товара"
+
+#: product/models.py:27
+msgid "free shipping"
+msgstr "бесплатная доставка"
+
+#: product/models.py:28
+msgid "limited edition"
+msgstr "ограничення коллекция"
+
+#: product/models.py:29
+msgid "banner on home page"
+msgstr "баннер на главной странице"
+
+#: product/models.py:30
+msgid "available"
+msgstr "доступность"
+
+#: product/models.py:34 product/models.py:213
+msgid "attributes"
+msgstr "атрибуты"
+
+#: product/models.py:35 tag/models.py:16
+msgid "tag"
+msgstr "тег"
+
+#: product/models.py:39
+msgid "products"
+msgstr "товары"
+
+#: product/models.py:105
+msgid "Image product"
+msgstr "изображение товара"
+
+#: product/models.py:106
+msgid "Product"
+msgstr "Товар"
+
+#: product/models.py:110
+msgid "product image"
+msgstr "изображение товара"
+
+#: product/models.py:111
+msgid "product images"
+msgstr "изображения товара"
+
+#: product/models.py:125
+msgid "rate"
+msgstr "оценка"
+
+#: product/models.py:126
+msgid "author"
+msgstr "автор"
+
+#: product/models.py:128
+msgid "Text"
+msgstr "Текст"
+
+#: product/models.py:134
+msgid "review"
+msgstr "отзыв"
+
+#: product/models.py:135
+msgid "reviews"
+msgstr "отзывы"
+
+#: product/models.py:146
+msgid "quantity of goods at a discount"
+msgstr "количество товара со скидкой"
+
+#: product/models.py:147
+msgid "sale price"
+msgstr "цена распродажи"
+
+#: product/models.py:148
+msgid "date from"
+msgstr "дата от"
+
+#: product/models.py:149
+msgid "date to"
+msgstr "дата до"
+
+#: product/models.py:152
+msgid "sale"
+msgstr "распродажа"
+
+#: product/models.py:153
+msgid "sales"
+msgstr "распродажи"
+
+#: product/models.py:191
+msgid "manufacturer"
+msgstr "производитель"
+
+#: product/models.py:192
+msgid "manufacturers"
+msgstr "производители"
+
+#: product/models.py:200
+msgid "city"
+msgstr "город"
+
+#: product/models.py:201
+msgid "address"
+msgstr "адрес"
+
+#: product/models.py:204
+msgid "seller"
+msgstr "продавец"
+
+#: product/models.py:205
+msgid "sellers"
+msgstr "продавцы"
+
+#: product/models.py:217
+msgid "specification"
+msgstr "зарактеристика"
+
+#: product/models.py:218
+msgid "specifications"
+msgstr "характеристики"
+
+#: tag/models.py:10
+msgid "id tag"
+msgstr "id тега"
+
+#: tag/models.py:17
+msgid "tags"
+msgstr "теги"

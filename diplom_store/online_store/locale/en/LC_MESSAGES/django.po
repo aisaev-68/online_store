@@ -1,0 +1,1198 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-07-02 10:20+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: account/admin.py:14
+msgid "Personal info"
+msgstr ""
+
+#: account/admin.py:15
+msgid "Permissions"
+msgstr ""
+
+#: account/admin.py:16
+msgid "Important dates"
+msgstr ""
+
+#: account/forms.py:24
+msgid "Username*:"
+msgstr ""
+
+#: account/forms.py:28 account/forms.py:122
+msgid "Username*"
+msgstr ""
+
+#: account/forms.py:35
+msgid "Phone number*:"
+msgstr ""
+
+#: account/forms.py:39
+msgid "Phone number*"
+msgstr ""
+
+#: account/forms.py:45
+msgid "Password*:"
+msgstr ""
+
+#: account/forms.py:49 account/forms.py:131
+msgid "Password*"
+msgstr ""
+
+#: account/forms.py:56
+msgid "Confirm the password*:"
+msgstr ""
+
+#: account/forms.py:60
+msgid "Confirm the password*"
+msgstr ""
+
+#: account/forms.py:66
+msgid "E-mail address*:"
+msgstr ""
+
+#: account/forms.py:70
+msgid "E-mail address*"
+msgstr ""
+
+#: account/forms.py:76
+msgid "Password mismatch! Retype!"
+msgstr ""
+
+#: account/forms.py:77
+msgid "A user with this phone number already exists!"
+msgstr ""
+
+#: account/forms.py:78
+msgid "A user with this email already exists!"
+msgstr ""
+
+#: account/forms.py:99
+msgid "This phone number is already in use."
+msgstr ""
+
+#: account/forms.py:109
+msgid "This email is already in use."
+msgstr ""
+
+#: account/models.py:28
+msgid "The image exceeds the maximum size in {max_size / (1024 * 1024)} Mb"
+msgstr ""
+
+#: account/models.py:35 frontend/templates/frontend/order.html:72
+#: frontend/templates/frontend/profile.html:59
+#: frontend/templates/frontend/profileAvatar.html:47
+msgid "Full name"
+msgstr ""
+
+#: account/models.py:36
+msgid "Email"
+msgstr ""
+
+#: account/models.py:37
+msgid "Surname"
+msgstr ""
+
+#: account/models.py:38 frontend/templates/frontend/order.html:77
+#: frontend/templates/frontend/profile.html:65
+#: frontend/templates/frontend/profileAvatar.html:55
+msgid "Phone"
+msgstr ""
+
+#: account/models.py:41 frontend/templates/frontend/profile.html:40
+#: frontend/templates/frontend/profileAvatar.html:35
+msgid "Avatar"
+msgstr ""
+
+#: account/models.py:62
+msgid "Phone number already exists."
+msgstr ""
+
+#: account/models.py:69
+msgid "Email already exists."
+msgstr ""
+
+#: account/models.py:76
+msgid "The image file size should not exceed 2 MB."
+msgstr ""
+
+#: account/models.py:79 order/models.py:17
+msgid "user"
+msgstr ""
+
+#: account/models.py:80
+msgid "users"
+msgstr ""
+
+#: account/templates/account/login.html:17
+#: account/templates/account/login.html:20
+#: frontend/templates/frontend/base.html:87
+#: frontend/templates/includes/log-in.html:21
+#: frontend/templates/includes/no-authorized.html:6
+msgid "Login"
+msgstr ""
+
+#: account/templates/account/login.html:19
+#: frontend/templates/frontend/historyorder.html:14
+#: frontend/templates/frontend/oneorder.html:14
+#: frontend/templates/frontend/order.html:15
+#: frontend/templates/frontend/payment.html:14
+#: frontend/templates/frontend/paymentsomeone.html:14
+#: frontend/templates/frontend/product.html:13
+#: frontend/templates/frontend/profileAvatar.html:14
+#: frontend/templates/frontend/progressPayment.html:14
+#: frontend/templates/frontend/sale.html:13
+msgid "home"
+msgstr ""
+
+#: account/templates/account/register.html:17
+msgid "Registration new user"
+msgstr ""
+
+#: account/templates/account/register.html:19 cart/templates/cart/cart.html:13
+#: frontend/templates/frontend/account.html:14
+#: frontend/templates/frontend/base.html:107
+#: frontend/templates/frontend/base.html:231
+#: frontend/templates/frontend/catalog.html:17
+#: frontend/templates/frontend/delivery.html:14
+#: frontend/templates/frontend/error.html:17
+#: frontend/templates/frontend/profile.html:18
+#: frontend/templates/frontend/settings.html:14
+#: order/templates/order/historyorder.html:17
+#: product/templates/product/catalog.html:13
+msgid "Home"
+msgstr ""
+
+#: account/templates/account/register.html:20
+msgid "Sign Up"
+msgstr ""
+
+#: account/templates/account/register.html:44
+#: frontend/templates/frontend/base.html:90
+#: frontend/templates/includes/log-in.html:22
+msgid "Register"
+msgstr ""
+
+#: account/views.py:81
+msgid "Created profile."
+msgstr ""
+
+#: account/views.py:87
+msgid "Profile creation error."
+msgstr ""
+
+#: account/views.py:116
+msgid "Disabled account."
+msgstr ""
+
+#: account/views.py:118
+msgid "Password or username does not match."
+msgstr ""
+
+#: account/views.py:139
+msgid "Get user profile"
+msgstr ""
+
+#: account/views.py:148
+msgid "Update user profile"
+msgstr ""
+
+#: account/views.py:169
+msgid "URL of the uploaded avatar."
+msgstr ""
+
+#: account/views.py:190
+msgid "URL of the uploaded password."
+msgstr ""
+
+#: account/views.py:218
+msgid "Get settings"
+msgstr ""
+
+#: account/views.py:271
+msgid "URL of the uploaded settings."
+msgstr ""
+
+#: cart/templates/cart/cart.html:10 cart/templates/cart/cart.html:15
+#: frontend/templates/frontend/cart.html:10
+#: frontend/templates/frontend/cart.html:13
+#: frontend/templates/frontend/cart.html:15
+msgid "Cart"
+msgstr ""
+
+#: catalog/models.py:32 catalog/models.py:39 product/models.py:214
+msgid "category"
+msgstr ""
+
+#: catalog/models.py:40
+msgid "categories"
+msgstr ""
+
+#: frontend/templates/frontend/account.html:11
+#: frontend/templates/frontend/account.html:16
+#: frontend/templates/includes/profile-menu.html:9
+msgid "My account"
+msgstr ""
+
+#: frontend/templates/frontend/account.html:39
+msgid "Edit profile"
+msgstr ""
+
+#: frontend/templates/frontend/account.html:51
+#: frontend/templates/frontend/index.html:20
+msgid "from"
+msgstr ""
+
+#: frontend/templates/frontend/account.html:57
+#: frontend/templates/includes/profile-menu.html:13
+msgid "History orders"
+msgstr ""
+
+#: frontend/templates/frontend/account.html:62
+#: frontend/templates/frontend/historyorder.html:43
+#: frontend/templates/frontend/oneorder.html:54
+#: frontend/templates/frontend/order.html:171
+msgid "Delivery type:"
+msgstr ""
+
+#: frontend/templates/frontend/account.html:66
+#: frontend/templates/frontend/historyorder.html:47
+#: frontend/templates/frontend/oneorder.html:66
+#: frontend/templates/frontend/order.html:189
+msgid "Payment:"
+msgstr ""
+
+#: frontend/templates/frontend/account.html:70
+#: frontend/templates/frontend/historyorder.html:51
+msgid "Total cost:"
+msgstr ""
+
+#: frontend/templates/frontend/account.html:74
+#: frontend/templates/frontend/historyorder.html:58
+#: frontend/templates/frontend/oneorder.html:70
+msgid "Status:"
+msgstr ""
+
+#: frontend/templates/frontend/base.html:48
+msgid "Free delivery"
+msgstr ""
+
+#: frontend/templates/frontend/base.html:50
+#: frontend/templates/frontend/delivery.html:75
+msgid "Follow Us"
+msgstr ""
+
+#: frontend/templates/frontend/base.html:83
+msgid "Logout"
+msgstr ""
+
+#: frontend/templates/frontend/base.html:110
+#: frontend/templates/frontend/base.html:233
+msgid "Sale"
+msgstr ""
+
+#: frontend/templates/frontend/base.html:112
+msgid "Hot"
+msgstr ""
+
+#: frontend/templates/frontend/base.html:113
+msgid "Gallery"
+msgstr ""
+
+#: frontend/templates/frontend/base.html:116
+msgid "Purchase"
+msgstr ""
+
+#: frontend/templates/frontend/base.html:134
+msgid "Show navigation"
+msgstr ""
+
+#: frontend/templates/frontend/base.html:150
+msgid "All Departments"
+msgstr ""
+
+#: frontend/templates/frontend/base.html:191
+msgid "What are you looking for ..."
+msgstr ""
+
+#: frontend/templates/frontend/base.html:193
+msgid "Search"
+msgstr ""
+
+#: frontend/templates/frontend/base.html:211
+msgid ""
+"Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy "
+"nibh euismod tincid unt ut laoreet dolore magna aliquam erat volutpat. Ut "
+"wisi enim ad"
+msgstr ""
+
+#: frontend/templates/frontend/base.html:228
+msgid "Useful Links"
+msgstr ""
+
+#: frontend/templates/frontend/base.html:235
+#: frontend/templates/frontend/delivery.html:11
+#: frontend/templates/frontend/delivery.html:16
+msgid "Delivery"
+msgstr ""
+
+#: frontend/templates/frontend/base.html:252
+msgid "Contacts"
+msgstr ""
+
+#: frontend/templates/frontend/base.html:265
+msgid "Accepted Payments"
+msgstr ""
+
+#: frontend/templates/frontend/cart.html:75
+#: frontend/templates/frontend/order.html:11
+#: frontend/templates/frontend/order.html:18
+msgid "Checkout"
+msgstr ""
+
+#: frontend/templates/frontend/cart.html:79
+msgid "Cart is empty"
+msgstr ""
+
+#: frontend/templates/frontend/catalog.html:14
+msgid "Catalog Megano"
+msgstr ""
+
+#: frontend/templates/frontend/catalog.html:19
+#: product/templates/product/catalog.html:10
+#: product/templates/product/catalog.html:15
+msgid "Catalog"
+msgstr ""
+
+#: frontend/templates/frontend/catalog.html:30
+#: product/templates/product/catalog.html:26
+msgid "Filter"
+msgstr ""
+
+#: frontend/templates/frontend/catalog.html:57
+msgid "Price"
+msgstr ""
+
+#: frontend/templates/frontend/catalog.html:69
+msgid "Product name"
+msgstr ""
+
+#: frontend/templates/frontend/catalog.html:74
+msgid "Specification"
+msgstr ""
+
+#: frontend/templates/frontend/catalog.html:94
+msgid "Seller"
+msgstr ""
+
+#: frontend/templates/frontend/catalog.html:106
+msgid "Manufacturer"
+msgstr ""
+
+#: frontend/templates/frontend/catalog.html:123
+msgid "Only items in stock"
+msgstr ""
+
+#: frontend/templates/frontend/catalog.html:130
+msgid "With free shipping"
+msgstr ""
+
+#: frontend/templates/frontend/catalog.html:137
+msgid "Apply"
+msgstr ""
+
+#: frontend/templates/frontend/catalog.html:146
+msgid "Popular tags"
+msgstr ""
+
+#: frontend/templates/frontend/catalog.html:168
+msgid "Sort by:"
+msgstr ""
+
+#: frontend/templates/frontend/delivery.html:30
+#: frontend/templates/frontend/index.html:84
+msgid "Shipping & Returns"
+msgstr ""
+
+#: frontend/templates/frontend/delivery.html:32
+#: frontend/templates/frontend/index.html:86
+msgid "World wide shipping"
+msgstr ""
+
+#: frontend/templates/frontend/delivery.html:42
+#: frontend/templates/frontend/index.html:98
+msgid "Money Back"
+msgstr ""
+
+#: frontend/templates/frontend/delivery.html:44
+#: frontend/templates/frontend/index.html:100
+msgid "Guaranted payments"
+msgstr ""
+
+#: frontend/templates/frontend/delivery.html:54
+#: frontend/templates/frontend/index.html:112
+msgid "Support Policy"
+msgstr ""
+
+#: frontend/templates/frontend/delivery.html:56
+#: frontend/templates/frontend/index.html:114
+msgid "Fast support team"
+msgstr ""
+
+#: frontend/templates/frontend/delivery.html:66
+#: frontend/templates/frontend/index.html:126
+msgid "Quality Guarantee"
+msgstr ""
+
+#: frontend/templates/frontend/delivery.html:68
+#: frontend/templates/frontend/index.html:128
+msgid "Best guaranted items"
+msgstr ""
+
+#: frontend/templates/frontend/delivery.html:95
+msgid "What is the cost of shipping?"
+msgstr ""
+
+#: frontend/templates/frontend/delivery.html:97
+msgid ""
+"Attention! Dear customers, payment for the order upon receipt through "
+"delivery is made only in cash and plastic cards! The use of gadgets and "
+"virtual cards is not possible!"
+msgstr ""
+
+#: frontend/templates/frontend/delivery.html:98
+msgid ""
+"For delivery, the following rules apply: for express delivery, the client is "
+"charged a fee of 500 rubles, and for regular delivery - if the order value "
+"less than 2000 rubles, then delivery costs 200 rubles, if more, then it is "
+"free."
+msgstr ""
+
+#: frontend/templates/frontend/delivery.html:99
+msgid "Get Started"
+msgstr ""
+
+#: frontend/templates/frontend/delivery.html:115
+msgid "New"
+msgstr ""
+
+#: frontend/templates/frontend/delivery.html:117
+msgid ""
+"A slim 15-inch laptop with powerful hardware that's easy to take with you as "
+"a portable gaming or workstation. And it is also relatively inexpensive when "
+"compared with models from more well-known brands. Should I choose this "
+"gaming laptop when buying and what should I look for?"
+msgstr ""
+
+#: frontend/templates/frontend/delivery.html:119
+msgid ""
+"The cover and the surface around the keyboard are made of aluminum, while "
+"the bottom of the laptop, the sides and the screen frame are plastic. "
+"Therefore, there is no feeling that you are using an inexpensive gaming "
+"laptop that is made entirely of plastic: when you touch the lid or put your "
+"hands on the keyboard, there is a pleasant coolness of metal."
+msgstr ""
+
+#: frontend/templates/frontend/delivery.html:121
+msgid ""
+"Inside is a 14-core Intel Core i7-12700H with a hybrid architecture: eight "
+"powerful cores for heavy tasks like gaming or 3D rendering, and four energy-"
+"efficient cores for background computing. It also has 16 GB of RAM, a half-"
+"terabyte SSD and a mobile RTX 3060."
+msgstr ""
+
+#: frontend/templates/frontend/delivery.html:123
+#, python-format
+msgid ""
+"In normal mode, the laptop does not operate on battery power for more than "
+"2.5 hours. Even the most innocuous Google Docs cloud editor drains the "
+"laptop by 20-40%% in an hour, with watching YouTube at medium brightness and "
+"volume, the result is the same. With the energy-efficient profile enabled, "
+"you can expect 3 hours - this is the maximum, but the display refresh rate "
+"drops to 60 Hz."
+msgstr ""
+
+#: frontend/templates/frontend/error.html:14
+#: frontend/templates/frontend/error.html:19
+#: frontend/templates/frontend/error.html:28
+msgid "Error"
+msgstr ""
+
+#: frontend/templates/frontend/historyorder.html:11
+#: frontend/templates/frontend/historyorder.html:16
+#: frontend/templates/frontend/oneorder.html:16
+msgid "History of orders"
+msgstr ""
+
+#: frontend/templates/frontend/historyorder.html:37
+#: frontend/templates/frontend/oneorder.html:11
+#: frontend/templates/frontend/oneorder.html:18
+msgid "Order"
+msgstr ""
+
+#: frontend/templates/frontend/historyorder.html:65
+msgid "Order history is empty"
+msgstr ""
+
+#: frontend/templates/frontend/index.html:42
+msgid "Popular Products"
+msgstr ""
+
+#: frontend/templates/frontend/index.html:137
+msgid "Limited edition"
+msgstr ""
+
+#: frontend/templates/frontend/oneorder.html:36
+msgid "Order date:"
+msgstr ""
+
+#: frontend/templates/frontend/oneorder.html:40
+#: frontend/templates/frontend/order.html:151
+msgid "Full name:"
+msgstr ""
+
+#: frontend/templates/frontend/oneorder.html:44
+#: frontend/templates/frontend/order.html:157
+msgid "Phone:"
+msgstr ""
+
+#: frontend/templates/frontend/oneorder.html:48
+#: frontend/templates/frontend/order.html:163
+msgid "E-mail:"
+msgstr ""
+
+#: frontend/templates/frontend/oneorder.html:58
+#: frontend/templates/frontend/order.html:177
+msgid "City:"
+msgstr ""
+
+#: frontend/templates/frontend/oneorder.html:62
+#: frontend/templates/frontend/order.html:183
+msgid "Address:"
+msgstr ""
+
+#: frontend/templates/frontend/oneorder.html:73 online_store/settings.py:176
+msgid "Paid"
+msgstr ""
+
+#: frontend/templates/frontend/oneorder.html:76 online_store/settings.py:177
+msgid "Payment error"
+msgstr ""
+
+#: frontend/templates/frontend/oneorder.html:81
+msgid "Payment failed:"
+msgstr ""
+
+#: frontend/templates/frontend/oneorder.html:111
+msgid "Total:"
+msgstr ""
+
+#: frontend/templates/frontend/oneorder.html:117
+#: frontend/templates/frontend/order.html:231
+#: frontend/templates/frontend/payment.html:100
+#: frontend/templates/frontend/paymentsomeone.html:99
+msgid "Pay"
+msgstr ""
+
+#: frontend/templates/frontend/order.html:65
+msgid "Step 1: User Options"
+msgstr ""
+
+#: frontend/templates/frontend/order.html:82
+msgid "E-mail"
+msgstr ""
+
+#: frontend/templates/frontend/order.html:88
+#: frontend/templates/frontend/order.html:119
+#: frontend/templates/frontend/order.html:137
+msgid "Next"
+msgstr ""
+
+#: frontend/templates/frontend/order.html:93
+msgid "Step 2 Shipping Method"
+msgstr ""
+
+#: frontend/templates/frontend/order.html:108
+msgid "City"
+msgstr ""
+
+#: frontend/templates/frontend/order.html:114
+msgid "Address"
+msgstr ""
+
+#: frontend/templates/frontend/order.html:124
+msgid "Step 3. Payment method"
+msgstr ""
+
+#: frontend/templates/frontend/order.html:142
+msgid "Step 4. Order confirmation"
+msgstr ""
+
+#: frontend/templates/frontend/order.html:227
+msgid "Total with delivery:"
+msgstr ""
+
+#: frontend/templates/frontend/payment.html:11
+#: frontend/templates/frontend/payment.html:16
+#: frontend/templates/frontend/paymentsomeone.html:11
+#: frontend/templates/frontend/paymentsomeone.html:16 payment/models.py:20
+msgid "Payment"
+msgstr ""
+
+#: frontend/templates/frontend/payment.html:27
+#: frontend/templates/frontend/paymentsomeone.html:27
+msgid "Card number"
+msgstr ""
+
+#: frontend/templates/frontend/payment.html:41
+#: frontend/templates/frontend/paymentsomeone.html:40
+msgid "Month"
+msgstr ""
+
+#: frontend/templates/frontend/payment.html:56
+#: frontend/templates/frontend/paymentsomeone.html:54
+msgid "Year"
+msgstr ""
+
+#: frontend/templates/frontend/payment.html:86
+#: frontend/templates/frontend/paymentsomeone.html:82
+msgid "Full name "
+msgstr ""
+
+#: frontend/templates/frontend/paymentsomeone.html:95
+msgid "Generate random score"
+msgstr ""
+
+#: frontend/templates/frontend/product.html:10
+msgid "Megano Product"
+msgstr ""
+
+#: frontend/templates/frontend/product.html:72
+msgid "Add To Cart"
+msgstr ""
+
+#: frontend/templates/frontend/product.html:78
+msgid "Tags:"
+msgstr ""
+
+#: frontend/templates/frontend/product.html:92
+msgid "Description"
+msgstr ""
+
+#: frontend/templates/frontend/product.html:95
+#: frontend/templates/frontend/product.html:121
+msgid "Reviews"
+msgstr ""
+
+#: frontend/templates/frontend/product.html:106
+msgid "Specifications"
+msgstr ""
+
+#: frontend/templates/frontend/product.html:108
+msgid "Value"
+msgstr ""
+
+#: frontend/templates/frontend/product.html:131
+msgid "Author:"
+msgstr ""
+
+#: frontend/templates/frontend/product.html:132
+msgid "Date:"
+msgstr ""
+
+#: frontend/templates/frontend/product.html:133
+msgid "Rate:"
+msgstr ""
+
+#: frontend/templates/frontend/product.html:142
+msgid "Add Review"
+msgstr ""
+
+#: frontend/templates/frontend/product.html:178
+msgid "Submit Review"
+msgstr ""
+
+#: frontend/templates/frontend/product.html:182
+msgid "Log in to leave a review"
+msgstr ""
+
+#: frontend/templates/frontend/profile.html:15
+#: frontend/templates/frontend/profile.html:20
+#: frontend/templates/frontend/profileAvatar.html:11
+#: frontend/templates/frontend/profileAvatar.html:16
+#: frontend/templates/includes/profile-menu.html:11
+msgid "Profile"
+msgstr ""
+
+#: frontend/templates/frontend/profile.html:42
+#: frontend/templates/frontend/profile.html:49
+#: frontend/templates/frontend/profileAvatar.html:41
+msgid "Choose an avatar"
+msgstr ""
+
+#: frontend/templates/frontend/profile.html:55
+msgid "Avatar successfully updated!"
+msgstr ""
+
+#: frontend/templates/frontend/profile.html:62
+msgid "Full name field must be filled"
+msgstr ""
+
+#: frontend/templates/frontend/profile.html:74
+msgid "The field E-mail must be filled"
+msgstr ""
+
+#: frontend/templates/frontend/profile.html:76
+msgid "Incorrect email format"
+msgstr ""
+
+#: frontend/templates/frontend/profile.html:80
+msgid "Profile updated successfully!"
+msgstr ""
+
+#: frontend/templates/frontend/profile.html:84
+#: frontend/templates/frontend/profile.html:114
+#: frontend/templates/frontend/profileAvatar.html:78
+#: frontend/templates/frontend/settings.html:78
+msgid "Save"
+msgstr ""
+
+#: frontend/templates/frontend/profile.html:92
+msgid "Current password"
+msgstr ""
+
+#: frontend/templates/frontend/profile.html:94
+msgid "Enter the current password"
+msgstr ""
+
+#: frontend/templates/frontend/profile.html:98
+#: frontend/templates/frontend/profileAvatar.html:65
+msgid "Password"
+msgstr ""
+
+#: frontend/templates/frontend/profile.html:100
+msgid "New password"
+msgstr ""
+
+#: frontend/templates/frontend/profile.html:103
+#: frontend/templates/frontend/profileAvatar.html:71
+msgid "Password confirmation"
+msgstr ""
+
+#: frontend/templates/frontend/profile.html:105
+msgid "Enter your password again"
+msgstr ""
+
+#: frontend/templates/frontend/profile.html:108
+msgid "Password updated successfully!"
+msgstr ""
+
+#: frontend/templates/frontend/profile.html:111
+msgid "Incorrect current password."
+msgstr ""
+
+#: frontend/templates/frontend/progressPayment.html:11
+#: frontend/templates/frontend/progressPayment.html:16
+msgid "Waiting for payment"
+msgstr ""
+
+#: frontend/templates/frontend/progressPayment.html:25
+msgid "We are waiting for confirmation of payment by the payment system"
+msgstr ""
+
+#: frontend/templates/frontend/sale.html:10
+#: frontend/templates/frontend/sale.html:15
+msgid "Sales"
+msgstr ""
+
+#: frontend/templates/frontend/settings.html:11
+#: frontend/templates/frontend/settings.html:16
+#: frontend/templates/includes/profile-menu.html:16 payment/models.py:89
+msgid "Settings"
+msgstr ""
+
+#: frontend/templates/frontend/settings.html:38
+msgid "Page size"
+msgstr ""
+
+#: frontend/templates/frontend/settings.html:42
+msgid "Express shipping cost"
+msgstr ""
+
+#: frontend/templates/frontend/settings.html:46
+msgid "Standard shipping cost"
+msgstr ""
+
+#: frontend/templates/frontend/settings.html:50
+msgid "Minimal amount free shipping"
+msgstr ""
+
+#: frontend/templates/frontend/settings.html:54
+msgid "Payment methods"
+msgstr ""
+
+#: frontend/templates/frontend/settings.html:63
+msgid "Shipping methods"
+msgstr ""
+
+#: frontend/templates/frontend/settings.html:74
+msgid "Settings updated successfully!"
+msgstr ""
+
+#: frontend/templates/includes/log-in.html:18
+msgid "Forgot your password?"
+msgstr ""
+
+#: frontend/templates/includes/no-authorized.html:5
+msgid "You must be logged in to view."
+msgstr ""
+
+#: frontend/templates/includes/profile-menu.html:3
+msgid "Navigation"
+msgstr ""
+
+#: frontend/templates/includes/profile-menu.html:19
+msgid "Administrative section"
+msgstr ""
+
+#: online_store/settings.py:129
+msgid "English"
+msgstr ""
+
+#: online_store/settings.py:130
+msgid "Russian"
+msgstr ""
+
+#: online_store/settings.py:166
+msgid "Online from a random someone else's account"
+msgstr ""
+
+#: online_store/settings.py:167
+msgid "Online card"
+msgstr ""
+
+#: online_store/settings.py:171
+msgid "Standard Shipping"
+msgstr ""
+
+#: online_store/settings.py:172
+msgid "Express Shipping"
+msgstr ""
+
+#: online_store/settings.py:178
+msgid "Process"
+msgstr ""
+
+#: online_store/urls.py:54
+msgid "Megano store administration panel"
+msgstr ""
+
+#: online_store/urls.py:55
+msgid "Admin panel MEGANO Shop"
+msgstr ""
+
+#: online_store/urls.py:56
+msgid "MEGANO Shop"
+msgstr ""
+
+#: order/models.py:12
+msgid "order number"
+msgstr ""
+
+#: order/models.py:20
+msgid "products in order"
+msgstr ""
+
+#: order/models.py:23
+msgid "date order"
+msgstr ""
+
+#: order/models.py:24
+msgid "full name"
+msgstr ""
+
+#: order/models.py:27
+msgid "phone"
+msgstr ""
+
+#: order/models.py:28
+msgid "availability of free shipping"
+msgstr ""
+
+#: order/models.py:29 payment/models.py:46
+msgid "payment method"
+msgstr ""
+
+#: order/models.py:30
+msgid "payment state"
+msgstr ""
+
+#: order/models.py:31 order/models.py:32
+msgid "not specified"
+msgstr ""
+
+#: order/models.py:31
+msgid "delivery city"
+msgstr ""
+
+#: order/models.py:32
+msgid "delivery address"
+msgstr ""
+
+#: order/models.py:34
+msgid "total order value"
+msgstr ""
+
+#: order/models.py:38 order/models.py:58 payment/models.py:16
+msgid "order"
+msgstr ""
+
+#: order/models.py:39
+msgid "orders"
+msgstr ""
+
+#: order/models.py:42
+msgid "Order № "
+msgstr ""
+
+#: order/models.py:54
+msgid "item from the order"
+msgstr ""
+
+#: order/models.py:55
+msgid "all items in the order"
+msgstr ""
+
+#: order/models.py:59 product/models.py:38 product/models.py:131
+#: product/models.py:145
+msgid "product"
+msgstr ""
+
+#: order/models.py:60
+msgid "quantity of goods in the order"
+msgstr ""
+
+#: order/templates/order/historyorder.html:14
+#: order/templates/order/historyorder.html:19
+msgid "Orders"
+msgstr ""
+
+#: payment/models.py:11
+msgid "account number"
+msgstr ""
+
+#: payment/models.py:12 product/models.py:188 product/models.py:199
+#: tag/models.py:11
+msgid "name"
+msgstr ""
+
+#: payment/models.py:13
+msgid "month"
+msgstr ""
+
+#: payment/models.py:14
+msgid "year"
+msgstr ""
+
+#: payment/models.py:15
+msgid "payment code"
+msgstr ""
+
+#: payment/models.py:21
+msgid "Payments"
+msgstr ""
+
+#: payment/models.py:52
+msgid "shipping method"
+msgstr ""
+
+#: payment/models.py:58
+msgid "order status"
+msgstr ""
+
+#: payment/models.py:64
+msgid "page size"
+msgstr ""
+
+#: payment/models.py:72
+msgid "express price"
+msgstr ""
+
+#: payment/models.py:78
+msgid "standard price"
+msgstr ""
+
+#: payment/models.py:84
+msgid "minimum amount free shipping"
+msgstr ""
+
+#: payment/models.py:88
+msgid "Setting"
+msgstr ""
+
+#: product/models.py:21
+msgid "product category"
+msgstr ""
+
+#: product/models.py:22
+msgid "price"
+msgstr ""
+
+#: product/models.py:23
+msgid "quantity"
+msgstr ""
+
+#: product/models.py:24 product/models.py:129
+msgid "created data"
+msgstr ""
+
+#: product/models.py:25
+msgid "title"
+msgstr ""
+
+#: product/models.py:26
+msgid "full description product"
+msgstr ""
+
+#: product/models.py:27
+msgid "free shipping"
+msgstr ""
+
+#: product/models.py:28
+msgid "limited edition"
+msgstr ""
+
+#: product/models.py:29
+msgid "banner on home page"
+msgstr ""
+
+#: product/models.py:30
+msgid "available"
+msgstr ""
+
+#: product/models.py:34 product/models.py:213
+msgid "attributes"
+msgstr ""
+
+#: product/models.py:35 tag/models.py:16
+msgid "tag"
+msgstr ""
+
+#: product/models.py:39
+msgid "products"
+msgstr ""
+
+#: product/models.py:105
+msgid "Image product"
+msgstr ""
+
+#: product/models.py:106
+msgid "Product"
+msgstr ""
+
+#: product/models.py:110
+msgid "product image"
+msgstr ""
+
+#: product/models.py:111
+msgid "product images"
+msgstr ""
+
+#: product/models.py:125
+msgid "rate"
+msgstr ""
+
+#: product/models.py:126
+msgid "author"
+msgstr ""
+
+#: product/models.py:128
+msgid "Text"
+msgstr ""
+
+#: product/models.py:134
+msgid "review"
+msgstr ""
+
+#: product/models.py:135
+msgid "reviews"
+msgstr ""
+
+#: product/models.py:146
+msgid "quantity of goods at a discount"
+msgstr ""
+
+#: product/models.py:147
+msgid "sale price"
+msgstr ""
+
+#: product/models.py:148
+msgid "date from"
+msgstr ""
+
+#: product/models.py:149
+msgid "date to"
+msgstr ""
+
+#: product/models.py:152
+msgid "sale"
+msgstr ""
+
+#: product/models.py:153
+msgid "sales"
+msgstr ""
+
+#: product/models.py:191
+msgid "manufacturer"
+msgstr ""
+
+#: product/models.py:192
+msgid "manufacturers"
+msgstr ""
+
+#: product/models.py:200
+msgid "city"
+msgstr ""
+
+#: product/models.py:201
+msgid "address"
+msgstr ""
+
+#: product/models.py:204
+msgid "seller"
+msgstr ""
+
+#: product/models.py:205
+msgid "sellers"
+msgstr ""
+
+#: product/models.py:217
+msgid "specification"
+msgstr ""
+
+#: product/models.py:218
+msgid "specifications"
+msgstr ""
+
+#: tag/models.py:10
+msgid "id tag"
+msgstr ""
+
+#: tag/models.py:17
+msgid "tags"
+msgstr ""
