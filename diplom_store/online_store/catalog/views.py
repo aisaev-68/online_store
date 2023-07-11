@@ -17,6 +17,7 @@ from catalog.models import Category
 from catalog.serializers import CategorySerializer
 from settings.models import PaymentSettings
 
+from online_store import settings
 from product.models import Product, Sale
 from product.serializers import ProductSerializer, SaleSerializer, ProductOrderSerializer
 
@@ -184,8 +185,13 @@ class CatalogAPIView(APIView):
     def pagination_queryset(self, queryset):
         len_products = len(queryset)
         paginator = PageNumberPagination()
-        settings = PaymentSettings.objects.first()
-        limit = settings.page_size
+        settings_db = PaymentSettings.objects.first()
+        print("1111", settings_db)
+        if settings_db:
+            print(888888888)
+            limit = settings_db.page_size
+        else:
+            limit = settings.REST_FRAMEWORK['PAGE_SIZE']
 
         paginator.page_size = limit
         paginated_queryset = paginator.paginate_queryset(queryset, self.request)
@@ -292,9 +298,25 @@ class BannersAPIView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class SearchAPIView(APIView):
+class SearchAPIView(CatalogAPIView):
 
-    def get(self, request: Request) -> Response:
+    def get(self, request) -> Response:
+        super().get(self)
         search_text = self.request.query_params.get('filterSearch')
-        product = Product.objects.filter(title__icontains=search_text).first()
-        return Response({'category': product.category_id}, status=status.HTTP_200_OK)
+        product = Product.objects.filter(available=True, title__icontains=search_text).order_by('-date').all()
+        return Response({'category': product[0].category_id}, status=status.HTTP_200_OK)
+        # queryset = self.filter_queryset(product)
+        #
+        # data = self.pagination_queryset(queryset)
+        # paginated_queryset = data['pagination']
+        # serialized_data = ProductSerializer(paginated_queryset, many=True).data
+        #
+        # response_data = {
+        #     'items': serialized_data,
+        #     'currentPage': data['currentPage'],
+        #     'lastPage': data['lastPage'],
+        #     'category': product[0].category_id
+        # }
+        #
+        # return Response(response_data, status=status.HTTP_200_OK)
+

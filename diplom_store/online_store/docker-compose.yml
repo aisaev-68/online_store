@@ -61,3 +61,4 @@ networks:
 
 volumes:
   db_data:
+  frontend:

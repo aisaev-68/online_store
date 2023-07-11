@@ -108,8 +108,7 @@ var mix = {
       const tags = this.topTags
         .filter((tag) => tag.selected)
         .map((tag) => tag.id);
-      const str = location.pathname;
-       alert(str);
+
       this.getData('/api/catalog/', {
         page,
         filterSearch: this.filterSearch ? this.filterSearch : null,
@@ -129,10 +128,11 @@ var mix = {
         tags,
         limit: PAGE_LIMIT,
       })
-        .then((data) => {
+        .then(data => {
           this.catalogCards = data.items;
           this.currentPage = data.currentPage;
           this.lastPage = data.lastPage;
+          //location.assign('/catalog');
         })
         .catch(() => {
           console.warn('Ошибка при получении каталога');
