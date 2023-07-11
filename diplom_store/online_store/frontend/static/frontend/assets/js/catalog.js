@@ -109,7 +109,7 @@ var mix = {
         .filter((tag) => tag.selected)
         .map((tag) => tag.id);
       const str = location.pathname;
-
+       alert(str);
       this.getData('/api/catalog/', {
         page,
         filterSearch: this.filterSearch ? this.filterSearch : null,
@@ -138,6 +138,7 @@ var mix = {
           console.warn('Ошибка при получении каталога');
         });
     },
+
   },
   mounted() {
     const urlParams = new URL(window.location.href).searchParams;
