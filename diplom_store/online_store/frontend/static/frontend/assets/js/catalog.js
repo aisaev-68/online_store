@@ -186,6 +186,8 @@ var mix = {
 
           // Обновление адресной строки
           window.history.replaceState(null, null, '?' + params.toString());
+          params = null;
+          this.updateSpecifications();
         })
         .catch(() => {
           console.warn('Ошибка при получении каталога');
@@ -195,7 +197,7 @@ var mix = {
   },
   mounted() {
     const urlParams = new URL(window.location.href).searchParams;
-    this.filterSearch = urlParams.get('filterSearch');
+    //this.filterSearch = urlParams.get('filterSearch');
     this.category = urlParams.get('category') ? Number(urlParams.get('category')) : null;
     this.selectedSort = this.sortRules.find((sort) => sort.id === 'price');
     this.selectedSort.selected = 'inc';
