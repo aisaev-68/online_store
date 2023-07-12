@@ -113,6 +113,7 @@ var mix = {
           // Установка параметров запроса в адресной строке
           params.set('page', page.toString());
            if (this.filterSearch) {
+            params.delete('filterSearch');
             params.set('filterSearch', this.filterSearch ? this.filterSearch : null);
           };
           if (this.category) {
@@ -134,8 +135,21 @@ var mix = {
             params.set('filter.available', this.filter.available.toString());
           };
           if (this.filter.specifications && this.filter.specifications.length > 0) {
+            params.delete('filter.specifications');
             this.filter.specifications.forEach((specification) => {
                   params.append(`filter.specifications.${specification.key}`, specification.value.toString());
+            });
+          };
+          if (this.filter.sellers && this.filter.sellers.length > 0) {
+            params.delete('filter.sellers');
+            this.filter.sellers.forEach((seller) => {
+             params.append(`filter.sellers.${seller.key}`, seller.value.toString());
+            });
+          }
+          if (this.filter.manufacturers && this.filter.manufacturers.length > 0) {
+            params.delete('filter.manufacturers');
+            this.filter.manufacturers.forEach((manufacturer) => {
+              params.append('filter.manufacturers', manufacturer.toString());
             });
           };
 
