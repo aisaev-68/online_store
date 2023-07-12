@@ -114,8 +114,8 @@ var mix = {
 
           // Установка параметров запроса в адресной строке
           params.set('page', page.toString());
-            params.set('filterSearch', this.filterSearch ? this.filterSearch : null);
-            params.set('category', this.category ? this.category : '');
+          params.set('filterSearch', this.filterSearch.toString());
+            //params.set('category', this.category ? this.category : '');
             params.set('filter.name', this.filter.name);
             params.set('filter.minPrice', this.filter.minPrice.toString());
             params.set('filter.maxPrice', this.filter.maxPrice.toString());
@@ -163,7 +163,7 @@ var mix = {
           this.lastPage = data.lastPage;
 
           // Обновление адресной строки
-          window.history.replaceState(null, null, params.toString());
+          window.history.replaceState(null, null, + '?' + params.toString());
           params.delete('filter.specifications');
 
         })
@@ -175,7 +175,7 @@ var mix = {
   },
   mounted() {
     const urlParams = new URL(window.location.href).searchParams;
-    //this.filterSearch = urlParams.get('filterSearch');
+    this.filterSearch = urlParams.get('filterSearch');
     this.category = urlParams.get('category') ? Number(urlParams.get('category')) : null;
     this.selectedSort = this.sortRules.find((sort) => sort.id === 'price');
     this.selectedSort.selected = 'inc';

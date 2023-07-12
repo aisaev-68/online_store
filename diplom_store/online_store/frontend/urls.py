@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, re_path
 from django.views.generic import TemplateView
 from account.views import RegisterView, MyLoginView, MyLogoutView
 
@@ -10,7 +10,7 @@ urlpatterns = [
     path('delivery/', TemplateView.as_view(template_name="frontend/delivery.html"), name='delivery'),
     path('account/', TemplateView.as_view(template_name="frontend/account.html"), name='account'),
     path('cart/', TemplateView.as_view(template_name="frontend/cart.html"), name='cart'),
-    path('catalog/', TemplateView.as_view(template_name="frontend/catalog.html")),
+    re_path(r'^catalog/', TemplateView.as_view(template_name="frontend/catalog.html")),
     path('catalog/<int:pk>', TemplateView.as_view(template_name="frontend/catalog.html")),
     path('history-order/', TemplateView.as_view(template_name="frontend/historyorder.html")),
     path('order-detail/<int:pk>', TemplateView.as_view(template_name="frontend/oneorder.html"), name="oneorder"),
