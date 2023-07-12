@@ -108,6 +108,36 @@ var mix = {
       const tags = this.topTags
         .filter((tag) => tag.selected)
         .map((tag) => tag.id);
+       const params = new URLSearchParams(window.location.search);
+
+          // Установка параметров запроса в адресной строке
+          params.set('page', page.toString());
+           if (this.filterSearch) {
+            params.set('filterSearch', this.filterSearch ? this.filterSearch : null);
+          };
+          if (this.category) {
+            params.set('category', this.category ? this.category : '');
+          };
+           if (this.filter.name) {
+            params.set('filter.name', this.filter.name);
+          };
+          if (this.filter.minPrice) {
+            params.set('filter.minPrice', this.filter.minPrice.toString());
+          };
+          if (this.filter.maxPrice) {
+            params.set('filter.maxPrice', this.filter.maxPrice.toString());
+          };
+          if (this.filter.freeDelivery) {
+            params.set('filter.freeDelivery', this.filter.freeDelivery.toString());
+          };
+          if (this.filter.available) {
+            params.set('filter.available', this.filter.available.toString());
+          };
+          if (this.filter.specifications && this.filter.specifications.length > 0) {
+            this.filter.specifications.forEach((specification) => {
+                  params.append(`filter.specifications.${specification.key}`, specification.value.toString());
+            });
+          };
 
       this.getData('/api/catalog/', {
         page,
@@ -132,7 +162,16 @@ var mix = {
           this.catalogCards = data.items;
           this.currentPage = data.currentPage;
           this.lastPage = data.lastPage;
-          //location.assign('/catalog');
+
+//          for (const key in filter) {
+//            if (filter.hasOwnProperty(key) && filter[key] !== null) {
+//              params.set(`filter.${key}`, filter[key].toString());
+//            }
+//          }
+          // Добавьте остальные параметры запроса
+
+          // Обновление адресной строки
+          window.history.replaceState(null, null, '?' + params.toString());
         })
         .catch(() => {
           console.warn('Ошибка при получении каталога');
