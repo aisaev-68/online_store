@@ -54,7 +54,7 @@ class BasketAPIView(APIView):
         products_in_cart = [product for product in cart.cart.keys()]
         products = Product.objects.filter(pk__in=products_in_cart)
         serializer = self.serializer_class(products, many=True, context=cart.cart)
-
+        logger.info(_('Retrieving products from the cart'))
         return Response(data=serializer.data, status=200)
 
     @swagger_auto_schema(
@@ -94,6 +94,7 @@ class BasketAPIView(APIView):
             quantity=count
         )
         serializer = self.serializer_class(product, context=cart.cart)
+        logger.info(_('Retrieving products from the cart'))
         return Response(data=[serializer.data], status=201)
 
     @swagger_auto_schema(
@@ -139,7 +140,7 @@ class BasketAPIView(APIView):
             quantity=count,
             update_quantity=update_quantity,
         )
-
+        logger.info(_('Removing products from the shopping cart'))
         if update_quantity:
             return Response(data=[], status=201)
         else:

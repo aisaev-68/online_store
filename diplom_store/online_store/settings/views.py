@@ -1,3 +1,4 @@
+import logging
 from django.utils.translation import gettext_lazy as _
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
@@ -11,6 +12,7 @@ from account.permissions import IsAdminOrSuperuser
 from settings.serializers import PaymentSettingsSerializer
 
 
+logger = logging.getLogger(__name__)
 
 class SettingsAPIView(APIView):
     """
@@ -68,7 +70,7 @@ class SettingsAPIView(APIView):
         settings_data['payment_methods_choices'] = dict(settings.PAYMENT_METHODS)
         settings_data['shipping_methods_choices'] = dict(settings.SHIPPING_METHODS)
         settings_data['order_status_choices'] = dict(settings.ORDER_STATUSES)
-
+        logger.info(_('Getting settings'))
         return Response(settings_data)
 
     @swagger_auto_schema(
@@ -83,5 +85,5 @@ class SettingsAPIView(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
-
+        logger.info(_('Save settings'))
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

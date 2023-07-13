@@ -1,5 +1,6 @@
 import logging
 from datetime import datetime
+from django.utils.translation import gettext_lazy as _
 from django.db.models import F, FloatField, Count, Q, Avg, DecimalField
 from django.core.paginator import Paginator
 from rest_framework.response import Response
@@ -99,6 +100,7 @@ class CategoryAPIView(APIView):
     def get(self, request: Request, *args, **kwargs) -> Response:
         categories = Category.objects.filter(parent=None)
         serializer = CategorySerializer(categories, many=True)
+        logger.info(_("Getting product categories"))
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
 
@@ -225,7 +227,7 @@ class CatalogAPIView(APIView):
             'currentPage': data['currentPage'],
             'lastPage': data['lastPage'],
         }
-
+        logger.info(_("Getting a product catalog"))
         return Response(response_data, status=status.HTTP_200_OK)
 
 
@@ -244,7 +246,7 @@ class ProductPopularAPIView(APIView):
             product.title = product.title[:25] + '...'
             product.categoryName = product.category
         serializer = ProductSerializer(products, many=True)
-
+        logger.info(_("Getting a popular products"))
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
@@ -260,7 +262,7 @@ class ProductLimitedAPIView(APIView):
             product.title = product.title[:25] + '...'
             product.categoryName = product.category
         serializer = ProductSerializer(products, many=True)
-
+        logger.info(_("Getting a limited products"))
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
@@ -282,6 +284,7 @@ class SalesAPIView(APIView):
         else:
             lastPage = len(products) // setting.page_size + 1
         serializer = SaleSerializer(current_page, many=True)
+        logger.info(_("Getting a sellers"))
         return Response(
             {'salesCards': serializer.data, 'currentPage': request.GET.get('page', 1), 'lastPage': lastPage},
             status=status.HTTP_200_OK)
@@ -295,7 +298,7 @@ class BannersAPIView(APIView):
     def get(self, request: Request, *args, **kwargs) -> Response:
         products = Product.objects.filter(banner=True).prefetch_related('images').order_by('id')[:4]
         serializer = ProductOrderSerializer(products, many=True)
-
+        logger.info(_("Getting a banners"))
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
@@ -305,19 +308,5 @@ class SearchAPIView(CatalogAPIView):
         super().get(self)
         search_text = self.request.query_params.get('filterSearch')
         product = Product.objects.filter(available=True, title__icontains=search_text).order_by('-date').all()
+        logger.info(_("Search for products in the database"))
         return Response({'category': product[0].category_id}, status=status.HTTP_200_OK)
-        # queryset = self.filter_queryset(product)
-        #
-        # data = self.pagination_queryset(queryset)
-        # paginated_queryset = data['pagination']
-        # serialized_data = ProductSerializer(paginated_queryset, many=True).data
-        #
-        # response_data = {
-        #     'items': serialized_data,
-        #     'currentPage': data['currentPage'],
-        #     'lastPage': data['lastPage'],
-        #     'category': product[0].category_id
-        # }
-        #
-        # return Response(response_data, status=status.HTTP_200_OK)
-

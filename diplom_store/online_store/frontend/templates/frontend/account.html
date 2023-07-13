@@ -72,7 +72,14 @@
                                             </div>
                                             <div class="Order-info Order-info_status">
                                                 <div class="Order-infoType">{% trans 'Status:' %}</div>
-                                                <div class="Order-infoContent">${order.status}$</div>
+                                                <div class="Order-infoContent">
+                                                    <p v-if="order.status === 1">
+                                                          {% trans 'Paid' %}
+                                                    </p>
+                                                    <p v-if="order.status === 2">
+                                                          {% trans 'Payment error' %}
+                                                    </p>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

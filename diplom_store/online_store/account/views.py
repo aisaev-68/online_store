@@ -1,3 +1,4 @@
+import logging
 from django.contrib.auth import authenticate, login, update_session_auth_hash
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import Group
@@ -18,6 +19,8 @@ from cart.cart import Cart
 from account.forms import UserRegistrationForm, LoginForm
 from account.serializers import UserPasswordChangeSerializer, UserAvatarSerializer, UserSerializer
 
+
+logger = logging.getLogger(__name__)
 
 
 class AccountUserAPIView(APIView):
@@ -42,6 +45,7 @@ class AccountUserAPIView(APIView):
         """
         user = self.request.user
         serializer = self.serializer_class(user)
+        logger.info(_('Avatar data successfully serialized!'))
         return Response(serializer.data, status=200)
 
 
@@ -56,7 +60,7 @@ class RegisterView(View):
         context = {
             'form': form,
         }
-
+        logger.info(_('User registration form received!'))
         return render(request, 'frontend/register.html', context)
 
     def post(self, request, *args, **kwargs):
@@ -79,10 +83,11 @@ class RegisterView(View):
             user = authenticate(request, username=new_user, password=password)
             login(request, user)
             # return redirect(reverse('account:profile'))
+            logger.info(_(f'User {user} registered!'))
             return redirect('/profile')
         else:
             messages.error(request, _('Profile creation error.'))
-
+            logger.exception(_('Profile creation error!'))
             return render(request, 'account/register.html', context)
 
 
@@ -95,6 +100,7 @@ class MyLoginView(View):
 
     def get(self, request):
         context = {"form": LoginForm()}
+        logger.info(_('Getting a login form!'))
         return render(request, 'frontend/login.html', context=context)
 
     def post(self, request):
@@ -106,12 +112,15 @@ class MyLoginView(View):
             if user is not None:
                 if user.is_active:
                     login(request, user)
+                    logger.info(_('User %s authenticated!'), user.username)
                     if Cart(request).cart:
                         return redirect('cart')
                     return redirect('account')
                 else:
+                    logger.error(_('Disabled account!'))
                     messages.error(request, _('Disabled account.'))
             else:
+                logger.error(_('Password or username does not match!'))
                 messages.error(request, _('Password or username does not match.'))
         return redirect('login')
 
@@ -120,6 +129,7 @@ class MyLogoutView(LogoutView):
     """
     Класс представление для выхода пользователя из системы.
     """
+    logger.info(_('The user logged out of the personal account!'))
     next_page = reverse_lazy('login')
 
 
@@ -137,6 +147,7 @@ class UserProfileAPIView(generics.ListCreateAPIView):
     )
     def get(self, request, *args, **kwargs) -> Response:
         serializer = self.serializer_class(self.request.user)
+        logger.info(_('User %s profile data obtained!'), request.user.username)
         return Response(serializer.data)
 
     @swagger_auto_schema(
@@ -149,13 +160,15 @@ class UserProfileAPIView(generics.ListCreateAPIView):
 
         if serializer.is_valid():
             serializer.save()
+            logger.info(_('Update user %s profile!'), request.user.username)
             return Response(data=serializer.data, status=status.HTTP_200_OK)
+        logger.error(_('Error updating user %s profile!'), request.user.username)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserAvatarAPIView(APIView):
     """
-    API для обновления автара.
+    API для обновления аватара.
     """
     parser_classes = [MultiPartParser, ]
     serializer_class = UserAvatarSerializer
@@ -169,7 +182,9 @@ class UserAvatarAPIView(APIView):
         serializer = self.serializer_class(request.user, data=request.data, partial=True)
         if serializer.is_valid():
             user = serializer.save()
+            logger.info(_('Update user %s avatar!'), request.user.username)
             return Response({'url': user.avatar.url})
+        logger.error(_('Error updating user %s avatar!'), request.user.username)
         return Response(serializer.errors, status=400)
 
 
@@ -195,11 +210,13 @@ class UserPasswordChangeView(APIView):
             if user is not None:
                 user.set_password(serializer.validated_data['password'])
                 user.save()
+                logger.info(_('User %s password change!'), user.username)
                 update_session_auth_hash(request, user)
                 return Response(status=status.HTTP_200_OK)
             else:
+                logger.error(_('User %s password update error!'), request.user.username)
                 return Response(status=status.HTTP_400_BAD_REQUEST)
-
+        logger.error(_('User %s password update error!'), request.user.username)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -210,4 +227,5 @@ class CheckAuthenticationAPI(APIView):
 
     def get(self, request) -> Response:
         is_authenticated = request.user.is_authenticated
+        logger.info(_('Checking if a user %s exists!'), request.user.username)
         return Response({"is_authenticated": is_authenticated})

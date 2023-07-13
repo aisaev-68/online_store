@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime
 from rest_framework.authentication import SessionAuthentication
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
@@ -16,9 +17,14 @@ from product.models import Product, Review, Manufacturer, Seller, Specification
 from product.serializers import ReviewSerializer, ManufacturerSerializer, SellerSerializer, \
     SpecificationSerializer, ProductReviewsSerializer
 
+logger = logging.getLogger(__name__)
 
 class MainPageView(View):
+    """
+    Представление для перехода на главную страницу.
+    """
     def get(self, request, *args, **kwargs):
+        logger.info(_('Go to home page'))
         return render(request, 'frontend/index.html')
 
 
@@ -34,6 +40,7 @@ class ProductDetailView(APIView):
     def get(self, request, pk) -> Response:
         product = Product.objects.prefetch_related('reviews').get(pk=pk)
         serializer = ProductReviewsSerializer(product, many=False)
+        logger.info(_('Getting detailed information about a product № %s'), product.id)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
@@ -70,6 +77,7 @@ class ProductReviewView(APIView):
             product_id=pk
         )
         serializer = self.serializer_class(review, many=False)
+        logger.info(_('Saving a product review by a user %s'), data['author'])
         return Response([serializer.data], status=status.HTTP_201_CREATED)
 
 
@@ -85,6 +93,7 @@ class ManufacturerListAPIView(APIView):
     def get(self, request: Request) -> Response:
         manufacturers = Manufacturer.objects.all()
         serializer = ManufacturerSerializer(manufacturers, many=True)
+        logger.info(_('Obtaining manufacturers of goods'))
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
@@ -96,6 +105,7 @@ class SellerListAPIView(APIView):
     def get(self, request: Request) -> Response:
         sellers = Seller.objects.all()
         serializer = SellerSerializer(sellers, many=True)
+        logger.info(_('Getting sellers of goods'))
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
@@ -107,5 +117,5 @@ class SpecificationAPIView(APIView):
     def get(self, request: Request, pk: int) -> Response:
         specifications = Specification.objects.filter(category_id=pk).first()
         serializer = SpecificationSerializer(specifications)
-
+        logger.info(_('Obtaining characteristics for a product category'))
         return Response(serializer.data, status=status.HTTP_200_OK)

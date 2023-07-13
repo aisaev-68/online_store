@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+import logging
 from django.utils.translation import gettext_lazy as _
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
@@ -19,8 +19,13 @@ from online_store import settings
 
 from settings.models import PaymentSettings
 
+logger = logging.getLogger(__name__)
+
 
 class OrderHistoryAPiView(APIView):
+    """
+    Представление для получения истории заказов.
+    """
     permission_classes = (IsAuthenticated,)
     authentication_classes = (SessionAuthentication,)
     serializer_class = OrderProductSerializer
@@ -55,6 +60,7 @@ class OrderHistoryAPiView(APIView):
 
     def get(self, request, *args, **kwargs):
         data = self.pagination_queryset()
+        logger.info(_('Getting order history'))
         return Response(data, status=200)
 
     @swagger_auto_schema(
@@ -86,10 +92,12 @@ class OrderHistoryAPiView(APIView):
             Cart(request).clear()
 
             orders = OrderProductSerializer(instance=order).data
-
+            logger.info(_('Saving an order'))
             return Response([orders], status=201)
         else:
+            logger.info(_('You must be logged in to view orders'))
             return HttpResponseRedirect(reverse('login'))
+
 
 class OrderAPIView(APIView):
     permission_classes = (IsAuthenticated,)
@@ -99,6 +107,7 @@ class OrderAPIView(APIView):
     def get(self, request, pk, *args, **kwargs):
         order = Order.objects.get(user=request.user, orderId=pk)
         serializer = self.serializer_class(order)
+        logger.info(_('Getting an order by ID'))
         return Response(serializer.data, status=200)
 
     def post(self, request, pk, *args, **kwargs):
@@ -124,6 +133,7 @@ class OrderAPIView(APIView):
         order.save()
 
         serializer = self.serializer_class(order)
+        logger.info(_('Saving an order by ID'))
         return Response(serializer.data, status=201)
 
 
@@ -135,8 +145,5 @@ class OrderActiveAPIView(APIView):
     def get(self, request, *args, **kwargs):
         order = Order.objects.get(user=request.user, status=2)
         serializer = self.serializer_class(order)
-
+        logger.info(_('Getting an active order № %s'), order.orderId)
         return Response(serializer.data, status=200)
-
-
-

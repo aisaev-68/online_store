@@ -1,3 +1,4 @@
+import logging
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import SessionAuthentication
@@ -9,6 +10,8 @@ from payment.models import Payment
 from payment.serializers import PaymentSerializer
 from payment.services import PaymentService
 from online_store import settings
+
+logger = logging.getLogger(__name__)
 
 
 class PaymentAPIView(APIView):
@@ -27,6 +30,7 @@ class PaymentAPIView(APIView):
             "status": order.status,
             "orderId": order.orderId,
         }
+        logger.info(_('Getting the order № %s payment status' ), order.orderId)
         return Response(data)
 
     def post(self, request, *args, **kwargs):
@@ -47,5 +51,6 @@ class PaymentAPIView(APIView):
         payment = Payment.objects.create(number=str(number_of_cart), name=name, month=month, year=year, code=code)
         order.payment = payment
         order.save()
+        logger.info(_('Order № %s payment'), order.orderId)
         return Response(status=200, template_name="frontend/account.html")
 
