@@ -123,6 +123,7 @@ class CatalogAPIView(APIView):
 
         manufacturers_filter = [value for key, value in self.request.query_params.items() if
                                 'filter[manufacturers]' in key]
+        print("manufacturers_filter", manufacturers_filter)
         free_delivery = self.request.query_params.get('filter[freeDelivery]')
         available = self.request.query_params.get('filter[available]')
         tags = self.request.query_params.get('tags[]')

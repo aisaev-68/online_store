@@ -29,7 +29,11 @@ class OrderHistoryAPiView(APIView):
 
         paginator = PageNumberPagination()
         payment_settings = PaymentSettings.objects.first()
-        limit = payment_settings.page_size
+
+        if payment_settings:
+            limit = payment_settings.page_size
+        else:
+            limit = settings.REST_FRAMEWORK['PAGE_SIZE']
 
         paginator.page_size = limit
         queryset = Order.objects.order_by('-createdAt').all()

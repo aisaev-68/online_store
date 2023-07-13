@@ -72,7 +72,9 @@ ROOT_URLCONF = 'online_store.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'temp')],
+        'DIRS': ['/www/data/templates/',
+                 '/www/data/templates/admin/',
+                 ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -194,13 +196,15 @@ SHORT_DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = '/www/data/static/'
 # STATICFILES_DIRS = [os.path.join(BASE_DIR, 'frontend')]
 
 LOGOUT_REDIRECT_URL = '/'
 
 # Media directory in the root directory
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+MEDIA_ROOT = '/www/data/media/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
