@@ -39,8 +39,10 @@ class ProductDetailView(APIView):
     )
     def get(self, request, pk) -> Response:
         product = Product.objects.prefetch_related('reviews').get(pk=pk)
+        product.title = product.title[:50]
         serializer = ProductReviewsSerializer(product, many=False)
         logger.info(_('Getting detailed information about a product № %s'), product.id)
+        print(666666666, serializer.data)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 

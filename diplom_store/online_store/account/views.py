@@ -55,6 +55,13 @@ class RegisterView(View):
     """
 
     def get(self, request, *args, **kwargs):
+        """
+        Метод для получения формы для регистрации пользователя.
+        :param request:
+        :param args:
+        :param kwargs:
+        :return: форма
+        """
         form = UserRegistrationForm()
 
         context = {
@@ -64,6 +71,13 @@ class RegisterView(View):
         return render(request, 'frontend/register.html', context)
 
     def post(self, request, *args, **kwargs):
+        """
+        Метод для регистрации нового пользователя.
+        :param request:
+        :param args:
+        :param kwargs:
+        :return:
+        """
         form = UserRegistrationForm(
             request.POST,
         )
@@ -77,12 +91,11 @@ class RegisterView(View):
             password = form.cleaned_data['password1']
             new_user.set_password(password)
             new_user.save()
-            # client_group = Group.objects.get(name="Clients")
-            # new_user.groups.add(client_group)
+            client_group = Group.objects.get(name="Clients")
+            new_user.groups.add(client_group)
             messages.success(request, _('Created profile.'))
             user = authenticate(request, username=new_user, password=password)
             login(request, user)
-            # return redirect(reverse('account:profile'))
             logger.info(_(f'User {user} registered!'))
             return redirect('/profile')
         else:
@@ -99,11 +112,21 @@ class MyLoginView(View):
 
 
     def get(self, request):
+        """
+        Метод для получение формы входа пользователя.
+        :param request:
+        :return: форма
+        """
         context = {"form": LoginForm()}
         logger.info(_('Getting a login form!'))
         return render(request, 'frontend/login.html', context=context)
 
     def post(self, request):
+        """
+        Метод для аутентификации пользователя.
+        :param request:
+        :return:
+        """
         form = LoginForm(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
@@ -146,6 +169,13 @@ class UserProfileAPIView(generics.ListCreateAPIView):
         operation_description=_("Get user profile"),
     )
     def get(self, request, *args, **kwargs) -> Response:
+        """
+        Метод для получения данных профиля.
+        :param request:
+        :param args:
+        :param kwargs:
+        :return: сериализированные данные профиля
+        """
         serializer = self.serializer_class(self.request.user)
         logger.info(_('User %s profile data obtained!'), request.user.username)
         return Response(serializer.data)
@@ -156,6 +186,13 @@ class UserProfileAPIView(generics.ListCreateAPIView):
         operation_description=_("Update user profile"),
     )
     def post(self, request, *args, **kwargs) -> Response:
+        """
+        Метод для обновление данных профиля.
+        :param request:
+        :param args:
+        :param kwargs:
+        :return: сериализированные данные профиля.
+        """
         serializer = self.serializer_class(request.user, data=request.data, partial=True)
 
         if serializer.is_valid():
@@ -179,6 +216,13 @@ class UserAvatarAPIView(APIView):
         operation_description=_("URL of the uploaded avatar."),
     )
     def post(self, request, *args, **kwargs) -> Response:
+        """
+        Метод для обновления аватара.
+        :param request:
+        :param args:
+        :param kwargs:
+        :return: url аватара
+        """
         serializer = self.serializer_class(request.user, data=request.data, partial=True)
         if serializer.is_valid():
             user = serializer.save()
@@ -202,7 +246,13 @@ class UserPasswordChangeView(APIView):
         operation_description=_("URL of the uploaded password."),
     )
     def post(self, request, *args, **kwargs) -> Response:
-
+        """
+        Метод для изменения пароля.
+        :param request:
+        :param args:
+        :param kwargs:
+        :return: статус выполнения операции.
+        """
         serializer = self.serializer_class(request.user, data=request.data)
         if serializer.is_valid():
             current_password = request.data.get('passwordCurrent')
@@ -226,6 +276,11 @@ class CheckAuthenticationAPI(APIView):
     """
 
     def get(self, request) -> Response:
+        """
+        Метод проверки пользователя на аутентификацию.
+        :param request:
+        :return: статус аутентификации.
+        """
         is_authenticated = request.user.is_authenticated
         logger.info(_('Checking if a user %s exists!'), request.user.username)
         return Response({"is_authenticated": is_authenticated})
