@@ -13,14 +13,13 @@ from drf_yasg import openapi
 from rest_framework.views import APIView
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import AllowAny
+
 from catalog.models import Category
 from catalog.serializers import CategorySerializer
 from settings.models import PaymentSettings
-
 from online_store import settings
 from product.models import Product, Sale
 from product.serializers import ProductSerializer, SaleSerializer, ProductOrderSerializer
-
 
 logger = logging.getLogger(__name__)
 
@@ -119,7 +118,7 @@ class CatalogAPIView(APIView):
         sellers_filter = [value for key, value in self.request.query_params.items() if 'filter[sellers]' in key]
 
         specifications = [{key: value} for key, value in self.request.query_params.items() if
-                                 'filter[specifications]' in key]
+                          'filter[specifications]' in key]
         specifications_filter = get_filtr_specification(specifications)
 
         manufacturers_filter = [value for key, value in self.request.query_params.items() if
@@ -274,7 +273,6 @@ class SalesAPIView(APIView):
     """
     Представление для получения товаров со скидками.
     """
-
     def get(self, request: Request, *args, **kwargs) -> Response:
         products = (Sale.objects
                     .filter(Q(dateFrom__gte=datetime.today()) | Q(dateTo__gte=datetime.today()))
