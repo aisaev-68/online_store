@@ -51,10 +51,11 @@ Catalog
                                     <input type="hidden" name="maxPrice" v-model="filters.price.currentToValue">
                                     <!-- Получаем данные по фильтру цены -->
 
-                                    <div class="range-price">{% trans 'Price' %}:&#32;
+                                    <div class="range-price" >{% trans 'Price' %}:&#32;
                                         <div class="rangePrice">
                                         </div>
                                     </div>
+
                                 </div>
                             </div>
                             <div class="form-group">
@@ -77,7 +78,7 @@ Catalog
                                             <div v-for="value in values">
                                                 <label :key="value">
                                                     <input type="checkbox" v-model="filter.specifications"
-                                                           :value="{ key: key, value: value }">
+                                                           :value="{ key: key, value: value }" @change="updateURL">
                                                     ${ value }$
                                                 </label>
                                             </div>
@@ -93,7 +94,7 @@ Catalog
                                     <div id="sellers" class="form-input form-input_full"
                                          style="display: flex; flex-direction: column;">
                                         <label v-for="seller in sellers" :key="seller.id">
-                                            <input type="checkbox" v-model="filter.sellers" :value="seller.name">
+                                            <input type="checkbox" v-model="filter.sellers" :value="seller.name" @change="updateURL">
                                             ${ seller.name }$
                                         </label>
                                     </div>
@@ -104,7 +105,7 @@ Catalog
                                 <div style="overflow: auto;max-height: 150px;">
                                 <div id="manufacturers" class="form-input form-input_full" style="display: flex; flex-direction: column;">
                                     <label v-for="manufacturer in manufacturers" :key="manufacturer.id">
-                                        <input type="checkbox" v-model="filter.manufacturers" :value="manufacturer.name">
+                                        <input type="checkbox" v-model="filter.manufacturers" :value="manufacturer.name" @change="updateURL">
                                         ${ manufacturer.name }$
                                     </label>
                                 </div>
@@ -115,14 +116,14 @@ Catalog
                             </div>
                             <div class="form-group">
                                 <label class="toggle">
-                                    <input type="checkbox" name="available" v-model="filter.available"/>
+                                    <input type="checkbox" name="available" v-model="filter.available" @change="updateURL"/>
                                     <span class="toggle-box"></span>
                                     <span class="toggle-text">{% trans 'Only items in stock' %}</span>
                                 </label>
                             </div>
                             <div class="form-group">
                                 <label class="toggle">
-                                    <input type="checkbox" name="freeDelivery" v-model="filter.freeDelivery"/>
+                                    <input type="checkbox" name="freeDelivery" v-model="filter.freeDelivery" @change="updateURL"/>
                                     <span class="toggle-box"></span>
                                     <span class="toggle-text">{% trans 'With free shipping' %}</span>
                                 </label>

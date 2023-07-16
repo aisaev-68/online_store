@@ -104,6 +104,7 @@ class Command(BaseCommand):
                     count=50,
                     brand=manufacturer,
                     seller=random.choice(sellers),
+                    banner=random.choice([True, False])
                 )
                 ProductImage.objects.create(image=file_path, product_id=product.pk)
 

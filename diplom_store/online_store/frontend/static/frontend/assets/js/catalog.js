@@ -114,54 +114,16 @@ var mix = {
       if (this.filter.minPrice) {
         params.set('filter.minPrice', this.filter.minPrice.toString());
       }
+      alert(this.filter.maxPrice);
       if (this.filter.maxPrice) {
         params.set('filter.maxPrice', this.filter.maxPrice.toString());
       }
-      if (this.filter.freeDelivery) {
-        params.set('filter.freeDelivery', this.filter.freeDelivery.toString());
-      }
-      if (this.filter.available) {
-        params.set('filter.available', this.filter.available.toString());
-      }
-
-      if (this.filter.specifications && this.filter.specifications.length > 0) {
-        // Удаление предыдущих значений
-        this.filter.specifications.forEach((specification) => {
-          params.delete(`filter.specifications.${specification.key}`);
-        });
-
-        // Добавление новых значений
-        this.filter.specifications.forEach((specification) => {
-          params.append(`filter.specifications.${specification.key}`, specification.value);
-        });
-      } else {
-        // Если фильтр specifications пуст, удалить ключ filter.specifications
-        params.delete('filter.specifications');
-      }
-
-      if (this.filter.sellers && this.filter.sellers.length > 0) {
-      let prefix = 'filter.sellers';
-          let i = 0;
-          while (params.has(prefix)) {
-            params.delete(`${prefix}[${i}]`);
-            i++;
-          }
-        this.filter.sellers.forEach((seller, index) => {
-          params.set(`filter.sellers[${index}]`, seller);
-        });
-      }
-      if (this.filter.manufacturers && this.filter.manufacturers.length > 0) {
-          let prefix = 'filter.manufacturers';
-          let i = 0;
-          while (params.has(prefix)) {
-            params.delete(`${prefix}[${i}]`);
-            i++;
-          }
-          this.filter.manufacturers.forEach((manufacturer, index) => {
-            params.set(`filter.manufacturers[${index}]`, manufacturer);
-          });
-        }
-
+//      if (this.filter.freeDelivery) {
+//        params.set('filter.freeDelivery', this.filter.freeDelivery.toString());
+//      }
+//      if (this.filter.available) {
+//        params.set('filter.available', this.filter.available.toString());
+//      }
       this.getData('/api/catalog/', {
         page,
         filterSearch: this.filterSearch ? this.filterSearch : null,
@@ -189,25 +151,75 @@ var mix = {
           // Обновление адресной строки
           window.history.replaceState(null, null, '?' + params.toString());
           this.resetFilters();
+          //this.updateURL();
         })
         .catch(() => {
           console.warn('Ошибка при получении каталога');
         });
     },
     resetFilters() {
-    this.filter = {
-      name: '',
-      minPrice: null,
-      maxPrice: null,
-      freeDelivery: null,
-      available: null,
-      sellers: [],
-      manufacturers: [],
-      specifications: [],
-    };
+        this.filter = {
+          name: '',
+          minPrice: 1,
+          maxPrice: 300000,
+          freeDelivery: false,
+          available: true,
+          sellers: [],
+          manufacturers: [],
+          specifications: [],
+        };
   },
+updateURL() {
+  const params = new URLSearchParams();
+  params.set('filter.freeDelivery', this.filter.freeDelivery.toString());
+  params.set('filter.available', this.filter.available.toString());
 
-  },
+  if (this.filter.specifications && this.filter.specifications.length > 0) {
+    // Удаление предыдущих значений
+    this.filter.specifications.forEach((specification) => {
+      params.delete(`filter.specifications.${specification.key}`);
+    });
+
+    // Добавление новых значений
+    this.filter.specifications.forEach((specification) => {
+      params.append(`filter.specifications.${specification.key}`, specification.value);
+    });
+      } else {
+        // Если фильтр specifications пуст, удалить ключ filter.specifications
+        params.delete('filter.specifications');
+      }
+
+      if (this.filter.sellers && this.filter.sellers.length > 0) {
+        let prefix = 'filter.sellers';
+        let i = 0;
+        while (params.has(prefix)) {
+          params.delete(`${prefix}[${i}]`);
+          i++;
+        }
+        this.filter.sellers.forEach((seller, index) => {
+          params.set(`filter.sellers[${index}]`, seller);
+        });
+      } else {
+        params.delete('filter.sellers');
+      }
+
+      if (this.filter.manufacturers && this.filter.manufacturers.length > 0) {
+        let prefix = 'filter.manufacturers';
+        let i = 0;
+        while (params.has(prefix)) {
+          params.delete(`${prefix}[${i}]`);
+          i++;
+        }
+        this.filter.manufacturers.forEach((manufacturer, index) => {
+          params.set(`filter.manufacturers[${index}]`, manufacturer);
+        });
+      } else {
+        params.delete('filter.manufacturers');
+      }
+      const newURL = this.currentURL + '&' + params.toString();
+      window.history.pushState(null, null, newURL);
+     },
+   },
   mounted() {
     const urlParams = new URL(window.location.href).searchParams;
     this.filterSearch = urlParams.get('filterSearch');
@@ -245,6 +257,7 @@ var mix = {
 //        minValue: 0,
 //        maxValue: 0,
       },
+      currentURL: window.location.href,
       sellers: [], // список всех продавцов
       manufacturers: [], // список всех производителей
       specifications: [],

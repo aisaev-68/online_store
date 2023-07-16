@@ -128,6 +128,7 @@ class CatalogAPIView(APIView):
         print("manufacturers_filter", manufacturers_filter)
         free_delivery = self.request.query_params.get('filter[freeDelivery]')
         available = self.request.query_params.get('filter[available]')
+        print("available", available)
         tags = self.request.query_params.get('tags[]')
         # Применение фильтров к queryset
         if search_text:
@@ -174,8 +175,13 @@ class CatalogAPIView(APIView):
 
         if free_delivery:
             queryset = queryset.filter(freeDelivery=free_delivery.lower() == 'true')
+        else:
+            queryset = queryset.filter(freeDelivery=False)
+        print("available", available)
         if available:
             queryset = queryset.filter(available=available.lower() == 'true')
+        else:
+            queryset = queryset.filter(available=available.lower() == 'false')
         if tags:
             queryset = queryset.filter(tags=tags)
 
