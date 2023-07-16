@@ -1,17 +1,16 @@
 import logging
 from datetime import datetime
 from django.utils.translation import gettext_lazy as _
-from django.db.models import F, FloatField, Count, Q, Avg, DecimalField
+from django.db.models import Q, Avg
 from django.core.paginator import Paginator
 from rest_framework.response import Response
 from rest_framework.request import Request
-from rest_framework import viewsets, status
+from rest_framework import status
 from django.db.models import F, FloatField
 from django.db.models.functions import Cast
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from rest_framework.views import APIView
-from rest_framework import generics
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import AllowAny
 from catalog.models import Category
@@ -125,10 +124,10 @@ class CatalogAPIView(APIView):
 
         manufacturers_filter = [value for key, value in self.request.query_params.items() if
                                 'filter[manufacturers]' in key]
-        print("manufacturers_filter", manufacturers_filter)
+
         free_delivery = self.request.query_params.get('filter[freeDelivery]')
         available = self.request.query_params.get('filter[available]')
-        print("available", available)
+
         tags = self.request.query_params.get('tags[]')
         # Применение фильтров к queryset
         if search_text:
@@ -177,7 +176,7 @@ class CatalogAPIView(APIView):
             queryset = queryset.filter(freeDelivery=free_delivery.lower() == 'true')
         else:
             queryset = queryset.filter(freeDelivery=False)
-        print("available", available)
+
         if available:
             queryset = queryset.filter(available=available.lower() == 'true')
         else:
@@ -195,9 +194,8 @@ class CatalogAPIView(APIView):
         len_products = len(queryset)
         paginator = PageNumberPagination()
         settings_db = PaymentSettings.objects.first()
-        print("1111", settings_db)
+
         if settings_db:
-            print(888888888)
             limit = settings_db.page_size
         else:
             limit = settings.REST_FRAMEWORK['PAGE_SIZE']
