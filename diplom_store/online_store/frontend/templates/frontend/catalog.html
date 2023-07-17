@@ -47,12 +47,13 @@ Catalog
                                            :data-from="filter.minPrice"
                                            :data-to="filter.maxPrice"
                                     />
-                                    <input type="hidden" name="minPrice" v-model="filters.price.currentFromValue">
-                                    <input type="hidden" name="maxPrice" v-model="filters.price.currentToValue">
+                                    <input type="hidden" name="minPrice" v-model="filter.minPrice">
+                                    <input type="hidden" name="maxPrice" v-model="filter.maxPrice">
                                     <!-- Получаем данные по фильтру цены -->
 
                                     <div class="range-price" >{% trans 'Price' %}:&#32;
                                         <div class="rangePrice">
+                                            {{ filter.minPrice }} - {{ filter.maxPrice }}
                                         </div>
                                     </div>
 

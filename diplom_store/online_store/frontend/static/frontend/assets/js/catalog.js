@@ -114,7 +114,7 @@ var mix = {
       if (this.filter.minPrice) {
         params.set('filter.minPrice', this.filter.minPrice.toString());
       }
-      alert(this.filter.maxPrice);
+      //alert(this.filter.maxPrice);
       if (this.filter.maxPrice) {
         params.set('filter.maxPrice', this.filter.maxPrice.toString());
       }
@@ -169,7 +169,7 @@ var mix = {
           specifications: [],
         };
   },
-updateURL() {
+    updateURL() {
   const params = new URLSearchParams();
   params.set('filter.freeDelivery', this.filter.freeDelivery.toString());
   params.set('filter.available', this.filter.available.toString());
