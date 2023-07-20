@@ -170,55 +170,56 @@ var mix = {
         };
   },
     updateURL() {
-  const params = new URLSearchParams();
-  params.set('filter.freeDelivery', this.filter.freeDelivery.toString());
-  params.set('filter.available', this.filter.available.toString());
+      const params = new URLSearchParams();
+      params.set('filter.freeDelivery', this.filter.freeDelivery.toString());
+      params.set('filter.available', this.filter.available.toString());
 
-  if (this.filter.specifications && this.filter.specifications.length > 0) {
-    // Удаление предыдущих значений
-    this.filter.specifications.forEach((specification) => {
-      params.delete(`filter.specifications.${specification.key}`);
-    });
-
-    // Добавление новых значений
-    this.filter.specifications.forEach((specification) => {
-      params.append(`filter.specifications.${specification.key}`, specification.value);
-    });
-      } else {
-        // Если фильтр specifications пуст, удалить ключ filter.specifications
-        params.delete('filter.specifications');
-      }
-
-      if (this.filter.sellers && this.filter.sellers.length > 0) {
-        let prefix = 'filter.sellers';
-        let i = 0;
-        while (params.has(prefix)) {
-          params.delete(`${prefix}[${i}]`);
-          i++;
-        }
-        this.filter.sellers.forEach((seller, index) => {
-          params.set(`filter.sellers[${index}]`, seller);
+      if (this.filter.specifications && this.filter.specifications.length > 0) {
+        // Удаление предыдущих значений
+        this.filter.specifications.forEach((specification) => {
+          params.delete(`filter.specifications.${specification.key}`);
         });
-      } else {
-        params.delete('filter.sellers');
-      }
 
-      if (this.filter.manufacturers && this.filter.manufacturers.length > 0) {
-        let prefix = 'filter.manufacturers';
-        let i = 0;
-        while (params.has(prefix)) {
-          params.delete(`${prefix}[${i}]`);
-          i++;
-        }
-        this.filter.manufacturers.forEach((manufacturer, index) => {
-          params.set(`filter.manufacturers[${index}]`, manufacturer);
+        // Добавление новых значений
+        this.filter.specifications.forEach((specification) => {
+          params.append(`filter.specifications.${specification.key}`, specification.value);
         });
-      } else {
-        params.delete('filter.manufacturers');
-      }
-      const newURL = this.currentURL + '&' + params.toString();
-      window.history.pushState(null, null, newURL);
-     },
+          } else {
+            // Если фильтр specifications пуст, удалить ключ filter.specifications
+            params.delete('filter.specifications');
+          }
+
+          if (this.filter.sellers && this.filter.sellers.length > 0) {
+            let prefix = 'filter.sellers';
+            let i = 0;
+            while (params.has(prefix)) {
+              params.delete(`${prefix}[${i}]`);
+              i++;
+            }
+            this.filter.sellers.forEach((seller, index) => {
+              params.set(`filter.sellers[${index}]`, seller);
+            });
+          } else {
+            params.delete('filter.sellers');
+          }
+
+          if (this.filter.manufacturers && this.filter.manufacturers.length > 0) {
+            let prefix = 'filter.manufacturers';
+            let i = 0;
+            while (params.has(prefix)) {
+              params.delete(`${prefix}[${i}]`);
+              i++;
+            }
+            this.filter.manufacturers.forEach((manufacturer, index) => {
+              params.set(`filter.manufacturers[${index}]`, manufacturer);
+            });
+          } else {
+            params.delete('filter.manufacturers');
+          }
+          const newURL = this.currentURL + '&' + params.toString();
+          window.history.pushState(null, null, newURL);
+         },
+
    },
   mounted() {
     const urlParams = new URL(window.location.href).searchParams;
@@ -234,6 +235,7 @@ var mix = {
     this.updateManufacturers();
     this.getSpecifications();
     this.updateSpecifications();
+
   },
 
   data() {
