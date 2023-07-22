@@ -1,7 +1,6 @@
 import os
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.urls import reverse
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import FileExtensionValidator
@@ -36,9 +35,14 @@ class User(AbstractUser):
     email = models.EmailField(unique=True, verbose_name=_("Email"))
     surname = models.CharField(max_length=50, blank=True, verbose_name=_("Surname"))
     phone = models.CharField(max_length=20, blank=True, null=True, verbose_name=_("Phone"), unique=True)
-    avatar = models.ImageField(upload_to=get_upload_path_by_user, blank=True, null=True,
-                               validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png']),
-                                           validate_image_file_extension], verbose_name=_("Avatar"))
+    avatar = models.ImageField(
+        upload_to=get_upload_path_by_user,
+        blank=True,
+        null=True,
+        validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png']),
+                    validate_image_file_extension], verbose_name=_("Avatar"),
+        default='avatar/default_avatars.png'
+    )
 
     def __str__(self) -> str:
         return self.username
@@ -50,6 +54,10 @@ class User(AbstractUser):
         else:
             self.fullName = f'{self.last_name} {self.first_name} {self.surname}'
         super().save(*args, **kwargs)
+        img = Image.open(self.avatar.path)
+        if img.height > 100 or img.width > 100:
+            img.thumbnail((200, 200))
+        img.save(self.avatar.path, quality=70, optimize=True)
 
 
     def get_url(self) -> str:

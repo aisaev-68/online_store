@@ -1,6 +1,9 @@
+import os
+
 from django.utils.translation import gettext_lazy as _
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.utils.timezone import now
 
 from catalog.models import Category
 from tag.models import Tag
@@ -13,7 +16,8 @@ def get_upload_path_by_products(instance, filename):
         :param filename: имя файла изображения
         :return: путь для сохранения
         """
-    return f'product_images/"%Y/%m/%d"/{filename}'
+    # return f'product_images/"%Y/%m/%d"/{filename}'
+    return os.path.join('product_images/', now().date().strftime("%Y/%m/%d"), filename)
 
 
 class Product(models.Model):

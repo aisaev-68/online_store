@@ -1,11 +1,8 @@
-import datetime
-
 from rest_framework import serializers
 import locale
 
-from catalog.models import Category
 from product.models import Product, Review, Sale, ProductImage, Seller, Manufacturer, Specification
-from tag.serializers import TagSerializer
+
 
 locale.setlocale(locale.LC_ALL, 'ru_RU.UTF-8')
 
@@ -31,7 +28,6 @@ class ReviewSerializer(serializers.ModelSerializer):
 class ProductReviewsSerializer(serializers.ModelSerializer):
     images = serializers.SerializerMethodField()
     rating = serializers.SerializerMethodField()
-    # reviews = serializers.SerializerMethodField()
     reviews = ReviewSerializer(many=True)
     description = serializers.SerializerMethodField()
     href = serializers.SerializerMethodField()
