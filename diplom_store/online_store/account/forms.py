@@ -7,6 +7,7 @@ from account.models import User
 style = "min-height: 45px; padding-left: 15px;"
 margin_stile = "margin-top: 15px;"
 
+
 class UserRegistrationForm(forms.ModelForm):
     """
     Класс формы регистрации пользователя.
@@ -17,7 +18,6 @@ class UserRegistrationForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         for field in self.fields:
             self.fields[field].widget.attrs['style'] = style
-
 
     username = forms.CharField(
         required=True,
@@ -138,4 +138,3 @@ class LoginForm(forms.Form):
         super().__init__(*args, **kwargs)
         for field in self.fields:
             self.fields[field].widget.attrs['style'] = style
-

@@ -38,3 +38,7 @@ docker system prune --all --volumes
 ```
 http://127.0.0.1:8080
 ```
+6. Для выгрузки фикстур с командной строки наберите:
+```
+docker-compose exec megano python manage.py dumpdata product > tests/fixtures/product-fixtures.json
+```

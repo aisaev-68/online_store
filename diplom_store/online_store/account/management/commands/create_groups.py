@@ -116,12 +116,21 @@ class Command(BaseCommand):
             clients_group.permissions.add(perm)
 
         self.stdout.write(self.style.SUCCESS("Groups created"))
-
+        self.stdout.write(self.style.SUCCESS("Create superuser"))
+        User.objects.create_superuser(
+            username='superuser',
+            email='email@ya.ru',
+            password='12345',
+            phone="89285484431",
+            last_name="Петров",
+            first_name="Петр",
+            surname="Петрович",
+        )
         admin_user = User.objects.create_user(
             username=settings.USER_ADMIN,
             email=settings.EMAIL,
             password=settings.PASSWORD,
-            phone="89285484431",
+            phone="89305484111",
             last_name="Иванов",
             first_name="Иван",
             surname="Иванович",
@@ -139,6 +148,7 @@ class Command(BaseCommand):
                 last_name=person.last_name(gender=Gender.MALE),
                 surname=person.surname(gender=Gender.MALE),
                 email=person.email(),
+                phone=person.telephone('7##########'),
                 password='12345',
             )
 

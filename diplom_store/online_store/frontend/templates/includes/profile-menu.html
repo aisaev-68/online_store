@@ -12,12 +12,14 @@
             </li>
             <li class="menu-item"><a class="menu-link" href="/history-order">{% trans 'History orders' %}</a>
             </li>
+            {% if user.is_superuser or user.is_staff %}
             <li class="menu-item">
                 <a class="menu-link" href="/settings">{% trans 'Settings' %}</a>
             </li>
             <li class="menu-item">
                 <a class="menu-link" href="/admin">{% trans 'Administrative section' %}</a>
             </li>
+            {% endif %}
         </ul>
     </div>
 </div>

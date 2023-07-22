@@ -7,7 +7,7 @@ class CustomUserManager(BaseUserManager):
     def create_user(self, email, username, last_name, first_name, surname, phone, password=None, avatar=None):
 
         if not username:
-            raise ValueError('Users must have a username')
+            raise ValueError(_('Users must have a username'))
 
         user = self.model(
             email=self.normalize_email(email),
