@@ -196,6 +196,7 @@
                             </div>
                             <div class="Cart Cart_order">
                                 <!-- Товар на оплату -->
+
                                 <div v-for="product in products" class="Cart-product">
                                     <div class="Cart-block Cart-block_row">
                                         <div class="Cart-block Cart-block_pict">
@@ -211,7 +212,7 @@
                                         </div>
                                     </div>
                                     <div class="Cart-block Cart-block_price">
-                                        <div class="Cart-price">${ product.price }$$
+                                        <div class="Cart-price">${ product.price }$₽
                                         </div>
                                     </div>
                                     <div class="Cart-block Cart-block_row">
@@ -225,7 +226,7 @@
                             <div class="Cart-total">
                                 <div class="Cart-block Cart-block_total">
                                     <strong class="Cart-title">{% trans 'Total with delivery:' %}</strong>
-                                    <span class="Cart-price">${ totalCost }$$</span>
+                                    <span class="Cart-price">${ totalCost }$₽</span>
                                 </div>
                                 <div class="Cart-block">
                                     <button class="btn btn_primary btn_lg" type="submit">{% trans 'Pay' %}

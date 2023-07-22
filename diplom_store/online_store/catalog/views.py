@@ -184,7 +184,13 @@ class CatalogAPIView(APIView):
             queryset = queryset.filter(tags=tags)
 
         if sort:
+            print("SORT", sort)
             sort_field = '-' + sort if sort_type == 'dec' else sort
+            if sort == "rating":
+                sort_field = '-' + 'reviews__rate' if sort_type == 'dec' else 'reviews__rate'
+                queryset = queryset.annotate(avg_reviews=Avg('reviews__rate'))
+            elif sort == 'reviews':
+                queryset = queryset.annotate(avg_reviews=Avg('reviews'))
             queryset = queryset.order_by(sort_field)
 
         return queryset

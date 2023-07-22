@@ -21,7 +21,7 @@ urlpatterns = [
     path('product/<int:pk>/', TemplateView.as_view(template_name="frontend/product.html"), name='product'),
     path('profile/', TemplateView.as_view(template_name="frontend/profile.html")),
     path('progress-payment/', TemplateView.as_view(template_name="frontend/progressPayment.html"), name="progress-payment"),
-    path('sale/', TemplateView.as_view(template_name="frontend/sale.html")),
+    path('sale/', TemplateView.as_view(template_name="frontend/sale.html"), name='sale'),
     path('settings/', TemplateView.as_view(template_name="frontend/settings.html")),
     path('register/', RegisterView.as_view(), name='register'),
     path('login/', MyLoginView.as_view(), name='login'),

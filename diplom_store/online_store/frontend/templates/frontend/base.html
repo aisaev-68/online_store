@@ -17,6 +17,8 @@
     <link rel="stylesheet" href="{% static 'frontend/assets/css/fonts.css' %}">
     <link rel="stylesheet" href="{% static 'frontend/assets/css/basic.css' %}">
     <link rel="stylesheet" href="{% static 'frontend/assets/css/extra.css' %}">
+    <script src="{% static 'frontend/assets/plg/jQuery/jquery-3.5.0.slim.min.js' %}"></script>
+    <script src="{% static 'frontend/assets/plg/range/ion.rangeSlider.min.js' %}"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/maska@2/dist/maska.umd.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -107,13 +109,13 @@
                         <li class="menu-item"><a class="menu-link" href="/">{% trans 'Home' %}</a>
                         </li>
 
-                        <li class="menu-item"><a class="menu-link" href="/sale">{% trans 'Sale' %}</a>
+                        <li class="menu-item"><a class="menu-link" href="{% url 'sale' %}">{% trans 'Sale' %}</a>
                         </li>
                         <li class="menu-item"><span class="menu-label menu-label_success">{% trans 'Hot' %}</span>
-                            <a class="menu-link" href="product.html">{% trans 'Gallery' %}</a>
+                            <a class="menu-link" href="">{% trans 'Gallery' %}</a>
                         </li>
 
-                        <li class="menu-item"><a class="menu-link" href="delivery/">{% trans 'Delivery' %}</a>
+                        <li class="menu-item"><a class="menu-link" href="{% url 'delivery' %}">{% trans 'Delivery' %}</a>
                         </li>
                     </ul>
                 </div>
@@ -288,10 +290,10 @@
 {% block mixins %}
 {% endblock %}
 <script src="{% static 'frontend/assets/js/app.js' %}"></script>
-<script src="{% static 'frontend/assets/plg/jQuery/jquery-3.5.0.slim.min.js' %}"></script>
+<!--<script src="{% static 'frontend/assets/plg/jQuery/jquery-3.5.0.slim.min.js' %}"></script>-->
 <script src="{% static 'frontend/assets/plg/form/jquery.form.js' %}"></script>
 <script src="{% static 'frontend/assets/plg/form/jquery.maskedinput.min.js' %}"></script>
-<script src="{% static 'frontend/assets/plg/range/ion.rangeSlider.min.js' %}"></script>
+<!--<script src="{% static 'frontend/assets/plg/range/ion.rangeSlider.min.js' %}"></script>-->
 <script src="{% static 'frontend/assets/plg/Slider/slick.min.js' %}"></script>
 <script src="{% static 'frontend/assets/js/scripts.js' %}"></script>
 </body>

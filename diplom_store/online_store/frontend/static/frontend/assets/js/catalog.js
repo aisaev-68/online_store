@@ -108,6 +108,7 @@ var mix = {
         params.set('sort', this.selectedSort.id);
         params.set('sortType', this.selectedSort.selected);
       }
+
       if (this.filter.name) {
         params.set('filter.name', this.filter.name);
       }
@@ -219,9 +220,29 @@ var mix = {
           const newURL = this.currentURL + '&' + params.toString();
           window.history.pushState(null, null, newURL);
          },
+      updateFilterPrice(data) {
+      // data - объект с полями from и to, содержащими текущие значения ползунка
+      this.filter.minPrice = data.from;
+      this.filter.maxPrice = data.to;
+    },
+    initRangeSlider() {
+      var $range = $('.range'),
+        $line = $range.find('.range-line');
+
+      $line.ionRangeSlider({
+        onStart: function (data) {
+          $('.rangePrice').text('₽' + data.from + ' - ₽' + data.to);
+        },
+        onChange: (data) => {
+          $('.rangePrice').text('₽' + data.from + ' - ₽' + data.to);
+          this.updateFilterPrice(data);
+        },
+      });
+    },
 
    },
   mounted() {
+    this.initRangeSlider();
     const urlParams = new URL(window.location.href).searchParams;
     this.filterSearch = urlParams.get('filterSearch');
     this.category = urlParams.get('category') ? Number(urlParams.get('category')) : null;

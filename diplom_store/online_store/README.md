@@ -1,73 +1,40 @@
-### 1 этап
-1. Создание нового Django-проекта
-2. Разработка модели хранения данных
-3. Разработка структуры URL на сайте.
-
-| Раздел | Страница     | Описание                 | HTTP-метод | URL       | Пространство имен |
-|--------|--------------|--------------------------|------------|-----------|-------------------|
-|Главная страница| registr.html | Регистарция пользователя | POST       | register/ | register          |
-|Главная страница| login.html   | Вход                     | GET        | login/    | login             |
-|Главная страница| cart.html    | Корзина                  | GET        | cart/     | cart              |
-|Личный кабинет|              | Выход                    | GET        | logout/   | logout            |
-|Личный кабинет| registr.html | Регистарция пользователя | POST       | register/ | register          |
-4. Разработка каркаса приложения
-5. Интеграция вёрстки шаблона сайта
-6. Подключение административной панели и БД
-7. Разработка верхнего меню и футера
-
+### Интернет-магазин Мегано
 
 ### Переменные среды
 Переименовать файл .env.example в .env и установите свои данные
 
 ### Команды для сборки и запуска
 
-1. Установить зависимости окружения: 
+1. Собрать образы и запустить сервисы (при запуске сервисов происходить миграция и заполнение баз тестовыми данным): 
 ```
-poetry install
+docker-compose up -d --build # режим prod
 ```
-2. Активация окружения: 
+3. Просмотр статуса службы:
 ```
-poetry shell
-```
-3. Миграция данных: 
-```
-python manage.py makemigrations
-python manage.py migrate
-```
-4. Заполнение базы тестовыми данными:
-```
-cd djmarketplace
-python manage.py create_superuser
-python manage.py create_room_type
-python manage.py create_houses
-python manage.py create_news
-```
-5. Текстуры
-```
-python manage.py dumpdata online_store.Catalog > online_store/tests/fixtures/catalog-fixtures.json
-python manage.py dumpdata online_store.Catalog > online_store/tests/fixtures/catalog-fixtures.json
-python manage.py dumpdata houseroom.RoomType > houseroom/tests/fixtures/room_type-fixtures.json  
-python manage.py dumpdata houseroom.NumberRoom > houseroom/tests/fixtures/number_room-fixtures.json 
-python manage.py dumpdata news.News > houseroom/tests/fixtures/news-fixtures.json    
-```
-5. Запуск приложения в режиме разработки:
-```
-python manage.py runserver
+docker-compose ps -a
 ```
 
-6. Сайт
+### Другие команды работы с docker
+
+1. Перезапустить службу:
+```
+ docker-compose restart
+```
+2. Запустить службу:
+```
+docker-compose start <имя службы>
+```
+3. Остановить службу:
+```
+docker-compose stop <имя службы>
+```
+4. Закрыть службы и удалить контейнеры:
+```
+docker container stop $(docker container ls -aq) &&  
+docker container rm $(docker container ls -aq) &&  
+docker system prune --all --volumes
+```
+5. Сайт
 ```
 http://127.0.0.1:8080
 ```
-
-sudo apt install gettext
-
-python manage.py makemessages -l en -l ru
-python manage.py compilemessages
-
-django-admin makemessages --all --ignore=.venv
-django-admin compilemessages --ignore=.venv
-
-docker-compose logs online_store_megano_1
-
-https://ejudge.lksh.ru/lang_docs/djbook.ru/rel1.9/topics/db/queries.html

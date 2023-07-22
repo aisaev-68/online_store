@@ -33,6 +33,7 @@ Catalog
                     <div class="Section-columnContent">
                         <form class="form" action="/catalog" @submit.prevent="getCatalogs(1)">
                             {% csrf_token %}
+
                             <div class="form-group">
                                 <div class="range Section-columnRange">
 
@@ -47,18 +48,19 @@ Catalog
                                            :data-from="filter.minPrice"
                                            :data-to="filter.maxPrice"
                                     />
-
-                                    <input type="hidden" name="minPrice" v-model="filters.price.currentFromValue">
-                                    <input type="hidden" name="maxPrice" v-model="filters.price.currentToValue">
+<!--                                    <input type="hidden" id="minPrice" name="minPrice" v-model="filter.minPrice">-->
+<!--                                    <input name="maxPrice" id="maxPrice" v-model="filter.maxPrice" >-->
                                     <!-- Получаем данные по фильтру цены -->
 
                                     <div class="range-price" >{% trans 'Price' %}:&#32;
                                         <div class="rangePrice">
+                                            {{ filter.minPrice }}₽ - {{ filter.maxPrice }}₽
                                         </div>
                                     </div>
 
                                 </div>
                             </div>
+
                             <div class="form-group">
                                 <input class="form-input form-input_full"
                                        id="title"
@@ -192,7 +194,7 @@ Catalog
                         <div class="Card-content">
                             <strong class="Card-title"><a :href="card.href">${ card.title }$</a></strong>
                             <div class="Card-description">
-                                <div class="Card-cost"><span class="Card-price">$${ card.price }$</span></div>
+                                <div class="Card-cost"><span class="Card-price">₽${ card.price }$</span></div>
                                 <div class="Card-category">${ card.categoryName }$</div>
                                 <div class="Card-hover">
                                     <button class="Card-btn" @click="addToBasket(card)">
