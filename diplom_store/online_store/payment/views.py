@@ -47,7 +47,7 @@ class PaymentAPIView(APIView):
         payment_service.start_payment_processing(num_workers=2)
         # Обработка платежа
         payment_data = payment_service.process_payment(number_of_cart)
-        print("PAYMENT", payment_data)
+
         payment_service.payment_queue.join()
         order.status = payment_data['status']
         payment = Payment.objects.create(number=str(number_of_cart), name=name, month=month, year=year, code=code)

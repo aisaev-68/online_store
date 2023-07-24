@@ -1,7 +1,6 @@
 import logging
 from datetime import datetime
 from rest_framework.authentication import SessionAuthentication
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from django.shortcuts import render
@@ -42,7 +41,6 @@ class ProductDetailView(APIView):
         product.title = product.title[:50]
         serializer = ProductReviewsSerializer(product, many=False)
         logger.info(_('Getting detailed information about a product № %s'), product.id)
-        print(666666666, serializer.data)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 

@@ -162,7 +162,7 @@ var mix = {
         this.filter = {
           name: '',
           minPrice: 1,
-          maxPrice: 300000,
+          maxPrice: 30000,
           freeDelivery: false,
           available: true,
           sellers: [],
@@ -271,7 +271,7 @@ var mix = {
       filter: {
         name: '',
         minPrice: 1,
-        maxPrice: 300000,
+        maxPrice: 30000,
         freeDelivery: false,
         available: true,
         sellers: [], // список выбранных продавцов

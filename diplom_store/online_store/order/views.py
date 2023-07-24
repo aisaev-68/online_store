@@ -146,5 +146,5 @@ class OrderActiveAPIView(APIView):
         order = Order.objects.get(user=request.user, status=2)
         serializer = self.serializer_class(order)
         logger.info(_('Getting an active order № %s'), order.orderId)
-        print("ORDER_ACTIVE", serializer.data)
+
         return Response(serializer.data, status=200)

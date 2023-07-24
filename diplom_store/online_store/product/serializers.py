@@ -60,7 +60,6 @@ class ProductReviewsSerializer(serializers.ModelSerializer):
         return [tag.name for tag in obj.tags.all()]
 
 
-
 class CurrentLastPageSerializer(serializers.Serializer):
     current_page = serializers.SerializerMethodField()
     last_page = serializers.SerializerMethodField()

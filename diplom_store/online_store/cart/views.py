@@ -20,8 +20,6 @@ class CartAPIView(APIView):
     """
     Получение продуктов из корзины и их сериализация
     """
-    # permission_classes = (IsAuthenticated,)
-    # authentication_classes = (SessionAuthentication,)
     serializer_class = BasketSerializer
 
     def get(self, request: Request) -> Response:

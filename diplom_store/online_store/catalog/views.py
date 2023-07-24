@@ -103,6 +103,9 @@ class CategoryAPIView(APIView):
 
 
 class CatalogAPIView(APIView):
+    """
+    Представление для фильтрации товаров по характеристикам и сортировки товаров.
+    """
     permission_classes = (AllowAny,)
 
     def filter_queryset(self, queryset):
@@ -171,20 +174,19 @@ class CatalogAPIView(APIView):
                 filters_manufacturers |= Q(brand__name=manufacturer)
             queryset = queryset.filter(filters_manufacturers)
 
-        if free_delivery:
-            queryset = queryset.filter(freeDelivery=free_delivery.lower() == 'true')
+        if free_delivery == 'true':
+            queryset = queryset.filter(freeDelivery=True)
         else:
             queryset = queryset.filter(freeDelivery=False)
 
-        if available:
-            queryset = queryset.filter(available=available.lower() == 'true')
+        if available == 'true':
+            queryset = queryset.filter(available=True)
         else:
-            queryset = queryset.filter(available=available.lower() == 'false')
+            queryset = queryset.filter(available=False)
         if tags:
             queryset = queryset.filter(tags=tags)
 
         if sort:
-            print("SORT", sort)
             sort_field = '-' + sort if sort_type == 'dec' else sort
             if sort == "rating":
                 sort_field = '-' + 'reviews__rate' if sort_type == 'dec' else 'reviews__rate'
@@ -311,7 +313,7 @@ class BannersAPIView(APIView):
 
 
 class SearchAPIView(CatalogAPIView):
-
+    """Представление для поиска товаров через строку поиска на странице."""
     def get(self, request) -> Response:
         super().get(self)
         search_text = self.request.query_params.get('filterSearch')

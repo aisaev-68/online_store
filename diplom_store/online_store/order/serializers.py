@@ -1,9 +1,6 @@
-import datetime
-
 from rest_framework import serializers
 from order.models import Order, OrderProducts
 from product.serializers import ProductSerializer, ProductOrderSerializer
-
 
 
 class OrderForAvatarSerializer(serializers.ModelSerializer):
@@ -12,6 +9,7 @@ class OrderForAvatarSerializer(serializers.ModelSerializer):
         model = Order
         fields = ('orderId', 'createdAt', 'deliveryType', 'paymentType',
                   'totalCost', 'status')
+
     def to_representation(self, obj):
         data = super().to_representation(obj)
         data["createdAt"] = obj.createdAt.strftime('%Y-%m-%d %H:%M')
@@ -54,6 +52,7 @@ class OrderProductsSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         return representation['products']
+
 
 class OrderProductSerializer(serializers.ModelSerializer):
     products = OrderProductsSerializer(source='orderproducts_set.all', many=True)

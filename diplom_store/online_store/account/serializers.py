@@ -1,10 +1,8 @@
-import json
-
 from rest_framework import serializers
 from django.contrib.auth.hashers import make_password
 from drf_yasg import openapi
+
 from account.models import User
-from online_store import settings
 from order.serializers import OrderSerializer, OrderProductSerializer, OrderForAvatarSerializer
 
 
@@ -16,8 +14,6 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['fullName', 'phone', 'email', 'avatar']
-
-
 
 
 class UserAvatarSerializer(serializers.ModelSerializer):
@@ -44,6 +40,7 @@ class UserAvatarSerializer(serializers.ModelSerializer):
         obj.save()
         return obj
 
+
 class UserPasswordChangeSerializer(serializers.ModelSerializer):
     """
     Сериализация пароля пользователя
@@ -52,7 +49,7 @@ class UserPasswordChangeSerializer(serializers.ModelSerializer):
     passwordReply = serializers.CharField()
 
     class Meta:
-        model = User #settings.AUTH_USER_MODEL
+        model = User
         fields = ['passwordCurrent', 'password', 'passwordReply']
 
     def save(self, **kwargs):

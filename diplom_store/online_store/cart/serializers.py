@@ -1,5 +1,4 @@
 from decimal import Decimal
-
 from rest_framework import serializers
 
 from product.models import Product
@@ -12,7 +11,6 @@ class BasketSerializer(serializers.ModelSerializer):
     """
     count = serializers.SerializerMethodField()
     price = serializers.SerializerMethodField()
-    # images = serializers.StringRelatedField(many=True)
     images = serializers.SerializerMethodField()
     href = serializers.StringRelatedField()
     description = serializers.StringRelatedField()
