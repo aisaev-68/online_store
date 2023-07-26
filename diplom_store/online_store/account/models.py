@@ -1,5 +1,6 @@
 import os
 from django.db import models
+from django.core.files.images import ImageFile
 from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
@@ -54,10 +55,17 @@ class User(AbstractUser):
         else:
             self.fullName = f'{self.last_name} {self.first_name} {self.surname}'
         super().save(*args, **kwargs)
-        img = Image.open(self.avatar.path)
-        if img.height > 100 or img.width > 100:
-            img.thumbnail((200, 200))
-        img.save(self.avatar.path, quality=70, optimize=True)
+        if self.avatar:
+            img = Image.open(self.avatar)
+            if img.height > 200 or img.width > 200:
+                img.thumbnail((200, 200))
+            # Перезапишем файл изображения с помощью ImageFile
+            img.save(self.avatar.path, quality=70, optimize=True)
+            # Обновляем поле `avatar` в базе данных для отображения обработанного изображения
+            self.avatar = ImageFile(open(self.avatar.path, "rb"))
+            super().save(*args, **kwargs)  # Сохраняем модель с обновленным полем `avatar`
+
+        print("AVATAR", self.avatar)
 
 
     def get_url(self) -> str:

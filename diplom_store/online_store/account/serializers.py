@@ -20,6 +20,7 @@ class UserAvatarSerializer(serializers.ModelSerializer):
     """
     Сериализация аватара.
     """
+
     class Meta:
         model = User
         fields = ['avatar', 'last_name', 'first_name', 'surname']
@@ -35,7 +36,7 @@ class UserAvatarSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('The image file size should not exceed 2 MB.')
         return avatar
 
-    def update(self,obj, validated_data):
+    def update(self, obj, validated_data):
         obj.avatar = validated_data.get('avatar', obj.avatar)
         obj.save()
         return obj

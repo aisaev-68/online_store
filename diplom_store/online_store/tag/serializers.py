@@ -4,11 +4,10 @@ from tag.models import Tag
 
 
 class TagSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор тегов.
+    """
 
     class Meta:
         model = Tag
         fields = ('id', 'name')
-
-
-
-

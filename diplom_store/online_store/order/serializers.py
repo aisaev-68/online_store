@@ -4,7 +4,6 @@ from product.serializers import ProductSerializer, ProductOrderSerializer
 
 
 class OrderForAvatarSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Order
         fields = ('orderId', 'createdAt', 'deliveryType', 'paymentType',
@@ -24,7 +23,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ('products', )
+        fields = ('products',)
 
     def to_representation(self, obj):
         data = super().to_representation(obj)
@@ -35,7 +34,11 @@ class OrderSerializer(serializers.ModelSerializer):
         data['createdAt'] = obj.createdAt.strftime('%Y-%m-%d %H:%M')
         return data
 
+
 class OrderProductsSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор товаров заказа.
+    """
     products = serializers.SerializerMethodField()
 
     class Meta:
@@ -55,6 +58,9 @@ class OrderProductsSerializer(serializers.ModelSerializer):
 
 
 class OrderProductSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор заказов.
+    """
     products = OrderProductsSerializer(source='orderproducts_set.all', many=True)
 
     class Meta:

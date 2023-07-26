@@ -5,6 +5,9 @@ from product.models import Product
 
 
 class CategorySerializer(serializers.ModelSerializer):
+    """
+    Сериализатор категорий.
+    """
     image = serializers.SerializerMethodField()
     subcategories = serializers.SerializerMethodField()
 
@@ -25,6 +28,9 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class SubcategorySerializer(serializers.ModelSerializer):
+    """
+    Сериализатор подкатегорий товара.
+    """
     image = serializers.SerializerMethodField()
 
     class Meta:
@@ -48,5 +54,3 @@ class BannersSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ['title', 'href', 'price', 'images']
-
-

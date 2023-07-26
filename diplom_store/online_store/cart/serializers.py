@@ -4,7 +4,6 @@ from rest_framework import serializers
 from product.models import Product
 
 
-
 class BasketSerializer(serializers.ModelSerializer):
     """
     Сериализация корзины продуктов
@@ -33,10 +32,8 @@ class BasketSerializer(serializers.ModelSerializer):
     def get_price(self, obj):
         return Decimal(self.context.get(str(obj.pk)).get('price'))
 
-
     def get_images(self, obj):
         return ['/media/' + str(image.image) for image in obj.images.all()]
-
 
     def get_reviews(self, obj):
         return obj.reviews.count()

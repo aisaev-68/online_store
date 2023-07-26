@@ -3,17 +3,23 @@ import locale
 
 from product.models import Product, Review, Sale, ProductImage, Seller, Manufacturer, Specification
 
-
 locale.setlocale(locale.LC_ALL, 'ru_RU.UTF-8')
 
 
 class ProductImageSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор изображений товара
+    """
+
     class Meta:
         model = ProductImage
         fields = ('image',)
 
 
 class ReviewSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор отзывов.
+    """
     email = serializers.EmailField()
 
     class Meta:
@@ -25,7 +31,11 @@ class ReviewSerializer(serializers.ModelSerializer):
         data["date"] = obj.date.strftime('%Y-%m-%d %H:%M')
         return data
 
+
 class ProductReviewsSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор товаров, отзывов к товару и рейтинга.
+    """
     images = serializers.SerializerMethodField()
     rating = serializers.SerializerMethodField()
     reviews = ReviewSerializer(many=True)
@@ -36,8 +46,9 @@ class ProductReviewsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ('id', 'category', 'price', 'count', 'date', 'title', 'description', 'fullDescription', 'href', 'freeDelivery',
-                  'images', 'tags', 'specifications', 'reviews', 'rating')
+        fields = (
+        'id', 'category', 'price', 'count', 'date', 'title', 'description', 'fullDescription', 'href', 'freeDelivery',
+        'images', 'tags', 'specifications', 'reviews', 'rating')
 
     def get_specifications(self, obj):
         return obj.attributes
@@ -78,6 +89,9 @@ class CurrentLastPageSerializer(serializers.Serializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор товаров.
+    """
     images = serializers.SerializerMethodField()
     rating = serializers.SerializerMethodField()
     reviews = serializers.SerializerMethodField()
@@ -88,8 +102,9 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ('id', 'category', 'price', 'count', 'date', 'title', 'description', 'fullDescription', 'href', 'freeDelivery',
-                  'images', 'tags', 'attributes', 'reviews', 'rating')
+        fields = (
+        'id', 'category', 'price', 'count', 'date', 'title', 'description', 'fullDescription', 'href', 'freeDelivery',
+        'images', 'tags', 'attributes', 'reviews', 'rating')
 
     def get_reviews(self, obj):
         return obj.reviews.count()
@@ -113,6 +128,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
     def get_title(self, obj):
         return obj.title[:25]
+
 
 class ProductOrderSerializer(serializers.ModelSerializer):
     category = serializers.PrimaryKeyRelatedField(read_only=True)
@@ -141,6 +157,7 @@ class ProductOrderSerializer(serializers.ModelSerializer):
     def get_reviews(self, instance):
         return instance.reviews.count()
 
+
 class SaleSerializer(serializers.ModelSerializer):
     """
     Сериализация товаров со скидками
@@ -163,7 +180,6 @@ class SaleSerializer(serializers.ModelSerializer):
         model = Sale
         fields = ('id', 'price', 'salePrice', 'dateFrom', 'dateTo', 'title', 'href', 'images')
 
-
     def to_representation(self, obj):
         data = super().to_representation(obj)
         data["dateFrom"] = obj.dateFrom.strftime('%d.%m')
@@ -172,18 +188,27 @@ class SaleSerializer(serializers.ModelSerializer):
 
 
 class ManufacturerSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор производителей.
+    """
     class Meta:
         model = Manufacturer
         fields = ('pk', 'name',)
 
 
 class SellerSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор продавцов.
+    """
     class Meta:
         model = Seller
         fields = ('pk', 'name', 'city', 'address')
 
 
 class SpecificationSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор характеристик товаров.
+    """
     class Meta:
         model = Specification
         fields = ('id', 'attributes')
