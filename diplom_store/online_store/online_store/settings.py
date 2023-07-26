@@ -22,9 +22,9 @@ AUTH_USER_MODEL = 'account.User'
 
 CSRF_FAILURE_VIEW = 'online_store.views.error_403'
 
-SWAGGER_SETTINGS = {
-    "DEFAULT_MODEL_RENDERING": "example"
-}
+# SWAGGER_SETTINGS = {
+#     "DEFAULT_MODEL_RENDERING": "example"
+# }
 
 # Application definition
 INSTALLED_APPS = [
@@ -35,8 +35,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admindocs',
-    'rest_framework',
     'corsheaders',
+    'rest_framework',
     'drf_yasg',
     'django_filters',
     'frontend.apps.FrontendConfig',
@@ -62,9 +62,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CORS_ORIGIN_ALLOW_ALL = True
+# CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOWED_ORIGINS = [
+    "http://127.0.0.1:8000",
+]
 
-CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8080']
+# CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:800']
 
 ROOT_URLCONF = 'online_store.urls'
 
@@ -73,6 +76,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': ['/www/data/templates/',
                  '/www/data/templates/admin/',
+                 '/www/data/templates/drf-yasg/',
                  ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -87,6 +91,32 @@ TEMPLATES = [
         },
     },
 ]
+
+# SWAGGER_SETTINGS = {
+#     'USE_SESSION_AUTH': False,
+#     'SECURITY_DEFINITIONS': {
+#         'Basic': {
+#             'type': 'basic'
+#         },
+#     },
+#     # Дополнительные настройки Swagger
+#     'VALIDATOR_URL': None,  # Если требуется использовать собственный валидатор OpenAPI, укажите здесь URL
+#     # ...
+#
+#     # Добавьте этот блок для передачи CSRF-токена в запросах Swagger
+#     'SECURITY_HEADERS': {
+#         'X-CSRFToken': {
+#             'type': 'apiKey',
+#             'in': 'header',
+#             'name': 'X-CSRFToken',
+#         }
+#     },
+#     'SECURITY_REQUIREMENTS': [
+#         {
+#             'X-CSRFToken': []
+#         }
+#     ],
+# }
 
 WSGI_APPLICATION = 'online_store.wsgi.application'
 

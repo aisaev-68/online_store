@@ -156,7 +156,7 @@
                                             </div>
                                             <div class="Card-category">${ card.categoryName }$
                                             </div>
-                                            <div class="Card-hover"><a class="Card-btn" href="#"><img
+                                            <div class="Card-hover"><a class="Card-btn" @click="addToBasket(card)"><img
                                                     src="{% static 'frontend/assets/img/icons/card/cart.svg' %}"
                                                     alt="cart.svg"/></a>
                                             </div>
