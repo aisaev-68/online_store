@@ -315,7 +315,7 @@ class BannersAPIView(APIView):
 class SearchAPIView(CatalogAPIView):
     """Представление для поиска товаров через строку поиска на странице."""
     def get(self, request) -> Response:
-        super().get(self)
+        super().get(request)
         search_text = self.request.query_params.get('filterSearch')
         product = Product.objects.filter(available=True, title__icontains=search_text).order_by('-date').all()
         logger.info(_("Search for products in the database"))

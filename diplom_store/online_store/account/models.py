@@ -15,7 +15,8 @@ def get_upload_path_by_user(instance, filename):
     :param filename:
     :return: возвращает путь для записи файла
     """
-    return os.path.join('avatar/', now().date().strftime("%Y/%m/%d"), filename)
+    # return os.path.join('avatars/', now().date().strftime("%Y/%m/%d"), filename)
+    return os.path.join('avatars/', filename)
 
 
 def validate_image_file_extension(image):
@@ -42,7 +43,7 @@ class User(AbstractUser):
         null=True,
         validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png']),
                     validate_image_file_extension], verbose_name=_("Avatar"),
-        default='avatar/default_avatars.png'
+        default='avatars/default_avatars.png'
     )
 
     def __str__(self) -> str:
@@ -54,18 +55,15 @@ class User(AbstractUser):
             self.last_name, self.first_name, self.surname = str(self.fullName).split(' ', 2)
         else:
             self.fullName = f'{self.last_name} {self.first_name} {self.surname}'
-        super().save(*args, **kwargs)
+        # super().save(*args, **kwargs)
         if self.avatar:
-            img = Image.open(self.avatar)
+            img = Image.open(self.avatar.path)
             if img.height > 200 or img.width > 200:
                 img.thumbnail((200, 200))
             # Перезапишем файл изображения с помощью ImageFile
             img.save(self.avatar.path, quality=70, optimize=True)
-            # Обновляем поле `avatar` в базе данных для отображения обработанного изображения
-            self.avatar = ImageFile(open(self.avatar.path, "rb"))
-            super().save(*args, **kwargs)  # Сохраняем модель с обновленным полем `avatar`
-
-        print("AVATAR", self.avatar)
+            # Обновляем поле avatar в базе данных для отображения обработанного изображения
+        super().save(*args, **kwargs)  # Сохраняем модель с обновленным полем avatar
 
 
     def get_url(self) -> str:

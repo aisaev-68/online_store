@@ -1,4 +1,4 @@
-### Интернет-магазин Мегано
+## Интернет-магазин Мегано
 
 ### Переменные среды
 Переименовать файл .env.example в .env и установите свои данные
@@ -9,9 +9,18 @@
 ```
 docker-compose up -d --build # режим prod
 ```
+2. Для выгрузки фикстур с командной строки наберите:
+```
+docker-compose exec megano python manage.py dumpdata product > tests/fixtures/product-fixtures.json
+```
+
 3. Просмотр статуса службы:
 ```
 docker-compose ps -a
+```
+4. Просмотр лога лога приложения
+```
+docker-compose logs megano
 ```
 
 ### Другие команды работы с docker
@@ -34,11 +43,8 @@ docker container stop $(docker container ls -aq) &&
 docker container rm $(docker container ls -aq) &&  
 docker system prune --all --volumes
 ```
-5. Сайт
+
+### Сайт
 ```
 http://127.0.0.1:8080
-```
-6. Для выгрузки фикстур с командной строки наберите:
-```
-docker-compose exec megano python manage.py dumpdata product > tests/fixtures/product-fixtures.json
 ```
