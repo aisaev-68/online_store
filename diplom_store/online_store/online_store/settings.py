@@ -22,9 +22,6 @@ AUTH_USER_MODEL = 'account.User'
 
 CSRF_FAILURE_VIEW = 'online_store.views.error_403'
 
-# SWAGGER_SETTINGS = {
-#     "DEFAULT_MODEL_RENDERING": "example"
-# }
 
 # Application definition
 INSTALLED_APPS = [
@@ -65,9 +62,10 @@ MIDDLEWARE = [
 # CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:8000",
+    "http://127.0.0.1:8080",
 ]
 
-# CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:800']
+CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8080']
 
 ROOT_URLCONF = 'online_store.urls'
 
@@ -92,31 +90,6 @@ TEMPLATES = [
     },
 ]
 
-# SWAGGER_SETTINGS = {
-#     'USE_SESSION_AUTH': False,
-#     'SECURITY_DEFINITIONS': {
-#         'Basic': {
-#             'type': 'basic'
-#         },
-#     },
-#     # Дополнительные настройки Swagger
-#     'VALIDATOR_URL': None,  # Если требуется использовать собственный валидатор OpenAPI, укажите здесь URL
-#     # ...
-#
-#     # Добавьте этот блок для передачи CSRF-токена в запросах Swagger
-#     'SECURITY_HEADERS': {
-#         'X-CSRFToken': {
-#             'type': 'apiKey',
-#             'in': 'header',
-#             'name': 'X-CSRFToken',
-#         }
-#     },
-#     'SECURITY_REQUIREMENTS': [
-#         {
-#             'X-CSRFToken': []
-#         }
-#     ],
-# }
 
 WSGI_APPLICATION = 'online_store.wsgi.application'
 

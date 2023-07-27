@@ -14,4 +14,4 @@ python manage.py dumpdata payment > tests/fixtures/payment-fixtures.json
 python manage.py dumpdata product > tests/fixtures/product-fixtures.json
 python manage.py dumpdata settings > tests/fixtures/settings-fixtures.json
 python manage.py dumpdata tag > tests/fixtures/tag-fixtures.json
-python manage.py runserver 0.0.0.0:8080
+python manage.py runserver 0.0.0.0:8000
