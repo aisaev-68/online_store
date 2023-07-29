@@ -30,7 +30,7 @@ class Product(models.Model):
     count = models.IntegerField(default=0, verbose_name=_('quantity'))
     date = models.DateTimeField(auto_now_add=True, verbose_name=_('created data'))
     title = models.CharField(max_length=150, verbose_name=_('title'))
-    fullDescription = models.TextField(max_length=100, verbose_name=_('full description product'))
+    fullDescription = models.TextField(max_length=2000, verbose_name=_('full description product'))
     freeDelivery = models.BooleanField(default=False, verbose_name=_('free shipping'))  # бесплатная доставка
     limited = models.BooleanField(default=False, verbose_name=_('limited edition'))  # ограниченный тираж
     banner = models.BooleanField(default=False, verbose_name=_('banner on home page'))
