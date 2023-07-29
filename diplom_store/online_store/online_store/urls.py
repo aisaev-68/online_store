@@ -25,12 +25,13 @@ schema_view = get_schema_view(
    ),
    # patterns=[path('api/', include('api.urls')), ],
    public=True,
-   permission_classes=[permissions.AllowAny],
+   permission_classes=[permissions.IsAuthenticatedOrReadOnly],
 )
 
 
 urlpatterns = [
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('swagger.json', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path('admin/doc/', include('django.contrib.admindocs.urls')),
     path('admin/', admin.site.urls, name="admin"),
     path('', include('frontend.urls')),

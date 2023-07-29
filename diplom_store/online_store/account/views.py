@@ -11,7 +11,7 @@ from django.views import View
 from rest_framework.parsers import MultiPartParser
 from rest_framework import status, generics
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.authentication import SessionAuthentication
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -28,13 +28,13 @@ class AccountUserAPIView(APIView):
     API для получения аватара и полного имени.
     """
     permission_classes = (IsAuthenticated,)
-    authentication_classes = (SessionAuthentication,)
+    authentication_classes = (SessionAuthentication,BasicAuthentication)
     serializer_class = UserAvatarSerializer
 
-    # @swagger_auto_schema(
-    #     responses={200: UserAvatarSerializer},
-    #     operation_description=_("Get user full name and avatar"),
-    # )
+    @swagger_auto_schema(
+        responses={200: UserAvatarSerializer},
+        operation_description=_("Get user full name and avatar"),
+    )
     def get(self, request, *args, **kwargs) -> Response:
         """
         Метод для получения аватара и полного имени.
@@ -43,6 +43,7 @@ class AccountUserAPIView(APIView):
         :param kwargs:
         :return: Response
         """
+        print(99999999999999)
         user = self.request.user
         serializer = self.serializer_class(user)
         logger.info(_('Avatar data successfully serialized!'))
