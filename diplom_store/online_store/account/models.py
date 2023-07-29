@@ -16,7 +16,8 @@ def get_upload_path_by_user(instance, filename):
     :return: возвращает путь для записи файла
     """
     # return os.path.join('avatars/', now().date().strftime("%Y/%m/%d"), filename)
-    return os.path.join('avatars/', filename)
+    #return os.path.join('avatars/', filename)
+    return f'media/avatars/{instance.id}/{filename}'
 
 
 def validate_image_file_extension(image):
@@ -50,24 +51,16 @@ class User(AbstractUser):
         return self.username
 
     def save(self, *args, **kwargs) -> None:
-
         if self.fullName:
             self.last_name, self.first_name, self.surname = str(self.fullName).split(' ', 2)
         else:
             self.fullName = f'{self.last_name} {self.first_name} {self.surname}'
-        # super().save(*args, **kwargs)
-        if self.avatar:
-            img = Image.open(self.avatar.path)
-            if img.height > 200 or img.width > 200:
-                img.thumbnail((200, 200))
-            # Перезапишем файл изображения с помощью ImageFile
-            img.save(self.avatar.path, quality=70, optimize=True)
-            # Обновляем поле avatar в базе данных для отображения обработанного изображения
         super().save(*args, **kwargs)  # Сохраняем модель с обновленным полем avatar
 
 
     def get_url(self) -> str:
-        return f'/profile/'
+        return f'/profile/' # переделать
+
     def clean(self):
         super().clean()
         try:

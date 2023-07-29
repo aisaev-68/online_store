@@ -72,10 +72,8 @@ class Command(BaseCommand):
                 with open(path_absolute, 'wb') as f:
                     f.write(request.content)
 
-                # price = decimal.Decimal(value.get('item_base_price'))
                 price = value.get('item_base_price')
-                # rating = value.get('rating')
-                # rating = decimal.Decimal()
+
                 attributes = {}
                 description = ''
                 for values in value.get('propertiesPortion'):

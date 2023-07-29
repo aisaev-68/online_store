@@ -226,6 +226,9 @@ class UserAvatarAPIView(APIView):
         """
         serializer = self.serializer_class(request.user, data=request.data, partial=True)
         if serializer.is_valid():
+            user = request.user
+            avatar_file = request.FILES.get('avatar')
+            user.avatar = avatar_file
             user = serializer.save()
             logger.info(_('Update user %s avatar!'), request.user.username)
             return Response({'url': user.avatar.url})
