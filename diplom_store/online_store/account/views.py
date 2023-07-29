@@ -28,7 +28,7 @@ class AccountUserAPIView(APIView):
     API для получения аватара и полного имени.
     """
     permission_classes = (IsAuthenticated,)
-    authentication_classes = (SessionAuthentication,BasicAuthentication)
+    authentication_classes = (SessionAuthentication, BasicAuthentication)
     serializer_class = UserAvatarSerializer
 
     @swagger_auto_schema(
@@ -275,7 +275,7 @@ class CheckAuthenticationAPI(APIView):
     """
     Представление API для проверки пользователя на аутентификацию.
     """
-
+    authentication_classes = (SessionAuthentication, BasicAuthentication)
     def get(self, request) -> Response:
         """
         Метод проверки пользователя на аутентификацию.

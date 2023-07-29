@@ -2,7 +2,7 @@ import logging
 from django.utils.translation import gettext_lazy as _
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.authentication import SessionAuthentication
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 
 from rest_framework.response import Response
 
@@ -21,7 +21,7 @@ class PaymentAPIView(APIView):
     """
 
     permission_classes = (IsAuthenticated,)
-    authentication_classes = (SessionAuthentication,)
+    authentication_classes = (SessionAuthentication, BasicAuthentication)
     serializer_class = PaymentSerializer
 
     def get(self, request, *args, **kwargs):

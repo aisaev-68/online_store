@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from rest_framework.authentication import SessionAuthentication
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -27,7 +27,7 @@ class OrderHistoryAPiView(APIView):
     Представление для получения истории заказов.
     """
     permission_classes = (IsAuthenticated,)
-    authentication_classes = (SessionAuthentication,)
+    authentication_classes = (SessionAuthentication, BasicAuthentication)
     serializer_class = OrderProductSerializer
 
     def pagination_queryset(self):
@@ -101,7 +101,7 @@ class OrderHistoryAPiView(APIView):
 
 class OrderAPIView(APIView):
     permission_classes = (IsAuthenticated,)
-    authentication_classes = (SessionAuthentication,)
+    authentication_classes = (SessionAuthentication, BasicAuthentication)
     serializer_class = OrderProductSerializer
 
     def get(self, request, pk, *args, **kwargs):
@@ -139,7 +139,7 @@ class OrderAPIView(APIView):
 
 class OrderActiveAPIView(APIView):
     permission_classes = (IsAuthenticated,)
-    authentication_classes = (SessionAuthentication,)
+    authentication_classes = (SessionAuthentication, BasicAuthentication)
     serializer_class = OrderProductSerializer
 
     def get(self, request, *args, **kwargs):

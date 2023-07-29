@@ -6,7 +6,7 @@ from rest_framework.request import Request
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from rest_framework.views import APIView
-from rest_framework.authentication import SessionAuthentication
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 
 from cart.cart import Cart
 from cart.serializers import BasketSerializer
@@ -45,7 +45,7 @@ class BasketAPIView(APIView):
     Представление для получения и удаления продуктов из корзины, добавления продуктов в корзину
     """
     serializer_class = BasketSerializer
-    authentication_classes = (SessionAuthentication,)
+    authentication_classes = (SessionAuthentication, BasicAuthentication)
 
     def get(self, request, *args, **kwargs):
         cart = Cart(request)

@@ -2,7 +2,7 @@ import logging
 from django.utils.translation import gettext_lazy as _
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
-from rest_framework.authentication import SessionAuthentication
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -19,7 +19,7 @@ class SettingsAPIView(APIView):
     API для получения и обновления настроек.
     """
     permission_classes = (IsAdminOrSuperuser,)
-    authentication_classes = (SessionAuthentication,)
+    authentication_classes = (SessionAuthentication, BasicAuthentication)
     serializer_class = PaymentSettingsSerializer
 
     @swagger_auto_schema(
