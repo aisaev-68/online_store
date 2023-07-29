@@ -19,7 +19,7 @@ urlpatterns = [
     path('payment/<int:pk>/', TemplateView.as_view(template_name="frontend/payment.html"), name='payment-detail'),
     path('payment-someone/', TemplateView.as_view(template_name="frontend/paymentsomeone.html"), name="payment-someone"),
     path('product/<int:pk>/', TemplateView.as_view(template_name="frontend/product.html"), name='product'),
-    path('profile/', TemplateView.as_view(template_name="frontend/profile.html")),
+    path('profile/', TemplateView.as_view(template_name="frontend/profile.html"), name='profile'),
     path('progress-payment/', TemplateView.as_view(template_name="frontend/progressPayment.html"), name="progress-payment"),
     path('sale/', TemplateView.as_view(template_name="frontend/sale.html"), name='sale'),
     path('settings/', TemplateView.as_view(template_name="frontend/settings.html")),

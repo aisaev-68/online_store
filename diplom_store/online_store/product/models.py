@@ -2,6 +2,7 @@ import os
 
 from django.utils.translation import gettext_lazy as _
 from django.db import models
+from django.urls import reverse
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils.timezone import now
 
@@ -16,7 +17,6 @@ def get_upload_path_by_products(instance, filename):
         :param filename: имя файла изображения
         :return: путь для сохранения
         """
-    # return f'product_images/"%Y/%m/%d"/{filename}'
     return os.path.join('product_images/', now().date().strftime("%Y/%m/%d"), filename)
 
 
@@ -57,7 +57,7 @@ class Product(models.Model):
         Получение ссылки для продукта
         :return: ссылка на детальную информацию о продукте
         """
-        return f'/product/{self.pk}/'
+        return reverse('product', args=[self.pk])
 
     def description(self):
         """
@@ -176,7 +176,7 @@ class Sale(models.Model):
         Получение ссылки на детальную страницу продукта
         :return: ссылка
         """
-        return f'/product/{self.product.pk}'
+        return reverse('product', args=[self.product.pk])
 
     def __str__(self):
         return self.product.title

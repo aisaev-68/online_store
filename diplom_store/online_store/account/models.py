@@ -1,12 +1,10 @@
-import os
 from django.db import models
-from django.core.files.images import ImageFile
+from django.urls import reverse
 from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import FileExtensionValidator
-from PIL import Image
-from django.utils.timezone import now
+
 
 
 def get_upload_path_by_user(instance, filename):
@@ -17,7 +15,7 @@ def get_upload_path_by_user(instance, filename):
     """
     # return os.path.join('avatars/', now().date().strftime("%Y/%m/%d"), filename)
     #return os.path.join('avatars/', filename)
-    return f'media/avatars/{instance.id}/{filename}'
+    return f'avatars/{instance.id}/{filename}'
 
 
 def validate_image_file_extension(image):
@@ -59,7 +57,8 @@ class User(AbstractUser):
 
 
     def get_url(self) -> str:
-        return f'/profile/' # переделать
+        # return f'/profile/' # переделать
+        return reverse('profile')
 
     def clean(self):
         super().clean()
