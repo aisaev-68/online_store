@@ -7,18 +7,112 @@ from django.utils.dateparse import parse_datetime
 from mimesis import Address, Person
 from mimesis.enums import Locale, Gender
 
-from shopapp.cart import Cart
-from shopapp.forms import OrderModelForm
-from shopapp.models import Product, Order, OrderItem, Category
+from account.models import User
+from catalog.models import Category
+from product.models import Product, Manufacturer, Seller, Sale, Specification, ProductImage
+from order.models import Order, OrderProducts
+from payment.models import Payment
+from settings.models import PaymentSettings
+from tag.models import Tag
 
 
-def get_promo_code(num: int):
-    code_chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-    code = ''
-    for i in range(0, num):
-        slice_start = random.randint(0, len(code_chars) - 1)
-        code += code_chars[slice_start: slice_start + 1]
-    return code
+class UserTestCase(TestCase):
+    pass
+
+class CategoryTestCase(TestCase):
+    pass
+
+
+
+
+class ProductTestCase(TestCase):
+    fixtures = [
+        'catalog-fixtures.json',
+        'category-fixtures.json',
+        'groups-fixtures.json',
+        'users-fixtures.json',
+        'profiles-fixtures.json',
+        'products-fixtures.json',
+        'orders-fixtures.json',
+    ]
+
+    @classmethod
+    def setUpClass(cls):
+        # Запускаются 1 раз перед тестами
+        """
+        Выборка продуктов
+        """
+        super().setUpClass()
+        cls.user = User.objects.get(pk=1)
+        cls.category = Category.objects.filter(name='Телефоны и смарт часы').first()
+        cls.products = Product.objects.filter(archived=False)
+
+    def setUp(self) -> None:
+        """
+        Вход пользователя и создание заказа для дальнейшего теста.
+        """
+        self.client.force_login(self.user)
+
+
+    def tearDown(self) -> None:
+        pass
+
+    def test_product_list(self):
+        response = self.client.get(
+            reverse('shopapp:products_list')
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'shopapp/products-list.html')
+
+
+    def test_product_detail(self):
+        response = self.client.get(
+            reverse('shopapp:product_detail', kwargs={'pk': 1})
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'shopapp/product_detail.html')
+
+
+    def test_product_create(self):
+        response = self.client.post(
+            reverse('shopapp:create_product'), data={
+                "catalog": self.category.catalog,
+                "catalog_eng": self.category,
+                "name": "Смартфон Apple iPhone 11 64GB",
+                "description": "Смартфон Apple iPhone 11 64 ГБ обладает интересным дизайном и управляется предустановленной операционной системой iOS 14.",
+                "attributes": {"Цвет": "Черный"},
+                "created_by": 1,
+                "rating": 3.2,
+                "price": 25090,
+                "image": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcS7JZqEk0p0KALzrLay6wBq2UtBy2agrfsR7C2kP7nnEvtM7f9N&usqp=CAE",
+                "discount": 2,
+                "sold": 0,
+                "products_count": 50,
+                "brand": "Apple",
+            }
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'shopapp/create_product.html')
+
+
+    def test_product_archived(self):
+        response = self.client.post(
+            reverse("shopapp:product_archived", kwargs={"pk": 1})
+        )
+
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse("shopapp:products_list"))
+
+    def tes_product_update(self):
+        response = self.client.post(
+            reverse("shopapp:update_product", kwargs={"pk": 1}), data={"product_count": 100}
+        )
+
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse("shopapp:product_detail"))
 
 
 class OrderTestCase(TestCase):
@@ -254,91 +348,3 @@ class CartTestCase(TestCase):
         self.assertRedirects(response, reverse("shopapp:cart_detail"))
 
 
-class ProductTestCase(TestCase):
-    fixtures = [
-        'catalog-fixtures.json',
-        'category-fixtures.json',
-        'groups-fixtures.json',
-        'users-fixtures.json',
-        'profiles-fixtures.json',
-        'products-fixtures.json',
-        'orders-fixtures.json',
-    ]
-
-    @classmethod
-    def setUpClass(cls):
-        # Запускаются 1 раз перед тестами
-        """
-        Выборка продуктов
-        """
-        super().setUpClass()
-        cls.user = User.objects.get(pk=1)
-        cls.category = Category.objects.filter(name='Телефоны и смарт часы').first()
-        cls.products = Product.objects.filter(archived=False)
-
-    def setUp(self) -> None:
-        """
-        Вход пользователя и создание заказа для дальнейшего теста.
-        """
-        self.client.force_login(self.user)
-
-
-    def tearDown(self) -> None:
-        pass
-
-    def test_product_list(self):
-        response = self.client.get(
-            reverse('shopapp:products_list')
-        )
-
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'shopapp/products-list.html')
-
-
-    def test_product_detail(self):
-        response = self.client.get(
-            reverse('shopapp:product_detail', kwargs={'pk': 1})
-        )
-
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'shopapp/product_detail.html')
-
-
-    def test_product_create(self):
-        response = self.client.post(
-            reverse('shopapp:create_product'), data={
-                "catalog": self.category.catalog,
-                "catalog_eng": self.category,
-                "name": "Смартфон Apple iPhone 11 64GB",
-                "description": "Смартфон Apple iPhone 11 64 ГБ обладает интересным дизайном и управляется предустановленной операционной системой iOS 14.",
-                "attributes": {"Цвет": "Черный"},
-                "created_by": 1,
-                "rating": 3.2,
-                "price": 25090,
-                "image": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcS7JZqEk0p0KALzrLay6wBq2UtBy2agrfsR7C2kP7nnEvtM7f9N&usqp=CAE",
-                "discount": 2,
-                "sold": 0,
-                "products_count": 50,
-                "brand": "Apple",
-            }
-        )
-
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'shopapp/create_product.html')
-
-
-    def test_product_archived(self):
-        response = self.client.post(
-            reverse("shopapp:product_archived", kwargs={"pk": 1})
-        )
-
-        self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, reverse("shopapp:products_list"))
-
-    def tes_product_update(self):
-        response = self.client.post(
-            reverse("shopapp:update_product", kwargs={"pk": 1}), data={"product_count": 100}
-        )
-
-        self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, reverse("shopapp:product_detail"))
