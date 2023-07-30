@@ -99,7 +99,7 @@ class ManufacturerListAPIView(APIView):
 
 class SellerListAPIView(APIView):
     """
-    Предсталение для получения продавцов.
+    Представление для получения продавцов.
     """
 
     def get(self, request: Request) -> Response:
