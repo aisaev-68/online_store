@@ -43,7 +43,6 @@ class AccountUserAPIView(APIView):
         :param kwargs:
         :return: Response
         """
-        print(99999999999999)
         user = self.request.user
         serializer = self.serializer_class(user)
         logger.info(_('Avatar data successfully serialized!'))
