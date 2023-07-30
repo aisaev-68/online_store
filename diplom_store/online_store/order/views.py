@@ -41,7 +41,7 @@ class OrderHistoryAPiView(APIView):
             limit = settings.REST_FRAMEWORK['PAGE_SIZE']
 
         paginator.page_size = limit
-        queryset = Order.objects.order_by('-createdAt').all()
+        queryset = Order.objects.filter(user=self.request.user).order_by('-createdAt').all()
         len_orders = len(queryset)
 
         paginated_queryset = paginator.paginate_queryset(queryset, self.request)
