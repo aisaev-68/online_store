@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from django.urls import reverse
 import locale
 
 from product.models import Product, Review, Sale, ProductImage, Seller, Manufacturer, Specification
@@ -174,7 +175,7 @@ class SaleSerializer(serializers.ModelSerializer):
         return [image.src() for image in product_images]
 
     def get_href(self, obj):
-        return f'/product/{obj.product.pk}'
+        return reverse('product', args=[obj.product.pk])
 
     class Meta:
         model = Sale
