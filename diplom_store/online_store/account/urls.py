@@ -5,7 +5,7 @@ from account.views import CheckAuthenticationAPI, AccountUserAPIView, UserProfil
 
 app_name = 'account'
 urlpatterns = [
-    path('api/account/', AccountUserAPIView.as_view()),
+    path('api/account/', AccountUserAPIView.as_view(), name='account'),
     path('api/profile/', UserProfileAPIView.as_view()),
     path('api/profile/avatar/', UserAvatarAPIView.as_view()),
     path('api/profile/password/', UserPasswordChangeView.as_view(), name='user-password-change'),
