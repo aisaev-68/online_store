@@ -7,5 +7,5 @@ app_name = 'cart'
 
 urlpatterns = [
     path('api/cart/', CartAPIView.as_view(), name='cart'),
-    path('api/basket/', BasketAPIView.as_view()),
+    path('api/basket/', BasketAPIView.as_view(), name='basket'),
 ]

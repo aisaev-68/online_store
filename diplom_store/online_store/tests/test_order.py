@@ -66,7 +66,7 @@ class TestOrderAPViews(APITestCase):
         url = reverse('order-detail', args=[self.order.id])
         data = {
             'fullName': 'Updated Name',
-            'phone': '987654321',
+            'phone': '8987654321',
             'email': 'updated@example.com',
             'deliveryType': 'express',
             'city': 'New City',
