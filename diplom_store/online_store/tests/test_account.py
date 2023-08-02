@@ -92,19 +92,19 @@ class MyLoginViewTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_302_FOUND)
         self.assertEqual(response.url, '/account/')  # Assuming successful login redirects to '/profile'
 
-    # def test_my_login_view_invalid_credentials(self):
-    #     url = reverse('login')
-    #     data = {
-    #         'username': 'user',
-    #         'password': 'password12345',
-    #     }
-    #     response = self.client.post(url, data)
-    #     self.assertEqual(response.status_code, status.HTTP_302_FOUND)
-    #     self.assertEqual(response.url, '/login/')  # Assuming unsuccessful login redirects to '/login'
-    #
-    # def test_my_login_view_authenticated_user_redirect(self):
-    #     url = reverse('login')
-    #     self.client.login(username='user', password='user12345')
-    #     response = self.client.get(url)
-    #     self.assertEqual(response.status_code, status.HTTP_302_FOUND)
-    #     self.assertEqual(response.url, '/account/')  # Assuming authenticated user redirects to '/profile'
+    def test_my_login_view_invalid_credentials(self):
+        url = reverse('login')
+        data = {
+            'username': 'user',
+            'password': 'password12345',
+        }
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, status.HTTP_302_FOUND)
+        self.assertEqual(response.url, '/login/')  # Assuming unsuccessful login redirects to '/login'
+
+    def test_my_login_view_authenticated_user_redirect(self):
+        url = reverse('login')
+        self.client.login(username='user', password='user12345')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertRedirects(response, '/account/', status_code=302, target_status_code=200)
