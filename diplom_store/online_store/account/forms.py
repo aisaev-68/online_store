@@ -82,12 +82,15 @@ class UserRegistrationForm(forms.ModelForm):
         model = User
         fields = ('username', 'email', 'phone', 'password1', 'password2',)
 
-    def clean_password(self):
-        cd = self.cleaned_data
+    def clean(self):
+        cleaned_data = super().clean()
+        password1 = cleaned_data.get('password1')
+        password2 = cleaned_data.get('password2')
 
-        if cd['password1'] != cd['password2']:
-            raise forms.ValidationError('password no match')
-        return cd['password1']
+        if password1 and password2 and password1 != password2:
+            raise forms.ValidationError(_("Password mismatch! Retype!"))
+
+        return cleaned_data
 
     def clean_phone(self):
         """

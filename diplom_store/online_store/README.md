@@ -48,3 +48,6 @@ docker system prune --all --volumes
 ```
 http://127.0.0.1:8080
 ```
+
+
+docker-compose exec megano python manage.py test tests.test_account

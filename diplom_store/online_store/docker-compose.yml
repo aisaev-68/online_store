@@ -29,8 +29,8 @@ services:
       - net
     depends_on:
       - megano
-    command: ["sh", "-c", "chown -R www-data:www-data /www/data/templates/drf-yasg/swagger.json && nginx -g 'daemon off;'"]
-
+    #command: ["sh", "-c", "chown -R www-data:www-data /www/data/templates/drf-yasg/swagger.json && nginx -g 'daemon off;'"]
+    command: ["sh", "-c", "touch /www/data/templates/drf-yasg/swagger.json && chown -R www-data:www-data /www/data/templates/drf-yasg/swagger.json && nginx -g 'daemon off;'"]
 
   postgres:
     image: "postgres"

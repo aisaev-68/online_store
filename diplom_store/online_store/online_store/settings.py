@@ -1,4 +1,5 @@
 import os
+import sys
 from decouple import config
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
@@ -112,8 +113,17 @@ DATABASES = {
         'PASSWORD': config('DB_PASSWORD'),
         'HOST': config('DB_HOST'),
         'PORT': config('DB_PORT')
-    }
+    },
+    # 'test': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': os.path.join(BASE_DIR, config('DB_NAME', default='db.sqlite3')),
+    # },
 }
+
+# if 'test' in sys.argv:
+#     DATABASES['default'] = DATABASES['test']
+#
+# EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 

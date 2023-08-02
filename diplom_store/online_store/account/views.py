@@ -101,7 +101,7 @@ class RegisterView(View):
         else:
             messages.error(request, _('Profile creation error.'))
             logger.exception(_('Profile creation error!'))
-            return render(request, 'account/register.html', context)
+            return render(request, 'frontend/register.html', context)
 
 
 class MyLoginView(View):
