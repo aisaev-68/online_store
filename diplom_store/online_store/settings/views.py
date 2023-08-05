@@ -81,9 +81,9 @@ class SettingsAPIView(APIView):
     def post(self, request):
         payment_settings = PaymentSettings.objects.first()
         serializer = self.serializer_class(payment_settings, data=request.data)
-
+        # serializer = PaymentSettingsSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data)
-        logger.info(_('Save settings'))
+            logger.info(_('Save settings'))
+            return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

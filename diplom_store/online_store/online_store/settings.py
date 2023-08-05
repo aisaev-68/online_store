@@ -17,7 +17,7 @@ ANONYMOUS_USER = config('ANONYMOUS_USER')
 ANONYMOUS_USER_PASSWORD = config('ANONYMOUS_USER_PASSWORD')
 CART_SESSION_ID = 'cart'
 
-FIXTURE_DIRS = ['online_store/tests/fixtures/']
+FIXTURE_DIRS = ['tests/fixtures/']
 
 AUTH_USER_MODEL = 'account.User'
 

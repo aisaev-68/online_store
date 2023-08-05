@@ -37,14 +37,11 @@
     "/account/": {
       "get": {
         "operationId": "account_list",
-        "description": "Get user full name and avatar",
+        "description": "Метод для получения аватара и полного имени.\n:param request:\n:param args:\n:param kwargs:\n:return: Response",
         "parameters": [],
         "responses": {
           "200": {
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/UserAvatar"
-            }
+            "description": ""
           }
         },
         "tags": [
@@ -789,7 +786,7 @@
     "/sellers/": {
       "get": {
         "operationId": "sellers_list",
-        "description": "Представление для получения продавцов.",
+        "description": "Предсталение для получения продавцов.",
         "parameters": [],
         "responses": {
           "200": {
@@ -887,33 +884,6 @@
     }
   },
   "definitions": {
-    "UserAvatar": {
-      "type": "object",
-      "properties": {
-        "avatar": {
-          "title": "Аватар",
-          "type": "string",
-          "readOnly": true,
-          "x-nullable": true,
-          "format": "uri"
-        },
-        "last_name": {
-          "title": "Фамилия",
-          "type": "string",
-          "maxLength": 150
-        },
-        "first_name": {
-          "title": "Имя",
-          "type": "string",
-          "maxLength": 150
-        },
-        "surname": {
-          "title": "Отчество",
-          "type": "string",
-          "maxLength": 50
-        }
-      }
-    },
     "Category": {
       "required": [
         "title"
@@ -1014,7 +984,7 @@
         "fullDescription": {
           "title": "Полное описание товара",
           "type": "string",
-          "maxLength": 2000,
+          "maxLength": 100,
           "minLength": 1
         },
         "href": {
@@ -1236,7 +1206,7 @@
         "fullDescription": {
           "title": "Полное описание товара",
           "type": "string",
-          "maxLength": 2000,
+          "maxLength": 100,
           "minLength": 1
         },
         "href": {
@@ -1308,6 +1278,33 @@
           "readOnly": true,
           "x-nullable": true,
           "format": "uri"
+        }
+      }
+    },
+    "UserAvatar": {
+      "type": "object",
+      "properties": {
+        "avatar": {
+          "title": "Аватар",
+          "type": "string",
+          "readOnly": true,
+          "x-nullable": true,
+          "format": "uri"
+        },
+        "last_name": {
+          "title": "Фамилия",
+          "type": "string",
+          "maxLength": 150
+        },
+        "first_name": {
+          "title": "Имя",
+          "type": "string",
+          "maxLength": 150
+        },
+        "surname": {
+          "title": "Отчество",
+          "type": "string",
+          "maxLength": 50
         }
       }
     },

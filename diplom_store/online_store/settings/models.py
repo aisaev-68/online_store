@@ -32,13 +32,13 @@ class PaymentSettings(models.Model):
     )
     express = models.DecimalField(
         decimal_places=2,
-        max_digits=5,
+        max_digits=6,
         default=settings.EXPRESS_SHIPPING_COST,
         verbose_name=_('express price')
     )
     standard = models.DecimalField(
         decimal_places=2,
-        max_digits=5,
+        max_digits=6,
         default=settings.STANDARD_SHIPPING_COST,
         verbose_name=_('standard price')
     )

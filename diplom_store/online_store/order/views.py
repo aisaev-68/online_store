@@ -73,7 +73,7 @@ class OrderHistoryAPiView(APIView):
             total = 0
             user = request.user
             products_data = request.data  # Получаем данные о продуктах из запроса
-
+            print(products_data)
             order = Order.objects.create(user=user)
             for product_data in products_data:
                 order_product = OrderProducts()

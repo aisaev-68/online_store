@@ -287,10 +287,11 @@ class SalesAPIView(APIView):
                     .select_related('product')
                     .filter(product__available=True)).order_by("salePrice")
         setting = PaymentSettings.objects.first()
-        paginator = Paginator(products, setting.page_size)
+        paginator = Paginator(products, setting.page_size if setting else 1)
         current_page = paginator.get_page(request.GET.get('page', 1))
-        if len(products) % setting.page_size == 0:
-            lastPage = len(products) // setting.page_size
+        p_size = setting.page_size if setting else 1
+        if len(products) % p_size == 0:
+            lastPage = len(products) // p_size
         else:
             lastPage = len(products) // setting.page_size + 1
         serializer = SaleSerializer(current_page, many=True)

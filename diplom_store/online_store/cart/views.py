@@ -36,7 +36,6 @@ class CartAPIView(APIView):
         products = Product.objects.filter(pk__in=products_in_cart)
         serializer = self.serializer_class(products, many=True, context=cart.cart)
         logger.info(_('Return serializer data cart'))
-
         return Response(serializer.data)
 
 
@@ -84,8 +83,9 @@ class BasketAPIView(APIView):
             - response: объект ответа с данными добавленного продукта
         """
         id = request.data.get('id')
-        count = request.data.get('count')
+        count = int(request.data.get('count'))
         cart = Cart(request)
+
         product = get_object_or_404(Product, pk=id)
         cart.add(
             product=product,
@@ -114,7 +114,7 @@ class BasketAPIView(APIView):
         #     ),
         # }
     )
-    def delete(self, request: Request, *args, **kwargs) -> Response:
+    def delete(self, request, *args, **kwargs) -> Response:
         """
         Удаление продукта из корзины
 
@@ -126,10 +126,10 @@ class BasketAPIView(APIView):
 
         cart = Cart(request)
         id = request.data.get('id')
-        count = request.data.get('count')
+        count = int(request.data.get('count'))
         update_quantity = False
 
-        if cart.cart[str(id)].get('quantity') == count:
+        if cart and cart.cart[str(id)].get('quantity') == count:
             update_quantity = True
 
         product = get_object_or_404(Product, id=id)
@@ -142,5 +142,9 @@ class BasketAPIView(APIView):
         if update_quantity:
             return Response(data=[], status=201)
         else:
-            serializer = self.serializer_class(product, context=cart.cart)
-            return Response(data=[serializer.data], status=201)
+            # serializer = self.serializer_class(product, context=cart.cart)
+            # return Response(data=[serializer.data], status=201)
+            products_in_cart = [product for product in cart.cart.keys()]
+            products = Product.objects.filter(pk__in=products_in_cart)
+            serializer = self.serializer_class(products, many=True, context=cart.cart)
+            return Response(data=serializer.data, status=201)

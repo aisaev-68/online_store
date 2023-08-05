@@ -19,3 +19,4 @@ class PaymentSettingsSerializer(serializers.ModelSerializer):
             'standard',
             'amount_free'
         )
+

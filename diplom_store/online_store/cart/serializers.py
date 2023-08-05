@@ -9,7 +9,7 @@ class BasketSerializer(serializers.ModelSerializer):
     Сериализация корзины продуктов
     """
     count = serializers.SerializerMethodField()
-    price = serializers.SerializerMethodField()
+    # price = serializers.SerializerMethodField()
     images = serializers.SerializerMethodField()
     href = serializers.StringRelatedField()
     description = serializers.StringRelatedField()
@@ -27,7 +27,9 @@ class BasketSerializer(serializers.ModelSerializer):
         )
 
     def get_count(self, obj):
-        return self.context.get(str(obj.pk)).get('quantity')
+        # return self.context.get(str(obj.pk)).get('quantity')
+        cart = self.context.get('cart', {})
+        return cart.get(str(obj.pk), {}).get('quantity', 0)
 
     def get_price(self, obj):
         return Decimal(self.context.get(str(obj.pk)).get('price'))

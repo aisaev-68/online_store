@@ -138,7 +138,7 @@ class MyLoginView(View):
                     logger.info(_('User %s authenticated!'), user.username)
                     if Cart(request).cart:
                         return redirect('cart')
-                    return redirect('account')
+                    return redirect('account:account')
                 else:
                     logger.error(_('Disabled account!'))
                     messages.error(request, _('Disabled account.'))
