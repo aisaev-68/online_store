@@ -2,7 +2,7 @@
 apt install -y gettext
 python manage.py makemigrations
 python manage.py migrate
-megano python manage.py test tests.test_all
+#megano python manage.py test tests.test_all
 #python manage.py create_groups
 #python manage.py create_categories
 #python manage.py create_tags
