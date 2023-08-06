@@ -1,0 +1,23 @@
+# Этапы для CI/CD
+stages:
+  - build
+  - test
+  - deploy
+
+# Этап сборки
+build:
+  stage: build
+  script:
+    - docker-compose -f docker-compose.yml build
+
+# Этап тестирования
+test:
+  stage: test
+  script:
+    - docker-compose -f docker-compose.yml run --rm megano python manage.py test
+
+# Этап развертывания
+deploy:
+  stage: deploy
+  script:
+    - docker-compose -f docker-compose.yml up -d
